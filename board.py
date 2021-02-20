@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import ImageTk,Image
 
+ALPHABETIC_COORDS = ['a', 'b', 'c', 'e', 'f', 'g', 'h']
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="white", color2="black"):
@@ -10,6 +11,17 @@ class GameBoard(tk.Frame):
         self.size = size
         self.color1 = color1
         self.color2 = color2
+        self.squares = []
+
+        for i in range (9):
+            file = []
+            for j in range (len(ALPHABETIC_COORDS)):
+                square = {
+                    "coord": ALPHABETIC_COORDS[j] + str(i),
+                    "currentPiece": None
+                }
+                file.append(square)
+            self.squares.append(file)
 
         canvas_width = columns * size
         canvas_height = rows * size

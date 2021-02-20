@@ -5,6 +5,7 @@ def main():
     root = tk.Tk()
     board = GameBoard(root)
     board.pack(side="top", fill="both", expand="true")
+    print(board.squares)
     root.geometry('900x600')
     root.resizable(width=0, height=0)
     root.mainloop()
