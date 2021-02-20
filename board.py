@@ -1,7 +1,7 @@
 import tkinter as tk
 from PIL import ImageTk,Image
 
-ALPHABETIC_COORDS = ['a', 'b', 'c', 'e', 'f', 'g', 'h']
+from utils import ALPHABETIC_COORDS
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="white", color2="black"):

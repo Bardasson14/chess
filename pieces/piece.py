@@ -9,6 +9,6 @@ class Piece:
         self.color = color
         self.possibleMoves = []
 
-    def getPossibleMoves(self, currentPosition):
+    def getPossibleMoves(self, coord, matrix):
         pass
 

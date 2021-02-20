@@ -3,6 +3,7 @@ class Bishop (Piece):
     def __init__(self):
         super.spriteDir = 'assets/img/' + super.color + 'Bishop.png'
 
+    '''
     def getPossibleMoves(self, coord, matrix):
         #returns an array of coords
         possibleMoves = [] # filled squares are added as well
@@ -14,3 +15,4 @@ class Bishop (Piece):
                     possibleMoves.append(matrix[i][j].coord) 
 
         return possibleMoves
+        '''
