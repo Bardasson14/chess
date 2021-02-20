@@ -13,11 +13,11 @@ class GameBoard(tk.Frame):
         self.color2 = color2
         self.squares = []
 
-        for i in range (8,-1,-1):
+        for i in range (8, 0,-1):
             file = []
             for j in range (len(ALPHABETIC_COORDS)):
                 square = {
-                    "coord": ALPHABETIC_COORDS[j] + str(i),
+                    "coord": ALPHABETIC_COORDS[j] + str(i), #coord will be used to generate game log.
                     "currentPiece": None
                 }
                 file.append(square)
