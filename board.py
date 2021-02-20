@@ -1,9 +1,10 @@
 import tkinter as tk
 from PIL import ImageTk,Image
+
+
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="white", color2="black"):
-        '''size is the size of a square, in pixels'''
-
+        #size is the size of a square, in pixels
         self.rows = rows
         self.columns = columns
         self.size = size
@@ -39,10 +40,3 @@ class GameBoard(tk.Frame):
                 self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
                 color = self.color1 if color == self.color2 else self.color2
         self.canvas.tag_lower("square")
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    board = GameBoard(root)
-    board.pack(side="top", fill="both", expand="true")
-    root.mainloop()
