@@ -1,4 +1,6 @@
-class Bishop (Piece):
+from .piece import Piece
+
+class Bishop(Piece):
     
     def __init__(self):
         super.spriteDir = 'assets/img/' + super.color + 'Bishop.png'

@@ -1,6 +1,6 @@
 from string import ascii_lowercase
 
-ALPHABETIC_COORDS = list(ascii_lowercase)[:9]
+ALPHABETIC_COORDS = list(ascii_lowercase)[:8]
 
 def convertCoord(coord):
     #returns respective row and col in matrix

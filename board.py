@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import ImageTk,Image
 
 from utils import ALPHABETIC_COORDS
+from pieces import bishop as bishopModule, king as kingModule, knight as knightModule, pawn as pawnModule, queen as queenModule, rook as rookModule
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="white", color2="black"):
