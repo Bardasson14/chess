@@ -9,7 +9,7 @@ def main():
     can = tk.Canvas(board)
     img  = ImageTk.PhotoImage(Image.open('assets/img/blackBishop.png'))
     can.pack()
-    can.create_image((0,0),img)
+    can.create_image((0,0),image=img)
     print(board.squares)
     root.geometry('900x600')
     root.resizable(width=0, height=0)
