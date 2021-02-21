@@ -36,7 +36,7 @@ class GameBoard(tk.Frame):
         self.canvas.bind("<Configure>", self.refresh)
 
     def refresh(self, event):
-        '''Redraw the board, possibly in response to window being resized'''
+        #Redraw the board, possibly in response to window being resized
         xsize = int((event.width-1) / self.columns)
         ysize = int((event.height-1) / self.rows)
         self.size = min(xsize, ysize)

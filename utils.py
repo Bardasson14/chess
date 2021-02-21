@@ -1,6 +1,6 @@
 from string import ascii_lowercase
 
-ALPHABETIC_COORDS = ascii_lowercase.split()[0:9]
+ALPHABETIC_COORDS = list(ascii_lowercase)[:9]
 
 def convertCoord(coord):
     #returns respective row and col in matrix
@@ -12,4 +12,4 @@ def squareStatus(coord, matrix):
     # 0 -> Empty
     # 1 -> Filled
     row, col = convertCoord(coord)
-    return 0 if not matrix[row][col].currentPiece else return 1
+    return (0 if not matrix[row][col].currentPiece else 1)
