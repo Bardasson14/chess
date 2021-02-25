@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
+from utils import convertCoord
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
@@ -46,7 +47,7 @@ class GameBoard(tk.Frame):
 
     def placepiece(self, name, row, column):
         '''Place a piece at the given row/column'''
-        self.pieces[name] = (row, column)
+        self.pieces[name] = {'index': (row, column), 'coord': convertCoord(row, column)}
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
         self.canvas.coords(name, x0, y0)
@@ -70,23 +71,22 @@ class GameBoard(tk.Frame):
                 color = self.color1 if color == self.color2 else self.color2
         
         for name in self.pieces:
-            self.placepiece(name, self.pieces[name][0], self.pieces[name][1])
+            self.placepiece(name, self.pieces[name]['index'][0], self.pieces[name]['index'][1])
         
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
     
     def positionPieces(self, player):
-        startLine = 0
-        endLine = 1
         colorName = COLORS[player.color]
+        firstLine = 0
+        secondLine = 1
         
         if (player.color != 0):
-            startLine = 7
-            endLine = 6
+            firstLine = 7
+            secondLine = 6
         
-        self.addPiece(colorName + '_king', player.pieces[0].spriteDir, startLine, 3)
-        print(0)
-        self.addPiece(colorName + '_queen', player.pieces[1].spriteDir, startLine, 4)
+        self.addPiece(colorName + '_king', player.pieces[0].spriteDir, firstLine, 3)
+        self.addPiece(colorName + '_queen', player.pieces[1].spriteDir, firstLine, 4)
         
         rooks = player.pieces[2:4]
         bishops = player.pieces[4:6]
@@ -94,12 +94,12 @@ class GameBoard(tk.Frame):
         pawns = player.pieces[8:16]
 
         for i in range (2):
-            self.addPiece(colorName + '_rook_' + str(i), rooks[i].spriteDir, startLine, i*7)
-            self.addPiece(colorName + '_bishop_' + str(i), bishops[i].spriteDir, startLine, 2 + 3*i)
-            self.addPiece(colorName + '_knight_' + str(i), knights[i].spriteDir, startLine, 1 + 5*i)
+            self.addPiece(colorName + '_rook_' + str(i), rooks[i].spriteDir, firstLine, i*7)
+            self.addPiece(colorName + '_bishop_' + str(i), bishops[i].spriteDir, firstLine, 2 + 3*i)
+            self.addPiece(colorName + '_knight_' + str(i), knights[i].spriteDir, firstLine, 1 + 5*i)
         
         for i in range(8):
-            self.addPiece(colorName + '_pawn_' + str(i), pawns[i].spriteDir, endLine, i)
+            self.addPiece(colorName + '_pawn_' + str(i), pawns[i].spriteDir, secondLine, i)
         
 
     '''
