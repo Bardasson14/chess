@@ -1,6 +1,7 @@
 import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
+from utils import convertCoord
 
 class GameBoard(tk.Frame):
     def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
@@ -12,6 +13,8 @@ class GameBoard(tk.Frame):
         self.color2 = color2
         self.pieces = {}
         self.squares = []
+        global sprites
+        sprites = []
 
         '''
         for i in range (8, 0,-1):
@@ -37,13 +40,14 @@ class GameBoard(tk.Frame):
         # changes the window size
         self.canvas.bind("<Configure>", self.refresh)
 
-    def addpiece(self, name, image, row=0, column=0):
-        self.canvas.create_image(0,0, image=image, tags=(name, "piece"), anchor="c")
+    def addPiece(self, name, imageDir, row=0, column=0):
+        sprites.append(tk.PhotoImage(file = imageDir))
+        self.canvas.create_image(0,0, image=sprites[len(sprites)-1], tags=(name, "piece"), anchor="c")
         self.placepiece(name, row, column)
 
     def placepiece(self, name, row, column):
         '''Place a piece at the given row/column'''
-        self.pieces[name] = (row, column)
+        self.pieces[name] = {'index': (row, column), 'coord': convertCoord(row, column)}
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
         self.canvas.coords(name, x0, y0)
@@ -67,13 +71,43 @@ class GameBoard(tk.Frame):
                 color = self.color1 if color == self.color2 else self.color2
         
         for name in self.pieces:
-            self.placepiece(name, self.pieces[name][0], self.pieces[name][1])
+            self.placepiece(name, self.pieces[name]['index'][0], self.pieces[name]['index'][1])
         
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
-
+    
     def positionPieces(self, player):
         colorName = COLORS[player.color]
-        img = tk.PhotoImage(file=(player.pieces[0].spriteDir))
-        self.addpiece(colorName + '_king', img, 1, 3)
+        firstLine = 0
+        secondLine = 1
         
+        if (player.color != 0):
+            firstLine = 7
+            secondLine = 6
+        
+        self.addPiece(colorName + '_king', player.pieces[0].spriteDir, firstLine, 3)
+        self.addPiece(colorName + '_queen', player.pieces[1].spriteDir, firstLine, 4)
+        
+        rooks = player.pieces[2:4]
+        bishops = player.pieces[4:6]
+        knights = player.pieces[6:8]
+        pawns = player.pieces[8:16]
+
+        for i in range (2):
+            self.addPiece(colorName + '_rook_' + str(i), rooks[i].spriteDir, firstLine, i*7)
+            self.addPiece(colorName + '_bishop_' + str(i), bishops[i].spriteDir, firstLine, 2 + 3*i)
+            self.addPiece(colorName + '_knight_' + str(i), knights[i].spriteDir, firstLine, 1 + 5*i)
+        
+        for i in range(8):
+            self.addPiece(colorName + '_pawn_' + str(i), pawns[i].spriteDir, secondLine, i)
+        
+
+    '''
+    def positionSinglePiece(self, piece, ):
+        global img #garbage collector
+        colorName = COLORS[player.color]
+        img = tk.PhotoImage(file=(player.pieces[0].spriteDir))
+        self.addPiece(colorName + '_king', img, 0,3)
+        img = tk.PhotoImage(file=(player.pieces[1].spriteDir))
+        self.addPiece(colorName + '_queen', img, 0,2)
+    '''

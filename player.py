@@ -20,7 +20,9 @@ def generatePieceList(color):
     
     for i in range(2):    
         pieceList.append(rook.Rook(color))
+    for i in range(2):
         pieceList.append(bishop.Bishop(color))
+    for i in range(2):
         pieceList.append(knight.Knight(color))
     
     for i in range(8):
