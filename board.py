@@ -12,6 +12,8 @@ class GameBoard(tk.Frame):
         self.color2 = color2
         self.pieces = {}
         self.squares = []
+        global sprites
+        sprites = []
 
         '''
         for i in range (8, 0,-1):
@@ -37,8 +39,9 @@ class GameBoard(tk.Frame):
         # changes the window size
         self.canvas.bind("<Configure>", self.refresh)
 
-    def addpiece(self, name, image, row=0, column=0):
-        self.canvas.create_image(0,0, image=image, tags=(name, "piece"), anchor="c")
+    def addPiece(self, name, imageDir, row=0, column=0):
+        sprites.append(tk.PhotoImage(file = imageDir))
+        self.canvas.create_image(0,0, image=sprites[len(sprites)-1], tags=(name, "piece"), anchor="c")
         self.placepiece(name, row, column)
 
     def placepiece(self, name, row, column):
@@ -71,9 +74,40 @@ class GameBoard(tk.Frame):
         
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
-
+    
     def positionPieces(self, player):
+        startLine = 0
+        endLine = 1
+        colorName = COLORS[player.color]
+        
+        if (player.color != 0):
+            startLine = 7
+            endLine = 6
+        
+        self.addPiece(colorName + '_king', player.pieces[0].spriteDir, startLine, 3)
+        print(0)
+        self.addPiece(colorName + '_queen', player.pieces[1].spriteDir, startLine, 4)
+        
+        rooks = player.pieces[2:4]
+        bishops = player.pieces[4:6]
+        knights = player.pieces[6:8]
+        pawns = player.pieces[8:16]
+
+        for i in range (2):
+            self.addPiece(colorName + '_rook_' + str(i), rooks[i].spriteDir, startLine, i*7)
+            self.addPiece(colorName + '_bishop_' + str(i), bishops[i].spriteDir, startLine, 2 + 3*i)
+            self.addPiece(colorName + '_knight_' + str(i), knights[i].spriteDir, startLine, 1 + 5*i)
+        
+        for i in range(8):
+            self.addPiece(colorName + '_pawn_' + str(i), pawns[i].spriteDir, endLine, i)
+        
+
+    '''
+    def positionSinglePiece(self, piece, ):
+        global img #garbage collector
         colorName = COLORS[player.color]
         img = tk.PhotoImage(file=(player.pieces[0].spriteDir))
-        self.addpiece(colorName + '_king', img, 1, 3)
-        
+        self.addPiece(colorName + '_king', img, 0,3)
+        img = tk.PhotoImage(file=(player.pieces[1].spriteDir))
+        self.addPiece(colorName + '_queen', img, 0,2)
+    '''
