@@ -2,8 +2,5 @@ from .piece import Piece
 
 class Queen(Piece):
     
-    def __init__(self):
-        super.spriteDir = 'assets/img/' + super.color + 'Queen.png'
-
-    def getPossibleMoves(self, coord, matrix):
-        pass
+    def __init__(self, color):
+        self.spriteDir = 'assets/img/' + color + 'Queen.png'

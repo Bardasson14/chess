@@ -1,8 +1,7 @@
 class Piece:
 
-    def __init__(self, spriteDir, color):
-        self.spriteDir = spriteDir
-        self.color = color
+    def __init__(self, color):
+        self.wasMovedBefore = False
         self.possibleMoves = []
 
     def getPossibleMoves(self, coord, matrix):

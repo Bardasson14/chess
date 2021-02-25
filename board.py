@@ -1,19 +1,19 @@
 import tkinter as tk
-from PIL import ImageTk,Image
-
-from utils import ALPHABETIC_COORDS
-from pieces import bishop as bishopModule, king as kingModule, knight as knightModule, pawn as pawnModule, queen as queenModule, rook as rookModule
+from PIL import Image, ImageTk
+from player import Player, COLORS
 
 class GameBoard(tk.Frame):
-    def __init__(self, parent, rows=8, columns=8, size=32, color1="white", color2="black"):
-        #size is the size of a square, in pixels
+    def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
+        '''size is the size of a square, in pixels'''
         self.rows = rows
         self.columns = columns
         self.size = size
         self.color1 = color1
         self.color2 = color2
+        self.pieces = {}
         self.squares = []
 
+        '''
         for i in range (8, 0,-1):
             file = []
             for j in range (len(ALPHABETIC_COORDS)):
@@ -23,27 +23,39 @@ class GameBoard(tk.Frame):
                 }
                 file.append(square)
             self.squares.append(file)
-
+        '''
+        
         canvas_width = columns * size
         canvas_height = rows * size
 
         tk.Frame.__init__(self, parent)
         self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
-                                width=canvas_width, height=canvas_height)
+                                width=canvas_width, height=canvas_height, background="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
 
         # this binding will cause a refresh if the user interactively
         # changes the window size
         self.canvas.bind("<Configure>", self.refresh)
 
-        
+    def addpiece(self, name, image, row=0, column=0):
+        self.canvas.create_image(0,0, image=image, tags=(name, "piece"), anchor="c")
+        self.placepiece(name, row, column)
+
+    def placepiece(self, name, row, column):
+        '''Place a piece at the given row/column'''
+        self.pieces[name] = (row, column)
+        x0 = (column * self.size) + int(self.size/2)
+        y0 = (row * self.size) + int(self.size/2)
+        self.canvas.coords(name, x0, y0)
+
     def refresh(self, event):
-        #Redraw the board, possibly in response to window being resized
+        '''Redraw the board, possibly in response to window being resized'''
         xsize = int((event.width-1) / self.columns)
         ysize = int((event.height-1) / self.rows)
         self.size = min(xsize, ysize)
         self.canvas.delete("square")
         color = self.color2
+        
         for row in range(self.rows):
             color = self.color1 if color == self.color2 else self.color2
             for col in range(self.columns):
@@ -53,4 +65,15 @@ class GameBoard(tk.Frame):
                 y2 = y1 + self.size
                 self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
                 color = self.color1 if color == self.color2 else self.color2
+        
+        for name in self.pieces:
+            self.placepiece(name, self.pieces[name][0], self.pieces[name][1])
+        
+        self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
+
+    def positionPieces(self, player):
+        colorName = COLORS[player.color]
+        img = tk.PhotoImage(file=(player.pieces[0].spriteDir))
+        self.addpiece(colorName + '_king', img, 1, 3)
+        
