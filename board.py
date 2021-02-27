@@ -6,43 +6,36 @@ from utils import convertCoord
 class Board(tk.Frame):
 
     def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
-        '''size is the size of a square, in pixels'''
+        
         self.rows = rows
         self.columns = columns
         self.size = size
         self.color1 = color1
         self.color2 = color2
-        #self.pieces = {}
-        self.squares = {}
+        self.squares = {} #this dict will be populated with the board grid using tuple(row, col) as key
         global sprites
         sprites = []
 
         for i in range(8):
             for j in range(8):
-                newSquareInfo = {'piece': None, 'coord': convertCoord(i, j)}
+                newSquareInfo = {'piece': None, 'coord': convertCoord(i, j)} #each entry in self.squares has a piece and a string coordinate
                 self.squares[(i,j)] = newSquareInfo
 
         canvas_width = columns * size
         canvas_height = rows * size
 
-        print(self.squares)
+        #print(self.squares)
 
         tk.Frame.__init__(self, parent)
         self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
                                 width=canvas_width, height=canvas_height, background="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
-
-        # this binding will cause a refresh if the user interactively
-        # changes the window size
         self.canvas.bind("<Configure>", self.refresh)
 
     def addPiece(self, piece, row=0, column=0):
         sprites.append(tk.PhotoImage(file = piece.spriteDir))
-        piece.spriteID = len(sprites)-1
-        print(row, column)
-        print(piece.name)
+        piece.spriteID = len(sprites)-1 #saves the sprite position in global sprites array
         self.canvas.create_image(0,0, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
-        print(self.canvas.__dict__)
         self.placePiece(piece, row, column)
 
     def placePiece(self, piece, row, column):
@@ -53,7 +46,6 @@ class Board(tk.Frame):
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
-        '''Redraw the board, possibly in response to window being resized'''
         xsize = int((event.width-1) / self.columns)
         ysize = int((event.height-1) / self.rows)
         self.size = min(xsize, ysize)
@@ -70,14 +62,16 @@ class Board(tk.Frame):
                 self.canvas.create_rectangle(x1, y1, x2, y2, outline="black", fill=color, tags="square")
                 color = self.color1 if color == self.color2 else self.color2
         
-        for item in self.squares.items():
-
-            if item[1]['piece'] != None:
+        for item in self.squares.items(): #iterates through the self.squares dict, attributing key to item[0] and value to item[1]
+            
+            if item[1]['piece']: #if statement is only true if square isn't empty
                 piece = item[1]['piece']
                 self.placePiece(piece, item[0][0], item[0][1])
         
+        # puts piece over the square
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
+
     
     def positionPieces(self, player):
         
