@@ -18,7 +18,7 @@ class Board(tk.Frame):
 
         for i in range(8):
             for j in range(8):
-                newSquareInfo = {'piece': None, 'coord': convertCoord(i, j)} #each entry in self.squares has a piece and a string coordinate
+                newSquareInfo = {'piece': None, 'coord':(i, j)} #each entry in self.squares has a piece and a coordinate
                 self.squares[(i,j)] = newSquareInfo
 
         canvas_width = columns * size
@@ -42,7 +42,7 @@ class Board(tk.Frame):
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-        print(self.squares[(row, column)])
+       # print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
@@ -84,7 +84,6 @@ class Board(tk.Frame):
         
         self.addPiece(player.pieces[0], firstLine, 3)
         self.addPiece(player.pieces[1], firstLine, 4)
-        
         rooks = player.pieces[2:4]
         bishops = player.pieces[4:6]
         knights = player.pieces[6:8]
