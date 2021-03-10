@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
 from utils import convertCoord
+from selected import Selected
 
 class Board(tk.Frame):
 
@@ -15,10 +16,13 @@ class Board(tk.Frame):
         self.squares = {} #this dict will be populated with the board grid using tuple(row, col) as key
         global sprites
         sprites = []
+        self.selected=False
+        self.selsquare=[]
+
 
         for i in range(8):
             for j in range(8):
-                newSquareInfo = {'piece': None, 'coord':(i, j)} #each entry in self.squares has a piece and a coordinate
+                newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None} #each entry in self.squares has a piece and a coordinate
                 self.squares[(i,j)] = newSquareInfo
 
         canvas_width = columns * size
@@ -31,6 +35,7 @@ class Board(tk.Frame):
                                 width=canvas_width, height=canvas_height, background="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
         self.canvas.bind("<Configure>", self.refresh)
+        self.canvas.bind("<Button-1>", self.callback)
 
     def addPiece(self, piece, row=0, column=0):
         sprites.append(tk.PhotoImage(file = piece.spriteDir))
@@ -96,3 +101,45 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.addPiece(pawns[i], secondLine, i)
+    def callback(self,event):
+        print ("clicked at", event.x, event.y)
+        for row in range(self.rows):
+            for col in range(self.columns):
+                if((row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)):
+                    piece=self.squares[(col,row)]['piece']
+                    ref=self.squares[(col,row)]['selected']
+                    if(piece!=None):
+                       if(not(self.selected)):
+                            piece.selected=True
+                            self.selected=True
+                            vec=piece.getPossibleMoves(self.squares[(col,row)]['coord'],self.squares)
+                            for i in range (len(vec)):
+                                self.squares[(vec[i][0],vec[i][1])]['selected']=Selected((col,row))
+                                x1 = (vec[i][0] * self.size)
+                                y1 = (vec[i][1] * self.size)
+                                x2 = x1 + self.size
+                                y2 = y1 + self.size
+                                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
+                       else:
+                            if(piece.selected):
+                                self.selected=False
+                                piece.selected=False
+                                for i in range(len(self.selsquare)):
+                                    self.canvas.delete(self.selsquare[i])
+                                self.selsquare=[]
+                    if(ref!=None):
+                        self.selected=False
+                        piece=self.squares[(ref.coord[0],ref.coord[1])]['piece']
+                        selecteds=piece.getPossibleMoves(self.squares[(ref.coord[0],ref.coord[1])]['coord'],self.squares)
+                        piece.selected=False
+                        piece.wasMovedBefore=True
+                        for i in range(len(self.selsquare)):
+                            self.canvas.delete(self.selsquare[i])
+                            self.squares[selecteds[i]]['selected']=None
+                        print(self.squares[(ref.coord[0],ref.coord[1])]['piece'])
+                        self.placePiece(self.squares[(ref.coord[0],ref.coord[1])]['piece'],col,row)                        
+                        self.selsquare=[]
+                        self.squares[(ref.coord[0],ref.coord[1])]['piece']=None
+
+                    
+                
