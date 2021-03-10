@@ -67,19 +67,19 @@ class Piece:
                         self.possibleMoves.append((coord[0]+1,coord[1]-1))
         else:#bispo, rainha
             pass
-    def movV(self,ncasa,coord,matrix,sent): 
+    def movV(self,ncasa,coord,matrix,sent,peao): 
         if (ncasa==1):#peao, rei
             if((coord[0]-1>=0)): #limite superior
                 if(sent==1 or sent==3):
                     f=matrix[(coord[0]-1,coord[1])]['piece']#⬆⬆⬆
-                    if (f!=None and f.color!=self.color):
+                    if (f!=None and f.color!=self.color and not(peao)):
                         self.possibleMoves.append((coord[0]-1,coord[1]))
                     if(f==None):
                         self.possibleMoves.append((coord[0]-1,coord[1]))
             if(coord[0]+1<=7): #limite inferior
                 if(sent==2 or sent==3):
                     b=matrix[(coord[0]+1,coord[1])]['piece']#⬇⬇⬇
-                    if (b!=None and b.color!=self.color):
+                    if (b!=None and b.color!=self.color and not(peao)):
                         self.possibleMoves.append((coord[0]+1,coord[1]))
                     if(b==None):
                         self.possibleMoves.append((coord[0]+1,coord[1]))
@@ -92,9 +92,6 @@ class Piece:
                         if(f==None):
                             self.possibleMoves.append((coord[0]-(i+1),coord[1]))
                             i+=1
-                        elif(f!=None and f.color!=self.color):
-                            self.possibleMoves.append((coord[0]-(i+1),coord[1]))
-                            i=2
                         else:
                             i=2
                     else:
@@ -107,9 +104,6 @@ class Piece:
                         if(f==None):
                             self.possibleMoves.append((coord[0]+(i+1),coord[1]))
                             i+=1
-                        elif(f!=None and f.color!=self.color):
-                            self.possibleMoves.append((coord[0]+(i+1),coord[1]))
-                            i=2
                         else:
                             i=2
                     else:

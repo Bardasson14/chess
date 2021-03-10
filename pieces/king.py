@@ -11,5 +11,5 @@ class King(Piece):
         self.possibleMoves=[]
         super().movD(1,coord,matrix,3,False)
         super().movH(1,coord,matrix)
-        super().movV(1,coord,matrix,3)
+        super().movV(1,coord,matrix,3,False)
         return self.possibleMoves

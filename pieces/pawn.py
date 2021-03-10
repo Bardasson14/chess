@@ -13,15 +13,15 @@ class Pawn(Piece):
         if(self.color=='white'):
             if(self.wasMovedBefore):
                 super().movD(1,coord,matrix,1,True)
-                super().movV(1,coord,matrix,1)
+                super().movV(1,coord,matrix,1,True)
             else:
                 super().movD(1,coord,matrix,1,True)
-                super().movV(2,coord,matrix,1)
+                super().movV(2,coord,matrix,1,True)
         else:
             if(self.wasMovedBefore):
                 super().movD(1,coord,matrix,2,True)
-                super().movV(1,coord,matrix,2)
+                super().movV(1,coord,matrix,2,True)
             else:
                 super().movD(1,coord,matrix,2,True)
-                super().movV(2,coord,matrix,2)
+                super().movV(2,coord,matrix,2,True)
         return self.possibleMoves
