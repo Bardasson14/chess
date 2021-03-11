@@ -2,7 +2,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
 from utils import convertCoord
-from selected import Selected
 
 class Board(tk.Frame):
 
@@ -113,8 +112,11 @@ class Board(tk.Frame):
                             piece.selected=True
                             self.selected=True
                             vec=piece.getPossibleMoves(self.squares[(col,row)]['coord'],self.squares)
+                            if(not(vec)):
+                                piece.selected=False
+                                self.selected=False
                             for i in range (len(vec)):
-                                self.squares[(vec[i][0],vec[i][1])]['selected']=Selected((col,row))
+                                self.squares[(vec[i][0],vec[i][1])]['selected']=(col,row)
                                 x1 = (vec[i][0] * self.size)
                                 y1 = (vec[i][1] * self.size)
                                 x2 = x1 + self.size
@@ -129,17 +131,17 @@ class Board(tk.Frame):
                                 self.selsquare=[]
                     if(ref!=None):
                         self.selected=False
-                        piece=self.squares[(ref.coord[0],ref.coord[1])]['piece']
-                        selecteds=piece.getPossibleMoves(self.squares[(ref.coord[0],ref.coord[1])]['coord'],self.squares)
+                        piece=self.squares[(ref[0],ref[1])]['piece']
+                        selecteds=piece.getPossibleMoves(self.squares[(ref[0],ref[1])]['coord'],self.squares)
                         piece.selected=False
                         piece.wasMovedBefore=True
                         for i in range(len(self.selsquare)):
                             self.canvas.delete(self.selsquare[i])
                             self.squares[selecteds[i]]['selected']=None
-                        print(self.squares[(ref.coord[0],ref.coord[1])]['piece'])
-                        self.placePiece(self.squares[(ref.coord[0],ref.coord[1])]['piece'],col,row)                        
+                        print(self.squares[(ref[0],ref[1])]['piece'])
+                        self.placePiece(self.squares[(ref[0],ref[1])]['piece'],col,row)                        
                         self.selsquare=[]
-                        self.squares[(ref.coord[0],ref.coord[1])]['piece']=None
+                        self.squares[(ref[0],ref[1])]['piece']=None
 
                     
                 
