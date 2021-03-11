@@ -104,38 +104,38 @@ class Board(tk.Frame):
         print ("clicked at", event.x, event.y)
         for row in range(self.rows):
             for col in range(self.columns):
-                if((row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)):
+                if((row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)):#tratamento do click mouse
                     piece=self.squares[(col,row)]['piece']
                     ref=self.squares[(col,row)]['selected']
-                    if(piece!=None):
-                       if(not(self.selected)):
-                            piece.selected=True
+                    if(piece!=None):#clicou na peca
+                       if(not(self.selected)):#se nenhuma peca esta selecionada ira permitir desenho de quadrados
+                            piece.selected=True #especifica qual peca foi selecionada
                             self.selected=True
                             vec=piece.getPossibleMoves(self.squares[(col,row)]['coord'],self.squares)
-                            if(not(vec)):
+                            if(not(vec)):#se nao a movimentos libera a selecao de outras pecas
                                 piece.selected=False
                                 self.selected=False
-                            for i in range (len(vec)):
+                            for i in range (len(vec)):#cria os quadraddos de possiveis movimentos
                                 self.squares[(vec[i][0],vec[i][1])]['selected']=(col,row)
                                 x1 = (vec[i][0] * self.size)
                                 y1 = (vec[i][1] * self.size)
                                 x2 = x1 + self.size
                                 y2 = y1 + self.size
                                 self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
-                       else:
+                       else:#vai desmarcar os quadrados e possibilitar click em outra peca
                             if(piece.selected):
                                 self.selected=False
                                 piece.selected=False
                                 for i in range(len(self.selsquare)):
                                     self.canvas.delete(self.selsquare[i])
                                 self.selsquare=[]
-                    if(ref!=None):
+                    if(ref!=None):#move a peca e libera o click
                         self.selected=False
                         piece=self.squares[(ref[0],ref[1])]['piece']
                         selecteds=piece.getPossibleMoves(self.squares[(ref[0],ref[1])]['coord'],self.squares)
                         piece.selected=False
                         piece.wasMovedBefore=True
-                        for i in range(len(self.selsquare)):
+                        for i in range(len(self.selsquare)):#libera os outros quadrados selecionados
                             self.canvas.delete(self.selsquare[i])
                             self.squares[selecteds[i]]['selected']=None
                         print(self.squares[(ref[0],ref[1])]['piece'])
