@@ -10,13 +10,13 @@ class Countdown(tk.Frame):
         self.seconds_left = 600
         self._timer_on = False
 
-    def show_widgets(self):
+    def showWidgets(self):
 
         self.label.pack()
         #self.entry.pack()
         self.start.pack()
 
-    def create_widgets(self):
+    def createWidgets(self):
 
         self.label = tk.Label(self, text="00:10:00")
         self.entry = tk.Entry(self, justify='center')
@@ -34,20 +34,19 @@ class Countdown(tk.Frame):
         else:
             self._timer_on = False
 
-    def start_button(self):
+    def startButton(self):
         '''começa a contagem'''
         
         self.stop_timer()
         self.countdown()                            
 
-    def stop_timer(self):
+    def stopTimer(self):
         '''Para ele após o tempo estipulado.'''
         if self._timer_on:
             self.after_cancel(self._timer_on)
             self._timer_on = False
 
-    def convert_seconds_left_to_time(self):
-
+    def convertSecondsLeftToTime(self):
         return datetime.timedelta(seconds=self.seconds_left)
 
 
