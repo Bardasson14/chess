@@ -102,12 +102,12 @@ class Board(tk.Frame):
             self.addPiece(pawns[i], secondLine, i)
     
     def addSquare(self,piece,coord): # trava a movimentacao no tabuleiro 
-        piece.selected = True             # e encaminha os possiveis movimentos para o desenho 
+        piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.getPossibleMoves(coord,self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
-            piece.selected=False
-            self.lock=False
+            piece.selected = False
+            self.lock = False
         self.drawSquare(vec,coord)
         
     def drawSquare(self,vec,coord): # desenha os possiveis movimentos na tela
@@ -119,21 +119,28 @@ class Board(tk.Frame):
             y2 = y1 + self.size
             self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
 
-    def clearSquare(self,piece,selecteds=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
-        piece.selected=False
-        self.lock=False
+    def clearSquare(self,piece,selected=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
+        piece.selected = False
+        self.lock = False
         for i in range(len(self.selsquare)):# libera da tela os quadrados referentes aos possiveis movimentos 
             self.canvas.delete(self.selsquare[i])
-        for i in range(len(selecteds)): # libera do dicionario as referencias a peca selecionada                     
-            self.squares[selecteds[i]]['selected']=None
-        self.selsquare=[]
-
+        for i in range(len(selected)): # libera do dicionario as referencias a peca selecionada                     
+            self.squares[selected[i]]['selected']=None
+        self.selsquare = []
+        
+    def pieceCapture(self, coord):
+        capturedPiece = self.squares[coord]['piece']
+        if capturedPiece:
+            self.canvas.delete(capturedPiece.name)
+        
     def movePiece(self,piece,ref,coord): 
-        selected = piece.getPossibleMoves(self.squares[(ref[0],ref[1])]['coord'],self.squares)
+        selected = piece.getPossibleMoves(self.squares[ref]['coord'],self.squares)
         piece.wasMovedBefore = True
         self.clearSquare(piece,selected)
-        self.placePiece(self.squares[(ref[0],ref[1])]['piece'],coord[0],coord[1]) # move a peca                    
-        self.squares[(ref[0],ref[1])]['piece']=None
+        self.pieceCapture(coord)
+        
+        self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
+        self.squares[ref]['piece'] = None
 
 
     def clickEventHandler(self,event): # encaminha funcoes dependendo do click do mouse
@@ -149,7 +156,7 @@ class Board(tk.Frame):
                             elif(self.lock and piece.selected):
                                 self.clearSquare(piece)
                         if ref:  # clicou no quadrado vermelho
-                            piece=self.squares[(ref[0],ref[1])]['piece']
+                            piece=self.squares[ref]['piece']
                             if(piece.selected):
                                 self.movePiece(piece,ref,(col,row))
 
