@@ -5,8 +5,8 @@ class Piece:
         self.possibleMoves = []
         self.spriteID = None
         self.name = name
-        self.color=color
-        self.selected=False
+        self.color = color
+        self.selected = False
 
     def getPossibleMoves(self, coord, matrix):
         pass
@@ -25,10 +25,10 @@ class Piece:
     #       2->bottom(↘,↙,⬇)
     #       3->top&bottom(↘,↙,⬇,⬆,↗,↖)
     
-    def movL(self,ncasa,coord,matrix,sent): # cavalo
+    def movL(self,ncasa,coord,matrix): # cavalo
         pass
         
-    def movH(self, coord, matrix, ncasa = 1):
+    def movH(self, coord, matrix):
         pass
     
         '''
@@ -49,7 +49,7 @@ class Piece:
             pass
         '''
 
-    def movD(self, coord, matrix, sent, peao, ncasa = 1):
+    def movD(self, coord, matrix):
         pass
 
         '''
@@ -84,7 +84,7 @@ class Piece:
             pass
         '''
 
-    def movV(self, coord, matrix, ncasa = 1): 
+    def movV(self, coord, matrix): 
         pass
 
         '''
