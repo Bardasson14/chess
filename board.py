@@ -19,7 +19,6 @@ class Board(tk.Frame):
         self.lock=False # indica se existe alguma peca selecionada no tabuleiro
         self.selsquare=[] # guarda as variaveis dos quadrados que indicam os possiveis movimentos
 
-
         for i in range(8):
             for j in range(8):
                 newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None} #each entry in self.squares has a piece and a coordinate
