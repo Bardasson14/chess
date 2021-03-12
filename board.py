@@ -18,7 +18,6 @@ class Board(tk.Frame):
         self.selected=False
         self.selsquare=[]
 
-
         for i in range(8):
             for j in range(8):
                 newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None} #each entry in self.squares has a piece and a coordinate
@@ -100,6 +99,7 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.addPiece(pawns[i], secondLine, i)
+
     def callback(self,event):
         print ("clicked at", event.x, event.y)
         for row in range(self.rows):
