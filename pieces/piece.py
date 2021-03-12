@@ -24,8 +24,11 @@ class Piece:
     #sent-  1->top(⬆,↗,↖)
     #       2->bottom(↘,↙,⬇)
     #       3->top&bottom(↘,↙,⬇,⬆,↗,↖)
+
+    def capture (self):
+        pass
     
-    def movL(self,ncasa,coord,matrix): # cavalo
+    def movL(self, coord, matrix): # cavalo
         pass
         
     def movH(self, coord, matrix):
