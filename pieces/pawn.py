@@ -17,10 +17,19 @@ class Pawn(Piece):
         return self.possibleMoves
 
     def movV(self, coord, matrix): 
-
-        # Achar possíveis mov.
-        # P/ 1 casa
+        self.checkUpperEdge(coord, matrix)
         
+
+    def movD(self, coord, matrix):
+
+        if (self.color == 'white'):
+            self.checkUpperLeftEdge(coord, matrix)
+            self.checkUpperRightEdge(coord, matrix)   
+        else: 
+            self.checkLowerLeftEdge(coord, matrix)
+            self.checkLowerRightEdge(coord, matrix)
+                
+    def checkUpperEdge(self, coord, matrix):
         if (self.color == 'white'):
             if (coord[0]-1>=0): # limite superior
                 f = matrix[(coord[0]-1,coord[1])]['piece']    # ⬆⬆⬆
@@ -32,7 +41,32 @@ class Pawn(Piece):
                 b = matrix[(coord[0]+1,coord[1])]['piece']#⬇⬇⬇
                 if (not b):
                     self.possibleMoves.append((coord[0]+1,coord[1]))
-            
+    
+    def checkUpperRightEdge(self, coord, matrix):
+        if (coord[1]!=7 and coord[0]!=0):
+            fr = matrix[(coord[0]-1,coord[1]+1)]['piece']
+            if (fr and fr.color != self.color):
+                self.possibleMoves.append((coord[0]-1,coord[1]+1))
+        
+    def checkUpperLeftEdge(self, coord, matrix):
+        if (coord[1]!=0 and coord[0]!=0): 
+            fl = matrix[(coord[0]-1,coord[1]-1)]['piece']
+            if (fl and fl.color != self.color):
+                self.possibleMoves.append((coord[0]-1,coord[1]-1))
+
+    def checkLowerRightEdge(self, coord, matrix):
+        if (coord[1]!=7 and coord[0]!=7):
+            br = matrix[(coord[0]+1,coord[1]+1)]['piece']
+            if (br and br.color != self.color):
+                self.possibleMoves.append((coord[0]+1,coord[1]+1))
+
+    def checkLowerLeftEdge(self, coord, matrix):
+        if (coord[1]!=0 and coord[0]!=7):
+            bl = matrix[(coord[0]+1,coord[1]-1)]['piece']
+            if(bl and bl.color != self.color):
+                self.possibleMoves.append((coord[0]+1,coord[1]-1))
+
+
         # P/ 2 casas  
         # Adicionar verificação de cor
         #if not self.wasMovedBefore:
@@ -47,28 +81,3 @@ class Pawn(Piece):
         #                i=2
         #        else:
         #            i=2
-
-    def movD(self, coord, matrix):
-
-        if (self.color == 'white'):
-            if (coord[1]!=7 and coord[0]!=0): #limite superior e lateral direito 
-                fr = matrix[(coord[0]-1,coord[1]+1)]['piece']#↗↗↗
-                if (fr and fr.color != self.color):
-                    self.possibleMoves.append((coord[0]-1,coord[1]+1))
-
-            if (coord[1]!=0 and coord[0]!=0):  #limite superior e lateral esquerdo
-                fl = matrix[(coord[0]-1,coord[1]-1)]['piece']#↖↖↖
-                if (fl and fl.color != self.color):
-                    self.possibleMoves.append((coord[0]-1,coord[1]-1))
-
-        else: 
-            if (coord[1]!=7 and coord[0]!=7): #limite inferior e lateral direito
-                br = matrix[(coord[0]+1,coord[1]+1)]['piece']#↘↘↘
-                if (br and br.color != self.color):
-                    self.possibleMoves.append((coord[0]+1,coord[1]+1))
-                    
-            if (coord[1]!=0 and coord[0]!=7): #limite inferior e lateral esquerdo
-                bl = matrix[(coord[0]+1,coord[1]-1)]['piece']#↙↙↙
-                if(bl and bl.color != self.color):
-                    self.possibleMoves.append((coord[0]+1,coord[1]-1))
-                

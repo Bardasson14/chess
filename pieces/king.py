@@ -15,48 +15,71 @@ class King(Piece):
         return self.possibleMoves
 
     def movH(self, coord, matrix):
-        if(coord[1]+1<=7):  #limite lateral direito
-            r = matrix[(coord[0],coord[1]+1)]['piece']    #➡➡➡
-            if (r and (r.color != self.color)):
-                self.possibleMoves.append((coord[0],coord[1]+1))
-            elif not r:
-                self.possibleMoves.append((coord[0],coord[1]+1))
-
-        if(coord[1]-1>=0):  #limite lateral esquerdo
-            l = matrix[(coord[0],coord[1]-1)]['piece']    #⬅⬅⬅
-            if (l and l.color!=self.color or (not l)):
-                self.possibleMoves.append((coord[0],coord[1]-1))
-    
+        self.checkRightEdge(coord, matrix)
+        self.checkLeftEdge(coord, matrix)
+        
     def movD(self, coord, matrix):
-        if(coord[1]!=7 and coord[0]!=0): #limite superior e lateral direito 
-            fr = matrix[(coord[0]-1,coord[1]+1)]['piece']#↗↗↗
-            if ((fr and fr.color!=self.color) or (not fr)):
-                self.possibleMoves.append((coord[0]-1,coord[1]+1))
-
-        if(coord[1]!=0 and coord[0]!=0):  #limite superior e lateral esquerdo
-            fl = matrix[(coord[0]-1,coord[1]-1)]['piece']#↖↖↖
-            if((fl and fl.color!=self.color) or (not fl)) :
-                self.possibleMoves.append((coord[0]-1,coord[1]-1))
-
-        if(coord[1]!=7 and coord[0]!=7): #limite inferior e lateral direito
-            br = matrix[(coord[0]+1,coord[1]+1)]['piece']#↘↘↘
-            if(br and br.color!=self.color or (not br)):
-                self.possibleMoves.append((coord[0]+1,coord[1]+1))
-
-        if(coord[1]!=0 and coord[0]!=7): #limite inferior e lateral esquerdo
-            bl = matrix[(coord[0]+1,coord[1]-1)]['piece']#↙↙↙
-            if((bl and bl.color!=self.color) or (not bl)):
-                self.possibleMoves.append((coord[0]+1,coord[1]-1))
-
+        self.checkUpperRightEdge(coord, matrix)
+        self.checkUpperLeftEdge(coord, matrix)
+        self.checkLowerRightEdge(coord, matrix)
+        self.checkLowerLeftEdge(coord, matrix)
+    
     def movV(self, coord, matrix): 
-        if((coord[0]-1>=0)):    #limite superior
-            f = matrix[(coord[0]-1,coord[1])]['piece']    #⬆⬆⬆
+        self.checkUpperEdge(coord, matrix)
+        self.checkLowerEdge(coord, matrix)
+        
+
+    def checkUpperEdge(self, coord, matrix):
+        if((coord[0]-1>=0)): 
+            f = matrix[(coord[0]-1,coord[1])]['piece']
             if ((f and f.color!=self.color) or (not f)):
                 self.possibleMoves.append((coord[0]-1,coord[1]))
-                
+    
+    def checkLowerEdge(self, coord, matrix):
         if(coord[0]+1<=7): #limite inferior
             b = matrix[(coord[0]+1,coord[1])]['piece']    #⬇⬇⬇
             if (b and b.color!=self.color or (not b)):
                 self.possibleMoves.append((coord[0]+1,coord[1]))
                 self.possibleMoves.append((coord[0]+1,coord[1]))
+    
+    def checkRightEdge(self, coord, matrix):
+        if(coord[1]+1<=7):  
+            r = matrix[(coord[0],coord[1]+1)]['piece']
+            if (r and (r.color != self.color)):
+                self.possibleMoves.append((coord[0],coord[1]+1))
+            elif not r:
+                self.possibleMoves.append((coord[0],coord[1]+1))
+
+    def checkLeftEdge(self, coord, matrix):
+        if(coord[1]-1>=0):
+            l = matrix[(coord[0],coord[1]-1)]['piece'] 
+            if (l and l.color!=self.color or (not l)):
+                self.possibleMoves.append((coord[0],coord[1]-1))
+    
+    def checkUpperRightEdge(self, coord, matrix):
+        if(coord[1]!=7 and coord[0]!=0):
+            fr = matrix[(coord[0]-1,coord[1]+1)]['piece']
+            if ((fr and fr.color!=self.color) or (not fr)):
+                self.possibleMoves.append((coord[0]-1,coord[1]+1))
+
+    def checkUpperLeftEdge(self, coord, matrix):
+        if(coord[1]!=0 and coord[0]!=0):
+            fl = matrix[(coord[0]-1,coord[1]-1)]['piece']
+            if((fl and fl.color!=self.color) or (not fl)) :
+                self.possibleMoves.append((coord[0]-1,coord[1]-1))
+
+    def checkLowerRightEdge(self, coord, matrix):
+        if(coord[1]!=7 and coord[0]!=7):
+            br = matrix[(coord[0]+1,coord[1]+1)]['piece']
+            if(br and br.color!=self.color or (not br)):
+                self.possibleMoves.append((coord[0]+1,coord[1]+1))
+
+        
+    def checkLowerLeftEdge(self, coord, matrix):
+        if(coord[1]!=0 and coord[0]!=7):
+            bl = matrix[(coord[0]+1,coord[1]-1)]['piece']
+            if((bl and bl.color!=self.color) or (not bl)):
+                self.possibleMoves.append((coord[0]+1,coord[1]-1))
+
+
     
