@@ -30,39 +30,17 @@ class Pawn(Piece):
             self.checkLowerLeftEdge(coord, matrix)
             self.checkLowerRightEdge(coord, matrix)
 
-    def firstMoveUpp(self,coord,matrix):
-        for i in range(2):
-            f = matrix[(coord[0]-(i+1),coord[1])]['piece']
-            if (not f): 
-                self.possibleMoves.append((coord[0]-(i+1),coord[1]))
-            else:
-                break
-
     def checkUpperEdge(self, coord, matrix):
-        if(self.wasMovedBefore):
-            if (coord[0]-1>=0):
-                f = matrix[(coord[0]-1,coord[1])]['piece'] 
-                if (not f):
-                    self.possibleMoves.append((coord[0]-1,coord[1]))
-        else:
-            self.firstMoveUpp(coord,matrix)
-
-    def firstMoveLow(self,coord,matrix):
-        for i in range(2):
-            f = matrix[(coord[0]+(i+1),coord[1])]['piece']
-            if (not f): 
-                self.possibleMoves.append((coord[0]+(i+1),coord[1]))
-            else:
-                break
+        if (coord[0]-1>=0):
+            f = matrix[(coord[0]-1,coord[1])]['piece'] 
+            if (not f):
+                self.possibleMoves.append((coord[0]-1,coord[1]))
 
     def checkLowerEdge(self, coord, matrix):
-        if(self.wasMovedBefore):
-            if (coord[0]+1<=7):
-                b = matrix[(coord[0]+1,coord[1])]['piece']
-                if (not b):
-                    self.possibleMoves.append((coord[0]+1,coord[1]))
-        else:
-            self.firstMoveLow(coord,matrix)
+        if (coord[0]+1<=7):
+            b = matrix[(coord[0]+1,coord[1])]['piece']
+            if (not b):
+                self.possibleMoves.append((coord[0]+1,coord[1]))
     
     def checkUpperRightEdge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=0):
@@ -103,3 +81,11 @@ class Pawn(Piece):
         #                i=2
         #        else:
         #            i=2
+
+        # ou
+        #   for i in range(2):
+        #       f = matrix[(coord[0]-(i+1),coord[1])]['piece']
+        #       if (not f): 
+        #           self.possibleMoves.append((coord[0]-(i+1),coord[1]))
+        #       else:
+        #           break
