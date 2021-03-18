@@ -30,6 +30,9 @@ class Pawn(Piece):
             self.checkLowerLeftEdge(coord, matrix)
             self.checkLowerRightEdge(coord, matrix)
 
+    def enPassant(self):
+        pass
+
     def checkUpperEdge(self, coord, matrix):
         if (coord[0]-1>=0):
             f = matrix[(coord[0]-1,coord[1])]['piece'] 

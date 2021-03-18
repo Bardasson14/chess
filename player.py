@@ -28,4 +28,3 @@ def generatePieceList(color):
         pieceList.append(pawn.Pawn(COLORS[color], COLORS[color] + '_pawn_' + str(i+1)))
 
     return pieceList
-
