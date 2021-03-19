@@ -1,11 +1,37 @@
 import tkinter as tk
+from tkinter import Menu
 from PIL import Image, ImageTk
 from board import Board, COLORS
 from player import Player
 from utils import convertCoord
 
+
 def main():
     root = tk.Tk()
+    root.title("chess")
+    menubar = Menu(root)
+    
+    root.config(menu=menubar)
+    gameMenu = Menu(menubar)
+    
+    gameMenu = Menu(menubar, tearoff=False)
+    sub_menu = Menu(gameMenu, tearoff=0)
+    sub_menu.add_command(label='Versus')
+    sub_menu.add_command(label='IA')
+    gameMenu.add_cascade(label='Mode', menu = sub_menu)
+    
+    gameMenu.add_separator()
+    
+    gameMenu.add_command(label='Exit',command=root.destroy)
+    menubar.add_cascade(label="Game",menu=gameMenu, underline=1)     
+    
+    help_menu = Menu(menubar,tearoff=0)
+
+    help_menu.add_command(label='Rules')
+    help_menu.add_command(label='About...')
+    menubar.add_cascade(label="Help",menu=help_menu,underline=0)
+    
+    
     p1 = Player(0)
     p2 = Player(1)
     board = Board(root)
