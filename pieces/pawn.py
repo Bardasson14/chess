@@ -1,4 +1,5 @@
 from .piece import Piece
+from game_state import GameState
 
 class Pawn(Piece):
     
@@ -17,12 +18,14 @@ class Pawn(Piece):
         return self.possibleMoves
 
     def movV(self, coord, matrix): 
+        #print(firstMove)
         if (self.color == 'white'):
             self.checkUpperEdge(coord, matrix)
         else:
             self.checkLowerEdge(coord, matrix)
 
     def movD(self, coord, matrix):
+        #print(firstMove)
         if (self.color == 'white'):
             self.checkUpperLeftEdge(coord, matrix)
             self.checkUpperRightEdge(coord, matrix)   
@@ -39,11 +42,38 @@ class Pawn(Piece):
             if (not f):
                 self.possibleMoves.append((coord[0]-1,coord[1]))
 
+        if GameState.firstMove:
+            i=0
+            while(i<2):
+                if(coord[0]-(i+1)>=0): # limite superior
+                    f = matrix[(coord[0]-(i+1),coord[1])]['piece']    # ⬆⬆⬆
+                    if (not f):
+                        self.possibleMoves.append((coord[0]-(i+1),coord[1]))
+                        i+=1
+                    else:
+                        i=2
+                else: i=2
+
+
     def checkLowerEdge(self, coord, matrix):
         if (coord[0]+1<=7):
             b = matrix[(coord[0]+1,coord[1])]['piece']
             if (not b):
                 self.possibleMoves.append((coord[0]+1,coord[1]))
+
+        if GameState.firstMove:
+            i=0
+            while(i<2):
+                if(coord[0]+(i+1)<=7): #limite inferior
+                    f=matrix[(coord[0]+(i+1),coord[1])]['piece']#⬇⬇⬇
+                    if(not f):
+                        self.possibleMoves.append((coord[0]+(i+1),coord[1]))
+                        i+=1
+                    else:
+                        i=2
+                else:
+                    i=2            
+        
     
     def checkUpperRightEdge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=0):
@@ -73,15 +103,7 @@ class Pawn(Piece):
         # P/ 2 casas  
         # Adicionar verificação de cor
         #if not self.wasMovedBefore:
-        #    i=0
-        #    while(i<2):
-        #        if(coord[0]-(i+1)>=0): # limite superior
-        #            f=matrix[(coord[0]-(i+1),coord[1])]['piece']    # ⬆⬆⬆
-        #            if (not f):
-        #                self.possibleMoves.append((coord[0]-(i+1),coord[1]))
-        #                i+=1
-        #            else:
-        #                i=2
+            
         #        else:
         #            i=2
 

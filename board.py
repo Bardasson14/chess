@@ -3,6 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
 from utils import convertCoord
+from game_state import GameState
 
 class Board(tk.Frame):
 
@@ -142,7 +143,6 @@ class Board(tk.Frame):
         self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
 
-
     def clickEventHandler(self,event): # encaminha funcoes dependendo do click do mouse
             print ("clicked at", event.x, event.y)
             for row in range(self.rows):
@@ -159,8 +159,8 @@ class Board(tk.Frame):
                             piece=self.squares[ref]['piece']
                             if(piece.selected):
                                 self.movePiece(piece,ref,(col,row))
-
-
+                                if (GameState.firstMove):
+                                    GameState.firstMove = False
 
                         
 
