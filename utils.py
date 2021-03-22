@@ -16,7 +16,6 @@ def pawn_promotion_menu(root):
     pieces = ['Bispo', 'Cavalo', 'Peão', 'Rei', 'Rainha', 'Torre']
     listbox = tk.Listbox(root, selectmode = 'single', width = 7, height=6)
     listbox.pack(expand = True, fill = "both")
-    to_be_destroyed = [listbox]
     label = tk.Label(root, text = "Selecione a peça na qual o peão se transformará")
     label.pack()
     for piece in pieces:
@@ -30,5 +29,4 @@ def set_piece(root):
     root.children['!listbox'].destroy()
     root.children['!label'].destroy()
     root.children['!button'].destroy()
-    #Transformar peça
-    
+    #Transformar peça na peça desejada
