@@ -13,7 +13,6 @@ class Player:
        
 def generatePieceList(color):
     pieceList = []
-    print(color)
     pieceList.append(king.King(COLORS[color], COLORS[color] + '_king'))
     pieceList.append(queen.Queen(COLORS[color], COLORS[color] + '_queen'))
     

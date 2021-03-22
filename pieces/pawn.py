@@ -2,19 +2,21 @@ from .piece import Piece
 from game_state import GameState
 
 class Pawn(Piece):
+
+    # add boundary checking functions
     
     def __init__(self, color, name):
         self.spriteDir = 'assets/img/' + color + 'Pawn.png'
         self.name = name
         self.color=color
         super(Pawn,self).__init__(color,name)
-        print(color)
-    
+        
     def getPossibleMoves(self, coord, matrix):
         self.possibleMoves=[]
-        # Setar variável global p/marcar primeira jogada do jogo, ou consultar log
-        self.movD(coord,matrix)
-        self.movV(coord,matrix)
+        self.movD(coord, matrix)
+        self.movV(coord, matrix)
+        if (GameState.possibleEnPassant):
+            self.checkEnPassant(coord, matrix)
         return self.possibleMoves
 
     def movV(self, coord, matrix): 
@@ -33,8 +35,13 @@ class Pawn(Piece):
             self.checkLowerLeftEdge(coord, matrix)
             self.checkLowerRightEdge(coord, matrix)
 
-    def enPassant(self):
-        pass
+    def checkEnPassant(self, coord, matrix):
+        # obs.: não é necessário checar as pretas, só as brancas podem dar en passant
+        if (coord[1]-1>=0 and matrix[(coord[0], coord[1]-1)]['piece'] == GameState.possibleEnPassant):
+            self.possibleMoves.append((coord[0]-1, coord[1]-1))
+        elif (coord[1]+1<=7 and matrix[(coord[0], coord[1]+1)]['piece'] == GameState.possibleEnPassant):
+            self.possibleMoves.append((coord[0]-1, coord[1]+1))
+
 
     def checkUpperEdge(self, coord, matrix):
         if (coord[0]-1>=0):
@@ -52,7 +59,8 @@ class Pawn(Piece):
                         i+=1
                     else:
                         i=2
-                else: i=2
+                else: 
+                    i=2
 
 
     def checkLowerEdge(self, coord, matrix):
@@ -98,19 +106,3 @@ class Pawn(Piece):
             bl = matrix[(coord[0]+1,coord[1]-1)]['piece']
             if(bl and bl.color != self.color):
                 self.possibleMoves.append((coord[0]+1,coord[1]-1))
-
-
-        # P/ 2 casas  
-        # Adicionar verificação de cor
-        #if not self.wasMovedBefore:
-            
-        #        else:
-        #            i=2
-
-        # ou
-        #   for i in range(2):
-        #       f = matrix[(coord[0]-(i+1),coord[1])]['piece']
-        #       if (not f): 
-        #           self.possibleMoves.append((coord[0]-(i+1),coord[1]))
-        #       else:
-        #           break
