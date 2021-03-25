@@ -1,5 +1,5 @@
 # game-related state variables (i.e: turns)
 
 class GameState:
-    possibleEnPassant = None
-    firstMove = True
+    possible_en_passant = None
+    first_move = True

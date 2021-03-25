@@ -15,19 +15,19 @@ class Pawn(Piece):
         self.possibleMoves=[]
         self.movD(coord, matrix)
         self.movV(coord, matrix)
-        if (GameState.possibleEnPassant):
-            self.checkEnPassant(coord, matrix)
+        if (GameState.possible_en_passant):
+            self.checken_passant(coord, matrix)
         return self.possibleMoves
 
     def movV(self, coord, matrix): 
-        #print(firstMove)
+        #print(first_move)
         if (self.color == 'white'):
             self.checkUpperEdge(coord, matrix)
         else:
             self.checkLowerEdge(coord, matrix)
 
     def movD(self, coord, matrix):
-        #print(firstMove)
+        #print(first_move)
         if (self.color == 'white'):
             self.checkUpperLeftEdge(coord, matrix)
             self.checkUpperRightEdge(coord, matrix)   
@@ -35,11 +35,11 @@ class Pawn(Piece):
             self.checkLowerLeftEdge(coord, matrix)
             self.checkLowerRightEdge(coord, matrix)
 
-    def checkEnPassant(self, coord, matrix):
+    def checken_passant(self, coord, matrix):
         # obs.: não é necessário checar as pretas, só as brancas podem dar en passant
-        if (coord[1]-1>=0 and matrix[(coord[0], coord[1]-1)]['piece'] == GameState.possibleEnPassant):
+        if (coord[1]-1>=0 and matrix[(coord[0], coord[1]-1)]['piece'] == GameState.possible_en_passant):
             self.possibleMoves.append((coord[0]-1, coord[1]-1))
-        elif (coord[1]+1<=7 and matrix[(coord[0], coord[1]+1)]['piece'] == GameState.possibleEnPassant):
+        elif (coord[1]+1<=7 and matrix[(coord[0], coord[1]+1)]['piece'] == GameState.possible_en_passant):
             self.possibleMoves.append((coord[0]-1, coord[1]+1))
 
 
@@ -49,7 +49,7 @@ class Pawn(Piece):
             if (not f):
                 self.possibleMoves.append((coord[0]-1,coord[1]))
 
-        if GameState.firstMove:
+        if GameState.first_move:
             i=0
             while(i<2):
                 if(coord[0]-(i+1)>=0): # limite superior
@@ -69,7 +69,7 @@ class Pawn(Piece):
             if (not b):
                 self.possibleMoves.append((coord[0]+1,coord[1]))
 
-        if GameState.firstMove:
+        if GameState.first_move:
             i=0
             while(i<2):
                 if(coord[0]+(i+1)<=7): #limite inferior

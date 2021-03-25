@@ -1,9 +1,9 @@
-import pieces
 import tkinter as tk
 from PIL import Image, ImageTk
 from player import Player, COLORS
 from utils import *
 from game_state import GameState
+import pieces
 from pieces.special_moves import *
 
 class Board(tk.Frame):
@@ -20,6 +20,8 @@ class Board(tk.Frame):
         sprites = []
         self.lock = False # indica se existe alguma peca selecionada no tabuleiro
         self.selsquare = [] # guarda as variaveis dos quadrados que indicam os possiveis movimentos
+        global special_moves
+        special_moves = SpecialMoves()
 
         for i in range(8):
             for j in range(8):
@@ -45,6 +47,7 @@ class Board(tk.Frame):
         self.placePiece(piece, row, column)
 
     def placePiece(self, piece, row, column):
+        print(piece.name, "entrou")
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
@@ -77,7 +80,6 @@ class Board(tk.Frame):
         # puts piece over the square
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
-
     
     def positionPieces(self, player):
         
@@ -135,7 +137,7 @@ class Board(tk.Frame):
         if capturedPiece:
             self.canvas.delete(capturedPiece.name)
         
-    def movePiece(self,piece,ref,coord): 
+    def movePiece(self, piece, ref, coord): 
         selected = piece.getPossibleMoves(self.squares[ref]['coord'],self.squares)
         piece.wasMovedBefore = True
         self.clearSquare(piece,selected)
@@ -144,7 +146,7 @@ class Board(tk.Frame):
         self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
 
-    def clickEventHandler(self,event): # encaminha funcoes dependendo do click do mouse
+    def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
         for row in range(self.columns):
             for col in range(self.rows):
                 if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
@@ -157,23 +159,27 @@ class Board(tk.Frame):
                             self.clearSquare(piece)
                     if ref:  # clicou no quadrado vermelho
                         piece = self.squares[ref]['piece']
+
                         if(piece and piece.selected):
+                              
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    SpecialMoves.enPassant(self, piece, row, col, ref)
-                                elif (col in [0,7]):
-                                    pawn_promotion_menu(self)
-                                    
-                            
-                            if not GameState.firstMove and GameState.possibleEnPassant == piece:
-                                GameState.possibleEnPassant = None
+                                    print(special_moves.selected_piece)
+                                    special_moves.en_passant(self, piece, row, col, ref)
+   
+                            if not GameState.first_move and GameState.possible_en_passant == piece:
+                                GameState.possible_en_passant = None
 
                             else:
-                                GameState.firstMove = False
+                                GameState.first_move = False
                                 if (get_piece_type(piece.name) == 'pawn' and (abs(col-ref[0]) == 2)):
-                                    GameState.possibleEnPassant = piece                                        
+                                    GameState.possible_en_passant = piece                                        
                             
                             self.movePiece(piece,ref,(col,row))
 
+                            if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
+                                print(special_moves.selected_piece)
+                                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                            
     def clickIsValid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
