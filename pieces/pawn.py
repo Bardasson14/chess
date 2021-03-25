@@ -37,37 +37,37 @@ class Pawn(Piece):
         if (coord[0]-1>=0):
             f = matrix[(coord[0]-1,coord[1])]['piece'] 
             if (not f):
-                self.possibleMoves.append((coord[0]-1,coord[1]))
+                self.possibleMoves.append((coord[0]-1,coord[1],'mov'))
 
     def checkLowerEdge(self, coord, matrix):
         if (coord[0]+1<=7):
             b = matrix[(coord[0]+1,coord[1])]['piece']
             if (not b):
-                self.possibleMoves.append((coord[0]+1,coord[1]))
+                self.possibleMoves.append((coord[0]+1,coord[1],'mov'))
     
     def checkUpperRightEdge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=0):
             fr = matrix[(coord[0]-1,coord[1]+1)]['piece']
             if (fr and fr.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]+1))
+                self.possibleMoves.append((coord[0]-1,coord[1]+1,'mov'))
         
     def checkUpperLeftEdge(self, coord, matrix):
         if (coord[1]!=0 and coord[0]!=0): 
             fl = matrix[(coord[0]-1,coord[1]-1)]['piece']
             if (fl and fl.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]-1))
+                self.possibleMoves.append((coord[0]-1,coord[1]-1,'mov'))
 
     def checkLowerRightEdge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=7):
             br = matrix[(coord[0]+1,coord[1]+1)]['piece']
             if (br and br.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]+1))
+                self.possibleMoves.append((coord[0]+1,coord[1]+1,'mov'))
 
     def checkLowerLeftEdge(self, coord, matrix):
         if (coord[1]!=0 and coord[0]!=7):
             bl = matrix[(coord[0]+1,coord[1]-1)]['piece']
             if(bl and bl.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]-1))
+                self.possibleMoves.append((coord[0]+1,coord[1]-1,'mov'))
 
 
         # P/ 2 casas  

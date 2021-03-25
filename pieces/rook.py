@@ -26,9 +26,9 @@ class Rook(Piece):
             if (coord[0] - i >= 0):
                 f = matrix[(coord[0]-i,coord[1])]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]-i,coord[1]))
+                    self.possibleMoves.append((coord[0]-i,coord[1],'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]-i,coord[1]))
+                    self.possibleMoves.append((coord[0]-i,coord[1],'mov'))
                     break
                 else:
                     break
@@ -38,9 +38,9 @@ class Rook(Piece):
             if (coord[0] + i <= 7):
                 f = matrix[(coord[0]+i,coord[1])]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]+i,coord[1]))
+                    self.possibleMoves.append((coord[0]+i,coord[1],'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]+i,coord[1]))
+                    self.possibleMoves.append((coord[0]+i,coord[1],'mov'))
                     break
                 else:
                     break
@@ -50,9 +50,9 @@ class Rook(Piece):
             if (coord[1] + i <= 7):
                 f = matrix[(coord[0],coord[1]+i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0],coord[1]+i))
+                    self.possibleMoves.append((coord[0],coord[1]+i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0],coord[1]+i))
+                    self.possibleMoves.append((coord[0],coord[1]+i,'mov'))
                     break
                 else:
                     break
@@ -62,9 +62,9 @@ class Rook(Piece):
             if (coord[1] - i >= 0):
                 f = matrix[(coord[0],coord[1]-i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0],coord[1]-i))
+                    self.possibleMoves.append((coord[0],coord[1]-i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0],coord[1]-i))
+                    self.possibleMoves.append((coord[0],coord[1]-i,'mov'))
                     break
                 else:
                     break
