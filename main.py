@@ -1,47 +1,10 @@
-import tkinter as tk
-from tkinter import Menu
-from PIL import Image, ImageTk
-from board import Board, COLORS
-from player import Player
-from utils import convertCoord
+from game import Game
+from utils import convert_coord
 
 
 def main():
-    root = tk.Tk()
-    root.title("chess")
-    menubar = Menu(root)
-    
-    root.config(menu=menubar)
-    gameMenu = Menu(menubar)
-    
-    gameMenu = Menu(menubar, tearoff=False)
-    sub_menu = Menu(gameMenu, tearoff=0)
-    sub_menu.add_command(label='Versus')
-    sub_menu.add_command(label='IA')
-    gameMenu.add_cascade(label='Mode', menu = sub_menu)
-    
-    gameMenu.add_separator()
-    
-    gameMenu.add_command(label='Exit',command=root.destroy)
-    menubar.add_cascade(label="Game",menu=gameMenu, underline=1)     
-    
-    help_menu = Menu(menubar,tearoff=0)
-
-    help_menu.add_command(label='Rules')
-    help_menu.add_command(label='About...')
-    menubar.add_cascade(label="Help",menu=help_menu,underline=0)
-    
-    
-    p1 = Player(0)
-    p2 = Player(1)
-    board = Board(root)
-    board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    board.positionPieces(p1)
-    board.positionPieces(p2)   
-    for sq in board.squares.values():
-        print(sq)
-    root.geometry('1000x600')
-    root.resizable(width=0, height=0)
-    root.mainloop()
+    game = Game()
     
 main()
+
+# Descartar main?
