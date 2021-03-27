@@ -176,6 +176,7 @@ class Board(tk.Frame):
             self.squares[reftorre]['piece'] = None
 
 
+    # dividir callback
     def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
         for row in range(self.rows):
             for col in range(self.columns):
@@ -211,8 +212,8 @@ class Board(tk.Frame):
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
                                 print("ocupa a casa no momento: ", piece.name)
                                 print(special_moves.selected_piece)
-                                special_moves.pawn_promotion(self, piece, row, col, sprites)
-                                
+                                special_moves.pawn_promotion(self, piece, col, row, sprites)
+
                         if(gr!='mov'):
                                 self.movRoque(gr,(col,row))
                             

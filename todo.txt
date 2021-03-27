@@ -1,0 +1,6 @@
+A Fazer
+- Corrigir movimentação de peão na jogada inicial
+- Melhorar interface (?)
+- Adicionar cronômetro a interface
+- Refatorar funções muito extensas (callback do mouse, por ex.:)
+- Renomear funções e padronizá-las
