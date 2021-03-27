@@ -8,27 +8,28 @@ class King(Piece):
         super(King,self).__init__(color,name)
 
     def littleRoque(self,coord,matrix):
-        for i in range(1,4):
-            if (coord[1] + i <= 7):
-                f = matrix[(coord[0],coord[1]+i)]['piece']
-                if (f and f.color==self.color):
-                    if((coord[1] + i)==7 and f.name=='white_rook_2'or f.name=='black_rook_2'):
-                        self.possibleMoves.append((coord[0],coord[1]+i-1,'lr'))
-                    else:
-                        print(f.name)
-                        break
+        if(not(self.wasMovedBefore)):
+            for i in range(1,4):
+                if (coord[1] + i <= 7):
+                    f = matrix[(coord[0],coord[1]+i)]['piece']
+                    if (f and f.color==self.color):
+                        if((coord[1] + i)==7 and (f.name=='white_rook_2'or f.name=='black_rook_2') and not(f.wasMovedBefore)):
+                            self.possibleMoves.append((coord[0],coord[1]+i-1,'lr'))
+                        else:
+                            print(f.name)
+                            break
 
     def bigRoque(self,coord,matrix):
-        for i in range(1,5):
-            if (coord[1] - i >= 0):
+        if(not(self.wasMovedBefore)):    
+            for i in range(1,5):
                 if (coord[1] - i >= 0):
                     f = matrix[(coord[0],coord[1]-i)]['piece']
-                if (f and f.color==self.color):
-                    if((coord[1] - i)==0 and f.name=='white_rook_1' or f.name=='black_rook_1'):
-                        self.possibleMoves.append((coord[0],coord[1]-i+2,'br'))
-                    else:
-                        print(f.name)
-                        break
+                    if (f and f.color==self.color):
+                        if((coord[1] - i)==0 and (f.name=='white_rook_1' or f.name=='black_rook_1')and not(f.wasMovedBefore)):
+                            self.possibleMoves.append((coord[0],coord[1]-i+2,'br'))
+                        else:
+                            print(f.name)
+                            break
 
     def roque(self,coord,matrix):
         self.bigRoque(coord,matrix)
