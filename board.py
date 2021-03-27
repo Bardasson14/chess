@@ -43,12 +43,14 @@ class Board(tk.Frame):
     def addPiece(self, piece, row=0, column=0):
         sprites.append(tk.PhotoImage(file = piece.spriteDir))
         piece.spriteID = len(sprites)-1 #saves the sprite position in global sprites array
-        self.canvas.create_image(0,0, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
+        self.canvas.create_image(row, column, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
         self.placePiece(piece, row, column)
 
     def placePiece(self, piece, row, column):
+        print(row, column)
         print(piece.name, "entrou")
         self.squares[(row, column)]['piece'] = piece
+        print(self.squares[(row, column)]['piece'])
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
        # print(self.squares[(row, column)])
@@ -178,7 +180,11 @@ class Board(tk.Frame):
                             self.movePiece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
+                                print("ocupa a casa no momento: ", piece.name)
                                 print(special_moves.selected_piece)
+                                print(row, col)
+                                print('certo:', self.squares[(col, row)]['piece'])
+                                print('errado:', self.squares[(row, col)]['piece'])
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
                             
     def clickIsValid(self, row, col, event):
