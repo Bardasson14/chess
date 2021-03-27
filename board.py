@@ -25,7 +25,7 @@ class Board(tk.Frame):
 
         for i in range(8):
             for j in range(8):
-                newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None} #each entry in self.squares has a piece and a coordinate
+                newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None} #each entry in self.squares has a piece and a coordinate
                 self.squares[(i,j)] = newSquareInfo
 
         canvas_width = columns * size
@@ -43,12 +43,14 @@ class Board(tk.Frame):
     def addPiece(self, piece, row=0, column=0):
         sprites.append(tk.PhotoImage(file = piece.spriteDir))
         piece.spriteID = len(sprites)-1 #saves the sprite position in global sprites array
-        self.canvas.create_image(0,0, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
+        self.canvas.create_image(row, column, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
         self.placePiece(piece, row, column)
 
     def placePiece(self, piece, row, column):
+        print(row, column)
         print(piece.name, "entrou")
         self.squares[(row, column)]['piece'] = piece
+        print(self.squares[(row, column)]['piece'])
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
        # print(self.squares[(row, column)])
@@ -90,8 +92,8 @@ class Board(tk.Frame):
             firstLine = 7
             secondLine = 6
         
-        self.addPiece(player.pieces[0], firstLine, 3)
-        self.addPiece(player.pieces[1], firstLine, 4)
+        self.addPiece(player.pieces[0], firstLine, 4)
+        self.addPiece(player.pieces[1], firstLine, 3)
         rooks = player.pieces[2:4]
         bishops = player.pieces[4:6]
         knights = player.pieces[6:8]
@@ -117,11 +119,16 @@ class Board(tk.Frame):
     def drawSquare(self,vec,coord): # desenha os possiveis movimentos na tela
         for i in range (len(vec)):
             self.squares[(vec[i][0],vec[i][1])]['selected']=coord
+            self.squares[(vec[i][0],vec[i][1])]['gamerule']=vec[i][2]
             x1 = (vec[i][0] * self.size)
             y1 = (vec[i][1] * self.size)
             x2 = x1 + self.size
             y2 = y1 + self.size
-            self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
+            if(vec[i][2]=='mov'):
+                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
+            else:
+                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="green", tags="square"))
+
 
     def clearSquare(self,piece,selected=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
@@ -129,7 +136,7 @@ class Board(tk.Frame):
         for i in range(len(self.selsquare)):# libera da tela os quadrados referentes aos possiveis movimentos 
             self.canvas.delete(self.selsquare[i])
         for i in range(len(selected)): # libera do dicionario as referencias a peca selecionada                     
-            self.squares[selected[i]]['selected']=None
+            self.squares[(selected[i][0],selected[i][1])]['selected']=None
         self.selsquare = []
         
     def pieceCapture(self, coord):
@@ -146,12 +153,37 @@ class Board(tk.Frame):
         self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
 
+    def movRoque(self,gr,coord):
+        piece = self.squares[coord]['piece']
+        if(gr=='lr'):
+            if(piece.color=='white'):
+                reftorre=(7,7)
+                torre=self.squares[reftorre]['piece']
+                print(torre.name)
+            else:
+                reftorre=(0,7)
+                torre=self.squares[reftorre]['piece']
+            self.placePiece(torre,coord[0],coord[1]-1)
+            self.squares[reftorre]['piece'] = None
+        else:
+            if(piece.color=='white'):
+                reftorre=(7,0)
+                torre=self.squares[reftorre]['piece']
+            else:
+                reftorre=(0,0)
+                torre=self.squares[reftorre]['piece']
+            self.placePiece(torre,coord[0],coord[1]+1)
+            self.squares[reftorre]['piece'] = None
+
+
+    # dividir callback
     def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
-        for row in range(self.columns):
-            for col in range(self.rows):
+        for row in range(self.rows):
+            for col in range(self.columns):
                 if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
                     ref = self.squares[(col,row)]['selected']
+                    gr = self.squares[(col,row)]['gamerule']
                     if piece:    # clicou na peca
                         if(not(self.lock) and not(piece.selected)):
                             self.addSquare(piece,(col,row))
@@ -159,7 +191,7 @@ class Board(tk.Frame):
                             self.clearSquare(piece)
                     if ref:  # clicou no quadrado vermelho
                         piece = self.squares[ref]['piece']
-
+                                
                         if(piece and piece.selected):
                               
                             if (get_piece_type(piece.name)=='pawn'):
@@ -178,8 +210,13 @@ class Board(tk.Frame):
                             self.movePiece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
+                                print("ocupa a casa no momento: ", piece.name)
                                 print(special_moves.selected_piece)
-                                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                                special_moves.pawn_promotion(self, piece, col, row, sprites)
+
+                        if(gr!='mov'):
+                                self.movRoque(gr,(col,row))
+                            
                             
     def clickIsValid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    

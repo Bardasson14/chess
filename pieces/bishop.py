@@ -24,9 +24,9 @@ class Bishop(Piece):
             if (coord[0]-i >= 0 and coord[1]-i >= 0):
                 f = matrix[(coord[0]-i,coord[1]-i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]-i,coord[1]-i))
+                    self.possibleMoves.append((coord[0]-i,coord[1]-i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]-i,coord[1]-i))
+                    self.possibleMoves.append((coord[0]-i,coord[1]-i,'mov'))
                     break
                 else:
                     break
@@ -36,9 +36,9 @@ class Bishop(Piece):
             if (coord[0]-i >= 0 and coord[1]+i <= 7):
                 f = matrix[(coord[0]-i,coord[1]+i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]-i,coord[1]+i))
+                    self.possibleMoves.append((coord[0]-i,coord[1]+i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]-i,coord[1]+i))
+                    self.possibleMoves.append((coord[0]-i,coord[1]+i,'mov'))
                     break
                 else:
                     break
@@ -48,9 +48,9 @@ class Bishop(Piece):
             if (coord[0]+i <= 7 and coord[1]+i <= 7):
                 f = matrix[(coord[0]+i,coord[1]+i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]+i,coord[1]+i))
+                    self.possibleMoves.append((coord[0]+i,coord[1]+i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]+i,coord[1]+i))
+                    self.possibleMoves.append((coord[0]+i,coord[1]+i,'mov'))
                     break
                 else:
                     break
@@ -60,9 +60,9 @@ class Bishop(Piece):
             if (coord[0]+i <= 7 and coord[1]-i >= 0):
                 f = matrix[(coord[0]+i,coord[1]-i)]['piece']
                 if (not f):
-                    self.possibleMoves.append((coord[0]+i,coord[1]-i))
+                    self.possibleMoves.append((coord[0]+i,coord[1]-i,'mov'))
                 elif(f and f.color != self.color):
-                    self.possibleMoves.append((coord[0]+i,coord[1]-i))
+                    self.possibleMoves.append((coord[0]+i,coord[1]-i,'mov'))
                     break
                 else:
                     break

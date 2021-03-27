@@ -25,6 +25,7 @@ class Piece:
     #       2->bottom(↘,↙,⬇)
     #       3->top&bottom(↘,↙,⬇,⬆,↗,↖)
 
+
     def capture (self):
         pass
     

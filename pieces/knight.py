@@ -28,65 +28,65 @@ class Knight(Piece):
         if (coord[0]-2 >= 0 and coord[1]-1 >= 0):
             f = matrix[(coord[0]-2,coord[1]-1)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]-2,coord[1]-1))
+                self.possibleMoves.append((coord[0]-2,coord[1]-1,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]-2,coord[1]-1))
+                self.possibleMoves.append((coord[0]-2,coord[1]-1,'mov'))
           
         
         if (coord[1]-2 >=0 and coord[0]-1 >=0):
             f = matrix[(coord[0]-1,coord[1]-2)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]-1,coord[1]-2))
+                self.possibleMoves.append((coord[0]-1,coord[1]-2,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]-2))
+                self.possibleMoves.append((coord[0]-1,coord[1]-2,'mov'))
 
     def movUR(self, coord, matrix):
         if (coord[0]-2 >= 0 and coord[1]+1 <= 7):
             f = matrix[(coord[0]-2,coord[1]+1)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]-2,coord[1]+1))
+                self.possibleMoves.append((coord[0]-2,coord[1]+1,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]-2,coord[1]+1))
+                self.possibleMoves.append((coord[0]-2,coord[1]+1,'mov'))
           
         
         if (coord[1]+2 <=7 and coord[0]-1 >=0):
             f = matrix[(coord[0]-1,coord[1]+2)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]-1,coord[1]+2))
+                self.possibleMoves.append((coord[0]-1,coord[1]+2,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]+2))
+                self.possibleMoves.append((coord[0]-1,coord[1]+2,'mov'))
 
     def movLL(self, coord, matrix):
         if (coord[0]+2 <= 7 and coord[1]-1 >=0):
             f = matrix[(coord[0]+2,coord[1]-1)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]+2,coord[1]-1))
+                self.possibleMoves.append((coord[0]+2,coord[1]-1,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]+2,coord[1]-1))
+                self.possibleMoves.append((coord[0]+2,coord[1]-1,'mov'))
           
         
         if (coord[0]+1 <= 7 and coord[1]-2 >=0):
             f = matrix[(coord[0]+1,coord[1]-2)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]+1,coord[1]-2))
+                self.possibleMoves.append((coord[0]+1,coord[1]-2,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]-2))
+                self.possibleMoves.append((coord[0]+1,coord[1]-2,'mov'))
 
 
     def movLR(self, coord, matrix):
         if (coord[0]+2 <= 7 and coord[1]+1 <=7):
             f = matrix[(coord[0]+2,coord[1]+1)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]+2,coord[1]+1))
+                self.possibleMoves.append((coord[0]+2,coord[1]+1,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]+2,coord[1]+1))
+                self.possibleMoves.append((coord[0]+2,coord[1]+1,'mov'))
           
         
         if (coord[0]+1 <= 7 and coord[1]+2 <= 7):
             f = matrix[(coord[0]+1,coord[1]+2)]['piece']
             if (not f):
-                self.possibleMoves.append((coord[0]+1,coord[1]+2))
+                self.possibleMoves.append((coord[0]+1,coord[1]+2,'mov'))
             elif(f and f.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]+2))
+                self.possibleMoves.append((coord[0]+1,coord[1]+2,'mov'))
 
 
