@@ -147,8 +147,8 @@ class Board(tk.Frame):
         self.squares[ref]['piece'] = None
 
     def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
-        for row in range(self.columns):
-            for col in range(self.rows):
+        for row in range(self.rows):
+            for col in range(self.columns):
                 if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
                     ref = self.squares[(col,row)]['selected']
@@ -179,7 +179,7 @@ class Board(tk.Frame):
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
                                 print(special_moves.selected_piece)
-                                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                                special_moves.pawn_promotion(self, piece, col, row, sprites)
                             
     def clickIsValid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
