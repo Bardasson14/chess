@@ -8,21 +8,21 @@ class Player:
         #0 - white
         #1 - black
         self.color = color
-        self.remainingPieces = 16
-        self.pieces = generatePieceList(color)
+        self.remaining_pieces = 16
+        self.pieces = generate_piece_list(color)
        
-def generatePieceList(color):
-    pieceList = []
-    pieceList.append(king.King(COLORS[color], COLORS[color] + '_king'))
-    pieceList.append(queen.Queen(COLORS[color], COLORS[color] + '_queen'))
+def generate_piece_list(color):
+    piece_list = []
+    piece_list.append(king.King(COLORS[color], COLORS[color] + '_king'))
+    piece_list.append(queen.Queen(COLORS[color], COLORS[color] + '_queen'))
     
     for i in range(2):    
-        pieceList.append(rook.Rook(COLORS[color], COLORS[color] + '_rook_' + str(i+1)))
+        piece_list.append(rook.Rook(COLORS[color], COLORS[color] + '_rook_' + str(i+1)))
     for i in range(2):
-        pieceList.append(bishop.Bishop(COLORS[color], COLORS[color] + '_bishop_' + str(i+1)))
+        piece_list.append(bishop.Bishop(COLORS[color], COLORS[color] + '_bishop_' + str(i+1)))
     for i in range(2):
-        pieceList.append(knight.Knight(COLORS[color], COLORS[color] + '_knight_' + str(i+1)))
+        piece_list.append(knight.Knight(COLORS[color], COLORS[color] + '_knight_' + str(i+1)))
     for i in range(8):
-        pieceList.append(pawn.Pawn(COLORS[color], COLORS[color] + '_pawn_' + str(i+1)))
+        piece_list.append(pawn.Pawn(COLORS[color], COLORS[color] + '_pawn_' + str(i+1)))
 
-    return pieceList
+    return piece_list

@@ -19,7 +19,7 @@ class SpecialMoves:
         self.selected_piece = None
     
     def en_passant(self, board, piece, row, col, ref):
-       board.pieceCapture(GameState.possible_en_passant)
+       board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
        
     def pawn_promotion(self, board, original_pawn, row, col, sprites):
@@ -33,39 +33,23 @@ class SpecialMoves:
         submit.pack()
 
     def destroy_promotion_menu(self, board, original_pawn, row, col, sprites):  
-        listbox_key = '!listbox'
-        label_key = '!label'
-        button_key = '!button'
-        i = 1
-
-        while listbox_key not in board.children:
-            i+=1
-            listbox_key = "!listbox{}".format(i)
-            
-        if (i!=1):
-            label_key = "!label{}".format(i)
-            button_key = "!button{}".format(i)
-
-        self.selected_piece = PIECES_EN[board.children[listbox_key].curselection()[0]]
-        board.children[listbox_key].destroy()
-        board.children[label_key].destroy()
-        board.children[button_key].destroy()
+        keys = get_canvas_keys(board.children)
+        self.selected_piece = PIECES_EN[board.children[keys[0]].curselection()[0]]
+        for key in keys:
+            board.children[key].destroy()
         self.set_piece(board, original_pawn, row, col, sprites)
 
     def set_piece(self, board, original_pawn, row, col, sprites): 
         piece_class = self.selected_piece.title()
-        print("piece_class: ", self.selected_piece)
         board.canvas.delete(original_pawn.name)
-        del sprites[original_pawn.spriteID]
         player_color = original_pawn.color
         modified_pawn = deepcopy(original_pawn)
-        modified_pawn = globals()[piece_class](player_color, player_color + '_' + self.selected_piece)
+        modified_pawn = globals()[piece_class](player_color, player_color + '_' + self.selected_piece + '_')
         index = PIECES_EN.index(self.selected_piece)
-        modified_pawn.name += str(self.promoted[index])
-        self.promoted[index] += 1
         filename = player_color + (get_piece_type(modified_pawn.name)).title()
+        modified_pawn.name += str(self.promoted[index])
+        print(self.promoted)
+        self.promoted[index] += 1
         modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
-        board.addPiece(modified_pawn, row, col)
-        
-    def castling(self):
-        pass
+        print("DICT: ", modified_pawn.__dict__)
+        board.add_piece(modified_pawn, row, col)
