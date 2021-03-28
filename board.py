@@ -153,6 +153,7 @@ class Board(tk.Frame):
         self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
 
+    # mover para special_moves
     def movRoque(self,gr,coord):
         piece = self.squares[coord]['piece']
         if(gr=='lr'):
