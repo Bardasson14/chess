@@ -67,12 +67,12 @@ class Pawn(Piece):
             if (not b):
                 self.possibleMoves.append((coord[0]+1,coord[1],'mov'))
 
-        if not self.wasMovedBefore:
+        if (not self.wasMovedBefore):
             i=0
             while(i<2):
                 if(coord[0]+(i+1)<=7): #limite inferior
                     f=matrix[(coord[0]+(i+1),coord[1])]['piece']#⬇⬇⬇
-                    if(not f):
+                    if (not f):
                         self.possibleMoves.append((coord[0]+(i+1),coord[1],'mov'))
                         i+=1
                     else:

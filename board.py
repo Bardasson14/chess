@@ -188,16 +188,18 @@ class Board(tk.Frame):
     def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
         for row in range(self.rows):
             for col in range(self.columns):
+
                 if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
+
                     if piece:    # clicou na peca
-                        print("PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.addSquare(piece,(col,row))
                         elif(self.lock and piece.selected):
                             self.clearSquare(piece)
+
                     if ref:  # clicou no quadrado vermelho
                         piece = self.squares[ref]['piece']
                                 
@@ -210,21 +212,14 @@ class Board(tk.Frame):
                                 else:
                                     GameState.possible_en_passant = None
    
-                            #if not GameState.first_move and GameState.possible_en_passant == piece:
-                            #    GameState.possible_en_passant = None
-
-                            #else:
-                            GameState.first_move = False
-                            #if (get_piece_type(piece.name) == 'pawn' and (abs(col-ref[0]) == 2)):
-                            #    GameState.possible_en_passant = piece                                        
-                        
+                            GameState.first_move = False                        
                             self.movePiece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
 
                         if(gr!='mov'):
-                                self.movRoque(gr,(col,row))
+                            self.movRoque(gr,(col,row))
                             
                             
     def clickIsValid(self, row, col, event):

@@ -22,7 +22,6 @@ def generatePieceList(color):
         pieceList.append(bishop.Bishop(COLORS[color], COLORS[color] + '_bishop_' + str(i+1)))
     for i in range(2):
         pieceList.append(knight.Knight(COLORS[color], COLORS[color] + '_knight_' + str(i+1)))
-    
     for i in range(8):
         pieceList.append(pawn.Pawn(COLORS[color], COLORS[color] + '_pawn_' + str(i+1)))
 
