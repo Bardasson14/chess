@@ -17,13 +17,10 @@ class SpecialMoves:
         self.selected_piece = None
     
     def en_passant(self, board, piece, row, col, ref):
-        if (board.squares[(col+1, row)]['piece'] == GameState.possible_en_passant):
-            board.pieceCapture((col+1, row))
-        else:
-            board.pieceCapture((col+1, row))
-
+       board.pieceCapture(GameState.possible_en_passant)
+       board.squares[GameState.possible_en_passant]['piece'] = None
+       
     def pawn_promotion(self, board, original_pawn, row, col, sprites):
-        print("promocao")
         self.pawn_promotion_menu(board, original_pawn, row, col, sprites)
         
     def pawn_promotion_menu(self, board, original_pawn, row, col, sprites):
@@ -58,8 +55,6 @@ class SpecialMoves:
         self.set_piece(board, original_pawn, row, col, sprites)
 
     def set_piece(self, board, original_pawn, row, col, sprites): 
-        # print(self.__dict__)   
-        # print(self.selected_piece)
         piece_class = self.selected_piece.title()
         board.canvas.delete(original_pawn.name)
         del sprites[original_pawn.spriteID]

@@ -37,11 +37,10 @@ class Pawn(Piece):
 
     def check_en_passant(self, coord, matrix):
         # obs.: não é necessário checar as pretas, só as brancas podem dar en passant
-        if (coord[1]-1>=0 and matrix[(coord[0], coord[1]-1)]['piece'] == GameState.possible_en_passant):
+        if (coord[1]-1>=0 and (coord[0], coord[1]-1) == GameState.possible_en_passant):
             self.possibleMoves.append((coord[0]-1, coord[1]-1,'mov'))
-        elif (coord[1]+1<=7 and matrix[(coord[0], coord[1]+1)]['piece'] == GameState.possible_en_passant):
+        elif (coord[1]+1<=7 and (coord[0], coord[1]+1) == GameState.possible_en_passant):
             self.possibleMoves.append((coord[0]-1, coord[1]+1,'mov'))
-
 
     def checkUpperEdge(self, coord, matrix):
         if (coord[0]-1>=0):
@@ -62,7 +61,6 @@ class Pawn(Piece):
                 else: 
                     i=2
 
-
     def checkLowerEdge(self, coord, matrix):
         if (coord[0]+1<=7):
             b = matrix[(coord[0]+1,coord[1])]['piece']
@@ -81,7 +79,6 @@ class Pawn(Piece):
                         i=2
                 else:
                     i=2            
-        
     
     def checkUpperRightEdge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=0):

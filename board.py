@@ -146,10 +146,17 @@ class Board(tk.Frame):
         
     def movePiece(self, piece, ref, coord): 
         selected = piece.getPossibleMoves(self.squares[ref]['coord'],self.squares)
-        piece.wasMovedBefore = True
+        
+        if (not piece.wasMovedBefore):
+
+            if (get_piece_type(piece.name) == "pawn"):
+                if (abs(ref[0]-coord[0]) == 2 and ((coord[1] < 7 and self.squares[(coord[0], coord[1]+1)]['piece']) or (coord[1]>0 and self.squares[(coord[0], coord[1]-1)]['piece']))):
+                    GameState.possible_en_passant = coord   
+
+            piece.wasMovedBefore = True
+
         self.clearSquare(piece,selected)
         self.pieceCapture(coord)
-        
         self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
 
@@ -186,6 +193,7 @@ class Board(tk.Frame):
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     if piece:    # clicou na peca
+                        print("PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.addSquare(piece,(col,row))
                         elif(self.lock and piece.selected):
@@ -197,22 +205,22 @@ class Board(tk.Frame):
                               
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    print(special_moves.selected_piece)
-                                    special_moves.en_passant(self, piece, row, col, ref)
+                                   special_moves.en_passant(self, piece, col, row, ref)
+                                    
+                                else:
+                                    GameState.possible_en_passant = None
    
-                            if not GameState.first_move and GameState.possible_en_passant == piece:
-                                GameState.possible_en_passant = None
+                            #if not GameState.first_move and GameState.possible_en_passant == piece:
+                            #    GameState.possible_en_passant = None
 
-                            else:
-                                GameState.first_move = False
-                                if (get_piece_type(piece.name) == 'pawn' and (abs(col-ref[0]) == 2)):
-                                    GameState.possible_en_passant = piece                                        
-                            
+                            #else:
+                            GameState.first_move = False
+                            #if (get_piece_type(piece.name) == 'pawn' and (abs(col-ref[0]) == 2)):
+                            #    GameState.possible_en_passant = piece                                        
+                        
                             self.movePiece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
-                                print("ocupa a casa no momento: ", piece.name)
-                                print(special_moves.selected_piece)
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
 
                         if(gr!='mov'):
