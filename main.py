@@ -1,4 +1,5 @@
 import tkinter as tk
+from timer import *
 from tkinter import Menu
 from PIL import Image, ImageTk
 from board import *
@@ -31,9 +32,24 @@ def main():
     help_menu.add_command(label='About...')
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
 
+    
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     
+    
+    LabelC1 = tk.LabelFrame(board, text="player2", height = 100, width = 150)
+    LabelC1.pack()
+    LabelC1.place(x = 600, y= 5)
+    timer1  = Countdown(LabelC1)
+    timer1.pack(padx = 30, pady = 10)
+    
+    LabelC2 = tk.LabelFrame(board, text="player1", height = 100, width = 150)
+    LabelC2.pack()
+    LabelC2.place(x = 600, y= 450)
+    timer2  = Countdown(LabelC2)
+    timer2.pack(padx = 30, pady = 10)
+
+
     state = GameState(board, [Player(0), Player(1)])
     #for sq in board.squares.values():
     #    print(sq)
