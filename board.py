@@ -190,6 +190,7 @@ class Board(tk.Frame):
                     piece = self.squares[(col,row)]['piece']
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
+                    print(GameState.possible_en_passant)
 
                     if piece:    # clicou na peca
                         print("SEL_PIECE: ", piece.__dict__)
