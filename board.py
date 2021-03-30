@@ -156,30 +156,6 @@ class Board(tk.Frame):
         self.capture_piece(coord)
         self.place_piece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
-
-    # mover para special_moves
-    def movRoque(self,gr,coord):
-        piece = self.squares[coord]['piece']
-        if(gr=='lr'):
-            if(piece.color=='white'):
-                reftorre=(7,7)
-                torre=self.squares[reftorre]['piece']
-                print(torre.name)
-            else:
-                reftorre=(0,7)
-                torre=self.squares[reftorre]['piece']
-            self.place_piece(torre,coord[0],coord[1]-1)
-            self.squares[reftorre]['piece'] = None
-        else:
-            if(piece.color=='white'):
-                reftorre=(7,0)
-                torre=self.squares[reftorre]['piece']
-            else:
-                reftorre=(0,0)
-                torre=self.squares[reftorre]['piece']
-            self.place_piece(torre,coord[0],coord[1]+1)
-            self.squares[reftorre]['piece'] = None
-
     
     # dividir callback
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
@@ -218,7 +194,7 @@ class Board(tk.Frame):
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
 
                         if(gr!='mov'):
-                            self.movRoque(gr,(col,row))
+                            special_moves.movRoque(self,gr,(col,row))
                             
                             
     def clickIsValid(self, row, col, event):
