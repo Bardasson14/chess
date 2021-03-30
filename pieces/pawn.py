@@ -6,103 +6,100 @@ class Pawn(Piece):
     # add boundary checking functions
     
     def __init__(self, color, name):
-        self.spriteDir = 'assets/img/' + color + 'Pawn.png'
+        self.sprite_dir = 'assets/img/' + color + 'Pawn.png'
         self.name = name
         self.color=color
         super(Pawn,self).__init__(color,name)
         
-    def getPossibleMoves(self, coord, matrix):
-        self.possibleMoves=[]
-        self.movD(coord, matrix)
-        self.movV(coord, matrix)
+    def get_possible_moves(self, coord, matrix):
+        self.possible_moves=[]
+        self.mov_d(coord, matrix)
+        self.mov_v(coord, matrix)
         if (GameState.possible_en_passant):
-            self.checken_passant(coord, matrix)
-        return self.possibleMoves
+            self.check_en_passant(coord, matrix)
+        return self.possible_moves
 
-    def movV(self, coord, matrix): 
+    def mov_v(self, coord, matrix): 
         #print(first_move)
         if (self.color == 'white'):
-            self.checkUpperEdge(coord, matrix)
+            self.check_upper_edge(coord, matrix)
         else:
-            self.checkLowerEdge(coord, matrix)
+            self.check_lower_edge(coord, matrix)
 
-    def movD(self, coord, matrix):
+    def mov_d(self, coord, matrix):
         #print(first_move)
         if (self.color == 'white'):
-            self.checkUpperLeftEdge(coord, matrix)
-            self.checkUpperRightEdge(coord, matrix)   
+            self.check_upper_left_edge(coord, matrix)
+            self.check_upper_right_edge(coord, matrix)   
         else: 
-            self.checkLowerLeftEdge(coord, matrix)
-            self.checkLowerRightEdge(coord, matrix)
+            self.check_lower_left_edge(coord, matrix)
+            self.check_lower_right_edge(coord, matrix)
 
-    def checken_passant(self, coord, matrix):
+    def check_en_passant(self, coord, matrix):
         # obs.: não é necessário checar as pretas, só as brancas podem dar en passant
-        if (coord[1]-1>=0 and matrix[(coord[0], coord[1]-1)]['piece'] == GameState.possible_en_passant):
-            self.possibleMoves.append((coord[0]-1, coord[1]-1,'mov'))
-        elif (coord[1]+1<=7 and matrix[(coord[0], coord[1]+1)]['piece'] == GameState.possible_en_passant):
-            self.possibleMoves.append((coord[0]-1, coord[1]+1,'mov'))
+        if (coord[1]-1>=0 and (coord[0], coord[1]-1) == GameState.possible_en_passant):
+            self.possible_moves.append((coord[0]-1, coord[1]-1,'mov'))
+        elif (coord[1]+1<=7 and (coord[0], coord[1]+1) == GameState.possible_en_passant):
+            self.possible_moves.append((coord[0]-1, coord[1]+1,'mov'))
 
-
-    def checkUpperEdge(self, coord, matrix):
+    def check_upper_edge(self, coord, matrix):
         if (coord[0]-1>=0):
-            f = matrix[(coord[0]-1,coord[1])]['piece'] 
-            if (not f):
-                self.possibleMoves.append((coord[0]-1,coord[1],'mov'))
+            front_piece = matrix[(coord[0]-1,coord[1])]['piece'] 
+            if (not front_piece):
+                self.possible_moves.append((coord[0]-1,coord[1],'mov'))
 
-        if GameState.first_move:
+        if not self.was_moved_before:
             i=0
             while(i<2):
                 if(coord[0]-(i+1)>=0): # limite superior
-                    f = matrix[(coord[0]-(i+1),coord[1])]['piece']    # ⬆⬆⬆
-                    if (not f):
-                        self.possibleMoves.append((coord[0]-(i+1),coord[1],'mov'))
+                    front_piece = matrix[(coord[0]-(i+1),coord[1])]['piece']    # ⬆⬆⬆
+                    if (not front_piece):
+                        self.possible_moves.append((coord[0]-(i+1),coord[1],'mov'))
                         i+=1
                     else:
                         i=2
                 else: 
                     i=2
 
-
-    def checkLowerEdge(self, coord, matrix):
+    def check_lower_edge(self, coord, matrix):
         if (coord[0]+1<=7):
-            b = matrix[(coord[0]+1,coord[1])]['piece']
-            if (not b):
-                self.possibleMoves.append((coord[0]+1,coord[1],'mov'))
+            bottom_piece = matrix[(coord[0]+1,coord[1])]['piece']
+            if (not bottom_piece):
+                self.possible_moves.append((coord[0]+1,coord[1],'mov'))
 
-        if GameState.first_move:
+        if (not self.was_moved_before):
             i=0
             while(i<2):
                 if(coord[0]+(i+1)<=7): #limite inferior
-                    f=matrix[(coord[0]+(i+1),coord[1])]['piece']#⬇⬇⬇
-                    if(not f):
-                        self.possibleMoves.append((coord[0]+(i+1),coord[1],'mov'))
+                    front_piece=matrix[(coord[0]+(i+1),coord[1])]['piece']#⬇⬇⬇
+                    if (not front_piece):
+                        self.possible_moves.append((coord[0]+(i+1),coord[1],'mov'))
                         i+=1
                     else:
                         i=2
                 else:
                     i=2            
-        
     
-    def checkUpperRightEdge(self, coord, matrix):
+    def check_upper_right_edge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=0):
-            fr = matrix[(coord[0]-1,coord[1]+1)]['piece']
-            if (fr and fr.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]+1,'mov'))
+            front_right_piece = matrix[(coord[0]-1,coord[1]+1)]['piece']
+            if (front_right_piece and front_right_piece.color != self.color):
+                self.possible_moves.append((coord[0]-1,coord[1]+1,'mov'))
         
-    def checkUpperLeftEdge(self, coord, matrix):
+    def check_upper_left_edge(self, coord, matrix):
         if (coord[1]!=0 and coord[0]!=0): 
-            fl = matrix[(coord[0]-1,coord[1]-1)]['piece']
-            if (fl and fl.color != self.color):
-                self.possibleMoves.append((coord[0]-1,coord[1]-1,'mov'))
+            front_left_piece = matrix[(coord[0]-1,coord[1]-1)]['piece']
+            if (front_left_piece and front_left_piece.color != self.color):
+                self.possible_moves.append((coord[0]-1,coord[1]-1,'mov'))
 
-    def checkLowerRightEdge(self, coord, matrix):
+    def check_lower_right_edge(self, coord, matrix):
         if (coord[1]!=7 and coord[0]!=7):
-            br = matrix[(coord[0]+1,coord[1]+1)]['piece']
-            if (br and br.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]+1,'mov'))
+            bottom_right_piece = matrix[(coord[0]+1,coord[1]+1)]['piece']
+            if (bottom_right_piece and bottom_right_piece.color != self.color):
+                self.possible_moves.append((coord[0]+1,coord[1]+1,'mov'))
 
-    def checkLowerLeftEdge(self, coord, matrix):
+    def check_lower_left_edge(self, coord, matrix):
         if (coord[1]!=0 and coord[0]!=7):
-            bl = matrix[(coord[0]+1,coord[1]-1)]['piece']
-            if(bl and bl.color != self.color):
-                self.possibleMoves.append((coord[0]+1,coord[1]-1,'mov'))
+            bottom_left_piece = matrix[(coord[0]+1,coord[1]-1)]['piece']
+            if(bottom_left_piece and bottom_left_piece.color != self.color):
+                self.possible_moves.append((coord[0]+1,coord[1]-1,'mov'))

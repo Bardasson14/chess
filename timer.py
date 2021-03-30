@@ -5,57 +5,55 @@ class Countdown(tk.Frame):
     
     def __init__(self, master):
         super().__init__(master)
-        self.createWidgets()
-        self.showWidgets()
-        self.secondsLeft = 600
-        self.timerOn = False
+        self.create_widgets()
+        self.show_widgets()
+        self.seconds_left = 600
+        self.timer_on = False
 
-    def showWidgets(self):
+    def show_widgets(self):
 
         self.label.pack()
         #self.entry.pack()
         self.start.pack()
 
-    def createWidgets(self):
+    def create_widgets(self):
 
         self.label = tk.Label(self, text="00:10:00")
         self.entry = tk.Entry(self, justify='center')
         self.entry.focus_set()
-        self.start = tk.Button(self, text="Start",
-                               command=self.startButton)
+        self.start = tk.Button(self, text="Start", command=self.start_button)
 
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
-        self.label['text'] = self.convertSecondsLeftToTime()
+        self.label['text'] = self.convert_seconds_left_to_time()
 
-        if self.secondsLeft:
-            self.secondsLeft -= 1
-            self.timerOn = self.after(1000, self.countdown)
+        if self.seconds_left:
+            self.seconds_left -= 1
+            self.timer_on = self.after(1000, self.countdown)
         else:
-            self.timerOn = False
+            self.timer_on = False
 
-    def startButton(self):
+    def start_button(self):
         '''começa a contagem'''
         
-        self.stopTimer()
+        self.stop_timer()
         self.countdown()                            
 
-    def stopTimer(self):
+    def stop_timer(self):
         '''Para ele após o tempo estipulado.'''
-        if self.timerOn:
-            self.afterCancel(self.timerOn)
-            self.timerOn = False
+        if self.timer_on:
+            self.after_cancel(self.timer_on)
+            self.timer_on = False
 
-    def convertSecondsLeftToTime(self):
-        return datetime.timedelta(seconds=self.secondsLeft)
+    def convert_seconds_left_to_time(self):
+        return datetime.timedelta(seconds=self.seconds_left)
 
 
+'''
 if __name__ == '__main__':
     root = tk.Tk()
     root.resizable(False, False)
-
     countdown = Countdown(root)
     countdown.pack()
-
     root.mainloop()
-
+'''
