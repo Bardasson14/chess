@@ -52,8 +52,8 @@ class Bishop(Piece):
         return self.possible_moves
 
     def kingPosition(self, matrix):
-        for i in range(1,8):
-            for j in range(1,8):
+        for i in range(8):
+            for j in range(8):
                 piece = matrix[(i, j)]['piece']
                 if(self.color == 'white' and piece):
                     if(piece.name == 'white_king'):
@@ -63,6 +63,7 @@ class Bishop(Piece):
                         GameState.blackcoord = (i,j)
 
     def topCheck(self, coord, matrix):#checa se o rei está em xeque por cima
+
         for i in range(1,8):
             if (coord[0] - i >= 0):
                 piece = matrix[(coord[0]-i,coord[1])]['piece']

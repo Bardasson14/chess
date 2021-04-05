@@ -37,8 +37,8 @@ class King(Piece):
             return 0
 
     def kingPosition(self, matrix):
-        for i in range(1,8):
-            for j in range(1,8):
+        for i in range(8):
+            for j in range(8):
                 piece = matrix[(i, j)]['piece']
                 if(self.color == 'white' and piece):
                     if(piece.name == 'white_king'):

@@ -12,32 +12,22 @@ class Pawn(Piece):
         super(Pawn,self).__init__(color,name)
 
     def kingCheck(self, coord, matrix):
-        if(self.topCheck(coord, matrix)):
-            return 1
-        elif(self.bottomCheck(coord, matrix)):
-            return 1
-        elif(self.rightCheck(coord, matrix)):
-            return 1
-        elif(self.letfCheck(coord, matrix)):
-            return 1
-        elif(self.topleftCheck(coord, matrix)):
-            return 1
-        elif(self.toprightCheck(coord, matrix)):
-            return 1
-        elif(self.bottomleftCheck(coord, matrix)):
-            return 1
-        elif(self.bottomrightCheck(coord, matrix)):
-            return 1
-        elif(self.ulCheck(coord, matrix)):
-            return 1
-        elif(self.urCheck(coord, matrix)):
-            return 1
-        elif(self.lrCheck(coord, matrix)):
-            return 1
-        elif(self.llCheck(coord, matrix)):
+        if(self.h_Check(coord, matrix) or self.v_Check(coord, matrix) or self.d_Check(coord, matrix) or self.l_Check(coord, matrix)):
             return 1
         else:
             return 0
+    
+    def h_Check(self, coord, matrix):
+        return self.letfCheck(coord, matrix) or self.rightCheck(coord, matrix)
+    
+    def v_Check(self, coord, matrix):
+        return self.topCheck(coord, matrix) or self.bottomCheck(coord, matrix)
+
+    def d_Check(self, coord, matrix):
+        return self.topleftCheck(coord, matrix) or self.toprightCheck(coord, matrix) or self.bottomleftCheck(coord, matrix) or self.bottomrightCheck(coord, matrix)
+    
+    def l_Check(self, coord, matrix):
+        return self.ulCheck(coord, matrix) or self.urCheck(coord, matrix) or self.lrCheck(coord, matrix) or self.llCheck(coord, matrix)
 
     def get_possible_moves(self, coord, matrix):
         self.possible_moves=[]
@@ -61,8 +51,8 @@ class Pawn(Piece):
         return self.possible_moves
 
     def kingPosition(self, matrix):
-        for i in range(1,8):
-            for j in range(1,8):
+        for i in range(8):
+            for j in range(8):
                 piece = matrix[(i, j)]['piece']
                 if(self.color == 'white' and piece):
                     if(piece.name == 'white_king'):

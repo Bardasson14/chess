@@ -48,8 +48,8 @@ class Knight(Piece):
         return self.possibleMoves
 
     def kingPosition(self, matrix):
-        for i in range(1,8):
-            for j in range(1,8):
+        for i in range(8):
+            for j in range(8):
                 piece = matrix[(i, j)]['piece']
                 if(self.color == 'white' and piece):
                     if(piece.name == 'white_king'):
@@ -155,7 +155,7 @@ class Knight(Piece):
     def ulCheck(self, coord, matrix):
         if (coord[0]-2 >= 0 and coord[1]-1 >= 0):
             piece = matrix[(coord[0]-2,coord[1]-1)]['piece']
-            print(matrix[(coord[0]-2,coord[1]-1)])
+            print(matrix[(co)])
             if((piece and piece.color != self.color) and (piece.name == 'black_knight_2' or piece.name == 'black_knight_1')):
                 return 1
             elif((piece and piece.color != self.color) and (piece.name == 'white_knight_2' or piece.name == 'white_knight_1')):
