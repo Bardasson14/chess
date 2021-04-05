@@ -53,3 +53,24 @@ class SpecialMoves:
         modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
         print("DICT: ", modified_pawn.__dict__)
         board.add_piece(modified_pawn, row, col)
+
+    def movRoque(self,board,gr,coord):
+        piece = board.squares[coord]['piece']
+        if(gr=='lr'):
+            if(piece.color=='white'):
+                reftorre=(7,7)
+                torre=board.squares[reftorre]['piece']
+            else:
+                reftorre=(0,7)
+                torre=board.squares[reftorre]['piece']
+            board.place_piece(torre,coord[0],coord[1]-1)
+            board.squares[reftorre]['piece'] = None
+        else:
+            if(piece.color=='white'):
+                reftorre=(7,0)
+                torre=board.squares[reftorre]['piece']
+            else:
+                reftorre=(0,0)
+                torre=board.squares[reftorre]['piece']
+            board.place_piece(torre,coord[0],coord[1]+1)
+            board.squares[reftorre]['piece'] = None
