@@ -3,6 +3,8 @@ class GameState:
     first_move = True
     blackcoord = (0,4)
     whitecoord = (7,4)
+    white_king_checked = False
+    black_king_checked = False
 
     def __init__(self, board, players):
         self.board = board

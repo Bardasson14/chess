@@ -27,3 +27,9 @@ def get_canvas_keys(canvas):
         button_key = "!button{}".format(i)
 
     return [listbox_key, label_key, button_key]
+
+def piece_in(piece, arr):
+    for element in arr:
+        if piece.name in element:
+            return True
+    return False

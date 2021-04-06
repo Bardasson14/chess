@@ -5,6 +5,7 @@ from utils import *
 from game_state import GameState
 import pieces
 from pieces.special_moves import *
+from game_rules import GameRules
 
 class Board(tk.Frame):
 
@@ -159,10 +160,12 @@ class Board(tk.Frame):
     
     # dividir callback
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
+        game_rules = GameRules()
+    
         for row in range(self.rows):
             for col in range(self.columns):
 
-                if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
+                if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
@@ -176,26 +179,34 @@ class Board(tk.Frame):
                             self.clear_square(piece)
 
                     if ref:  # clicou no quadrado vermelho
-                        piece = self.squares[ref]['piece']
-                            
-                        if(piece and piece.selected):
-                              
-                            if (get_piece_type(piece.name)=='pawn'):
-                                if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                   special_moves.en_passant(self, piece, col, row, ref)
-                                    
-                                else:
-                                    GameState.possible_en_passant = None
-   
-                            GameState.first_move = False                        
-                            self.move_piece(piece,ref,(col,row))
 
-                            if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
-                                special_moves.pawn_promotion(self, piece, col, row, sprites)
+                        if not (game_rules.check_all(self.squares, GameState.blackcoord) or (game_rules.check_all(self.squares, GameState.whitecoord))):
+                            piece = self.squares[ref]['piece']
+                                
+                            if(piece and piece.selected):
+                                
+                                if (get_piece_type(piece.name)=='pawn'):
+                                    if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
+                                        special_moves.en_passant(self, piece, col, row, ref)
+                                        
+                                    else:
+                                        GameState.possible_en_passant = None
+    
+                                GameState.first_move = False                        
+                                self.move_piece(piece,ref,(col,row))
 
-                        if(gr!='mov'):
-                            special_moves.movRoque(self,gr,(col,row))
+                                if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
+                                    special_moves.pawn_promotion(self, piece, col, row, sprites)
+
+                                elif (get_type(piece.name)=='king'):
+                                    if (piece.color == 'white'):
+                                        GameState.whitecoord = (col, row)
+                                    else:
+                                        GameState.blackcoord = (col, row)
+
+                            if(gr!='mov'):
+                                special_moves.movRoque(self,gr,(col,row))
+                                
                             
-                            
-    def clickIsValid(self, row, col, event):
+    def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
