@@ -38,7 +38,6 @@ class SpecialMoves:
         for key in keys:
             board.children[key].destroy()
         self.set_piece(board, original_pawn, row, col, sprites)
-        board.lock=False
 
     def set_piece(self, board, original_pawn, row, col, sprites): 
         piece_class = self.selected_piece.title()
