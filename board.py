@@ -164,11 +164,13 @@ class Board(tk.Frame):
 
                 if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
+                    if(piece):
+                        color=piece.color
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     print(GameState.possible_en_passant)
 
-                    if piece:    # clicou na peca
+                    if piece and GameState.turno(color):    # clicou na peca
                         print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
@@ -191,8 +193,9 @@ class Board(tk.Frame):
                             self.move_piece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
+                                self.lock=True
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
-
+                        GameState.troca()
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
                             
