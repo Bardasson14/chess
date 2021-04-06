@@ -9,6 +9,8 @@ class GameState:
         self.board.position_pieces(players[0])
         self.board.position_pieces(players[1])
 
+
+        
     @classmethod
     def troca(self):
         if(self.player=='white'):
@@ -18,7 +20,6 @@ class GameState:
 
     @classmethod
     def turno(self,color):
-        print(self.player)
+        #print(self.player)
         r=(self.player==color)
         return r
-

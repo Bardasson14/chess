@@ -1,5 +1,9 @@
 import tkinter as tk
 import datetime
+from game_state import GameState
+from player import Player
+
+
 
 class Countdown(tk.Frame):
     
@@ -14,14 +18,14 @@ class Countdown(tk.Frame):
 
         self.label.pack()
         #self.entry.pack()
-        self.start.pack()
+        #self.start.pack()
 
     def create_widgets(self):
 
         self.label = tk.Label(self, text="00:10:00")
         self.entry = tk.Entry(self, justify='center')
         self.entry.focus_set()
-        self.start = tk.Button(self, text="Start", command=self.start_button)
+        #self.start = tk.Button(self, text="Start", command=self.stop_timer)
 
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
@@ -33,7 +37,7 @@ class Countdown(tk.Frame):
         else:
             self.timer_on = False
 
-    def start_button(self):
+    def start_timer(self):
         '''começa a contagem'''
         
         self.stop_timer()
