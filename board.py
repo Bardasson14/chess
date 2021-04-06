@@ -52,7 +52,7 @@ class Board(tk.Frame):
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-       # #print(self.squares[(row, column)])
+       # ##print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
@@ -171,10 +171,10 @@ class Board(tk.Frame):
                         color=piece.color
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
-                    ##print(GameState.possible_en_passant)
+                    ###print(GameState.possible_en_passant)
 
                     if piece and GameState.turno(color):    # clicou na peca
-                        print("SEL_PIECE: ", piece.__dict__)
+                        #print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):

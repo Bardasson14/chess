@@ -23,7 +23,7 @@ class GameState:
 
     @classmethod
     def turno(self,color):
-        print(self.player)
+        #print(self.player)
         r=(self.player==color)
         return r
 
