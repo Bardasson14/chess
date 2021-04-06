@@ -1,5 +1,4 @@
 from .piece import Piece
-from game_state import GameState
 
 class Bishop(Piece):
     
@@ -7,6 +6,11 @@ class Bishop(Piece):
         self.sprite_dir = 'assets/img/' + color + 'Bishop.png'
         self.name = name
         super(Bishop,self).__init__(color,name)
+
+    def get_possible_moves(self, coord, matrix):
+        self.possible_moves=[]
+        self.mov_d(coord,matrix)
+        return self.possible_moves
 
     def mov_d(self, coord, matrix):
         self.check_upper_left(coord, matrix)

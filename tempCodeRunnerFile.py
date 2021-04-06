@@ -48,7 +48,7 @@ def main():
 
     state = GameState(board, [Player(0), Player(1)])
     #for sq in board.squares.values():
-    #    print(sq)
+    #    #print(sq)
     root.geometry('1000x600')
     root.resizable(width=0, height=0)
     root.mainloop()

@@ -20,14 +20,14 @@ class Pawn(Piece):
         return self.possible_moves
 
     def mov_v(self, coord, matrix): 
-        #print(first_move)
+        ##print(first_move)
         if (self.color == 'white'):
             self.check_upper_edge(coord, matrix)
         else:
             self.check_lower_edge(coord, matrix)
 
     def mov_d(self, coord, matrix):
-        #print(first_move)
+        ##print(first_move)
         if (self.color == 'white'):
             self.check_upper_left_edge(coord, matrix)
             self.check_upper_right_edge(coord, matrix)   
