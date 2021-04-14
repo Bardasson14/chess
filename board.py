@@ -106,10 +106,12 @@ class Board(tk.Frame):
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
     
-    def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
+    def add_square(self, piece, coord, game_rules): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
+        # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
+        #     vec = []
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -176,7 +178,7 @@ class Board(tk.Frame):
                     if piece and GameState.turno(color):    # clicou na peca
                         #print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
-                            self.add_square(piece,(col,row))
+                            self.add_square(piece,(col,row), game_rules)
                         elif(self.lock and piece.selected):
                             self.clear_square(piece)
                         
