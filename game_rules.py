@@ -28,7 +28,7 @@ class GameRules:
                 piece = matrix[(coord[0]+(mode[string_mode])*i, coord[1])]['piece']
                 if (piece and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen']):
                     return True
-                elif (piece and piece.color == current_king.color):
+                elif (piece):
                     break
         return False
 
@@ -47,7 +47,7 @@ class GameRules:
                 piece = matrix[(coord[0],coord[1]+mode[string_mode]*i)]['piece']
                 if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen'])):
                     return True
-                elif(piece and piece.color == current_king.color):
+                elif (piece):
                     break
         return False
         
@@ -66,8 +66,6 @@ class GameRules:
 
             if (self.check_diagonal_boundaries(coord, string_mode, i)):
                 piece = matrix[(coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i)]['piece']
-                
-
                 if(piece and (piece.color != current_king.color)) :
                     print(piece.color)
                     print(get_piece_type(piece.name))
@@ -75,9 +73,8 @@ class GameRules:
 
                     if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower') or (piece.color=='black' and string_mode.split('_')[0] == 'upper'))):
                         return True
-                    
-                    elif((piece and piece.color == current_king.color)):
-                        break
+                elif(piece):
+                    break
         return False
 
     def check_diagonal_boundaries(self, coord, string_mode, i):
@@ -97,8 +94,8 @@ class GameRules:
         reverse_x = reverse_mode[string_mode][0]
         reverse_y = reverse_mode[string_mode][1]
         current_king = matrix[coord]['piece']
-        ##print(coord)
-        # ##print(x,y)
+        #print(coord)
+        #print(x,y)
     
         if (self.check_knight_boundaries(coord, string_mode)[0]):
             piece = matrix[(coord[0]+x, coord[1]+y)]['piece']
