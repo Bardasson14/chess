@@ -171,11 +171,12 @@ class GameRules:
         return boundaries[string_mode]
 
     def append_moves(self, color, matrix, coord):
+        dirs = ['left', 'top', 'right', 'bottom']
         aux = []
-        aux.extend(self.king_left(color, matrix, coord))
-        aux.extend(self.king_right(color, matrix, coord))
-        aux.extend(self.king_top(color, matrix, coord))
-        aux.extend(self.king_bottom(color, matrix, coord))
+
+        for direction in dirs:
+            aux += self.king_check(matrix, coord, direction)
+            
         return aux
 
     def verify_squares(self, color, matrix, coord, string_mode):
@@ -201,93 +202,3 @@ class GameRules:
             return moves
 
         return []
-
-    '''
-    def verify_squares_bottom(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[0]+i > 7):
-                break
-            else:
-                piece = matrix[(coord[0]+i, coord[1])]['piece']
-                if(not(piece)):
-                    moves.append((coord[0]+i,coord[1], 'mov'))
-                elif(piece and piece.color != color and (get_piece_type(piece.name) in ['rook', 'queen'])):
-                    aux = True
-                    moves.append((coord[0]+i,coord[1], 'mov'))
-                    break
-                else: 
-                    break
-        if(aux):
-            return moves
-        else:
-            moves = []
-            return moves
-
-    def verify_squares_top(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[0]-i < 0):
-                break
-            else:
-                piece = matrix[(coord[0]-i, coord[1])]['piece']
-                if(not(piece)):
-                    moves.append((coord[0]-i,coord[1], 'mov'))
-                elif(piece and piece.color and (get_piece_type(piece.name) in ['rook', 'queen'])):
-                    aux = True
-                    moves.append((coord[0]-i,coord[1], 'mov'))
-                    break
-                else: 
-                    break
-        if(aux):
-            return moves
-        else:
-            moves = []
-            return moves
-
-    def verify_squares_right(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[1]+i > 7):
-                break
-            else:
-                piece = matrix[(coord[0], coord[1]+i)]['piece']
-                if(not(piece)):
-                    moves.append((coord[0],coord[1]+i, 'mov'))
-                elif(piece and piece.color and (get_piece_type(piece.name) in ['rook', 'queen'])):
-                    aux = True
-                    moves.append((coord[0],coord[1]+i, 'mov'))
-                    break
-                else: 
-                    break
-        if(aux):
-            return moves
-        else:
-            moves = []
-            return moves
-
-    def verify_squares_left(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[1]-i < 0):
-                break
-            else:
-                piece = matrix[(coord[0], coord[1]-i)]['piece']
-                if(not(piece)):
-                    moves.append((coord[0],coord[1]-i, 'mov'))
-                elif(piece and piece.color and (get_piece_type(piece.name) in ['rook', 'queen'])):
-                    aux = True
-                    moves.append((coord[0],coord[1]-i, 'mov'))
-                    break
-                else: 
-                    break
-        if(aux):
-            return moves
-        else:
-            moves = []
-            return moves
-    '''
