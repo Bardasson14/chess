@@ -125,11 +125,12 @@ class GameRules:
         
         if (possible_moves):
             directions = ['bottom', 'top', 'right', 'left']
-            func_name = 'verify_squares_' + directions[possible_moves[0]] 
+            # func_name = 'verify_squares_' + directions[possible_moves[0]] 
+            list_aux = self.verify_squares(color, matrix, coord, directions[possible_moves[0]])
             possible_moves.pop(0)
             # print(globals())
             # print(func_name)
-            list_aux = getattr(self, func_name)(color, matrix, coord)
+            # list_aux = getattr(self, func_name)(color, matrix, coord)
             if(list_aux):
                 return possible_moves + list_aux
         return []
@@ -139,7 +140,7 @@ class GameRules:
         # 2 - right
         # 3 - left
         
-    def king_check(self, matrix, coord, string_mode):
+    def king_check(self, matrix, coord, string_mode, color):
         directions = ['bottom', 'top', 'right', 'left']
         modes = {'left': (0, -1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0)}
         mode = modes[string_mode]
@@ -148,10 +149,11 @@ class GameRules:
         aux = False
 
         for i in range(1,8):
-            if(self.king_check_boundaries(coord, string_mode)):
+            if(self.king_check_boundaries(coord, string_mode, i)):
                 break
             else:
                 piece = matrix[coord_aux]['piece']
+                # print(coord_aux)
                 if(piece and piece.color == color):
                     if(get_piece_type(piece.name) == 'king'):
                         aux = True
@@ -166,7 +168,7 @@ class GameRules:
             return moves
         return []
 
-    def king_check_boundaries(self, coord, string_mode):
+    def king_check_boundaries(self, coord, string_mode, i):
         boundaries = {'left': coord[1]-i < 0, 'top': coord[0]-i < 0, 'right': coord[1]+i > 7, 'bottom': coord[0]+i > 7}
         return boundaries[string_mode]
 
@@ -175,7 +177,7 @@ class GameRules:
         aux = []
 
         for direction in dirs:
-            aux += self.king_check(matrix, coord, direction)
+            aux += self.king_check(matrix, coord, direction, color)
             
         return aux
 
@@ -186,7 +188,7 @@ class GameRules:
         moves = []
         aux = False
         for i in range(1,8):
-            if(self.king_check_boundaries(coord, string_mode)):
+            if(self.king_check_boundaries(coord, string_mode, i)):
                 break
             else:
                 piece = matrix[coord_aux]['piece']
