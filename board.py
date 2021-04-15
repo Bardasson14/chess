@@ -130,7 +130,7 @@ class Board(tk.Frame):
             else:
                 self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="green", tags="square"))
 
-    def clear_square(self,piece,selected=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
+    def clear_square(self,piece,selected): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
         self.lock = False
         for i in range(len(self.selsquare)):# libera da tela os quadrados referentes aos possiveis movimentos 
@@ -168,19 +168,20 @@ class Board(tk.Frame):
             for col in range(self.columns):
 
                 if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
-                    piece = self.squares[(col,row)]['piece']
+                    piece = self.squares[(col,row)]['piece']#guarda se o quadrado clicado eh uma peca
                     if(piece):
                         color=piece.color
-                    ref = self.squares[(col,row)]['selected']
-                    gr = self.squares[(col,row)]['gamerule']
+                    ref = self.squares[(col,row)]['selected']#guarda se o quadrado clicado possui alguma referencia
+                    gr = self.squares[(col,row)]['gamerule']#guarda se o quadrado clicado possui alguma regra de jogo
+                    print(ref)
                     ###print(GameState.possible_en_passant)
 
-                    if piece and GameState.turno(color):    # clicou na peca
+                    if piece and GameState.turno(color):    # clicou na peca no turno
                         #print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row), game_rules)
                         elif(self.lock and piece.selected):
-                            self.clear_square(piece)
+                            self.clear_square(piece,piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         
                         print()
                         print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
@@ -214,7 +215,7 @@ class Board(tk.Frame):
                                 else:
                                     GameState.blackcoord = (col, row)
 
-                        GameState.troca()
+                        GameState.troca()#troca a cor do turno
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
