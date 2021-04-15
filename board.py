@@ -175,7 +175,7 @@ class Board(tk.Frame):
                     gr = self.squares[(col,row)]['gamerule']
                     ###print(GameState.possible_en_passant)
 
-                    if piece and GameState.turno(color):    # clicou na peca
+                    if piece:    # clicou na peca
                         #print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row), game_rules)

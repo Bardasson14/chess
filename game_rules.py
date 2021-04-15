@@ -67,9 +67,9 @@ class GameRules:
             if (self.check_diagonal_boundaries(coord, string_mode, i)):
                 piece = matrix[(coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i)]['piece']
                 if(piece and (piece.color != current_king.color)) :
-                    print(piece.color)
-                    print(get_piece_type(piece.name))
-                    print(string_mode.split('_')[0])
+                    #print(piece.color)
+                    #print(get_piece_type(piece.name))
+                    #print(string_mode.split('_')[0])
 
                     if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower') or (piece.color=='black' and string_mode.split('_')[0] == 'upper'))):
                         return True
@@ -120,37 +120,56 @@ class GameRules:
         return [coord[0]+2 <= 7 and coord[1]+1 <=7, coord[0]+1 <= 7 and coord[1]+2 <= 7]
     
     def can_move(self, color, matrix, coord):
-        p_moves = self.append_moves(color, matrix, coord)
-        if(len(p_moves) > 0 and p_moves[0] == 0):
-            p_moves.pop(0)
-            list_aux = self.verify_squares_bottom(color, matrix, coord)
-            if(len(list_aux) > 0):
-                p_moves.extend(list_aux)
-            else:
-                p_moves = []
-        elif(len(p_moves) > 0 and p_moves[0] == 1):
-            p_moves.pop(0)
-            list_aux = self.verify_squares_top(color, matrix, coord)
-            if(len(list_aux) > 0):
-                p_moves.extend(list_aux)
-            else:
-                p_moves = []
-        elif(len(p_moves) > 0 and p_moves[0] == 2):
-            p_moves.pop(0)
-            list_aux = self.verify_squares_right(color, matrix, coord)
-            if(len(list_aux) > 0):
-                p_moves.extend(list_aux)
-            else:
-                p_moves = []
-        elif(len(p_moves) > 0 and p_moves[0] == 3):
-            p_moves.pop(0)
-            list_aux = self.verify_squares_left(color, matrix, coord)
-            if(len(list_aux) > 0):
-                p_moves.extend(list_aux)
-            else:
-                p_moves = []               
-        return p_moves    
+
+        possible_moves = self.append_moves(color, matrix, coord)
         
+        if (possible_moves):
+            directions = ['bottom', 'top', 'right', 'left']
+            func_name = 'verify_squares_' + directions[possible_moves[0]] 
+            possible_moves.pop(0)
+            # print(globals())
+            # print(func_name)
+            list_aux = getattr(self, func_name)(color, matrix, coord)
+            if(list_aux):
+                return possible_moves + list_aux
+        return []
+
+        # 0 - bottom
+        # 1 - top
+        # 2 - right
+        # 3 - left
+        
+    def king_check(self, matrix, coord, string_mode):
+        directions = ['bottom', 'top', 'right', 'left']
+        modes = {'left': (0, -1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0)}
+        mode = modes[string_mode]
+        coord_aux = (coord[0]+mode[0], coord[1]+mode[1])
+        moves = []
+        aux = False
+
+        for i in range(1,8):
+            if(self.king_check_boundaries(coord, string_mode)):
+                break
+            else:
+                piece = matrix[coord_aux]['piece']
+                if(piece and piece.color == color):
+                    if(get_piece_type(piece.name) == 'king'):
+                        aux = True
+                    break
+                elif not piece:
+                    moves.append((coord_aux[0], coord_aux[1], 'mov'))
+                else:
+                    break
+
+        if(aux):
+            moves.insert(0, directions.index(string_mode))
+            return moves
+        return []
+
+    def king_check_boundaries(self, coord, string_mode):
+        boundaries = {'left': coord[1]-i < 0, 'top': coord[0]-i < 0, 'right': coord[1]+i > 7, 'bottom': coord[0]+i > 7}
+        return boundaries[string_mode]
+
     def append_moves(self, color, matrix, coord):
         aux = []
         aux.extend(self.king_left(color, matrix, coord))
@@ -159,106 +178,31 @@ class GameRules:
         aux.extend(self.king_bottom(color, matrix, coord))
         return aux
 
-    def king_top(self, color, matrix, coord):
+    def verify_squares(self, color, matrix, coord, string_mode):
+        modes = {'left': (0,-1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0)}
+        mode = modes[string_mode]
+        coord_aux = (coord[0]+mode[0], coord[1]+mode[1])
         moves = []
         aux = False
         for i in range(1,8):
-            if(coord[0]-i < 0):
+            if(self.king_check_boundaries(coord, string_mode)):
                 break
             else:
-                piece = matrix[(coord[0]-i, coord[1])]['piece']
-                if(piece and piece.color == color):
-                    if(get_piece_type(piece.name) in ['king']):
-                        aux = True
-                        break
-                    else:
-                        break
-                elif(not(piece)):
-                    moves.append((coord[0]-i,coord[1], 'mov'))
-                else:
+                piece = matrix[coord_aux]['piece']
+                if(not(piece)):
+                    moves.append((coord_aux[0], coord_aux[1],'mov'))
+                elif(piece and piece.color != color and (get_piece_type(piece.name) in ['rook', 'queen'])):
+                    aux = True
+                    moves.append((coord_aux[0], coord_aux[1], 'mov'))
+                    break
+                else: 
                     break
         if(aux):
-            moves.insert(0, 0)
-            return moves
-        else:
-            moves = []
             return moves
 
-    def king_bottom(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[0]+i > 7):
-                break
-            else:
-                piece = matrix[(coord[0]+i, coord[1])]['piece']
-                if(piece and piece.color == color):
-                    if(get_piece_type(piece.name) in ['king']):
-                        aux = True
-                        break
-                    else:
-                        break
-                elif(not(piece)):
-                    moves.append((coord[0]+i,coord[1], 'mov'))
-                else:
-                    break
-        if(aux):
-            moves.insert(0, 1)
-            return moves
-        else:
-            moves = []
-            return moves
-        
-    def king_left(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[1]-i < 0):
-                break
-            else:
-                piece = matrix[(coord[0], coord[1]-i)]['piece']
-                if(piece and piece.color == color):
-                    if(get_piece_type(piece.name) in ['king']):
-                        aux = True
-                        break
-                    else:
-                        break
-                elif(not(piece)):
-                    moves.append((coord[0],coord[1]-i, 'mov'))
-                else:
-                    break
-        if(aux):
-            moves.insert(0, 2)
-            return moves
-        else:
-            moves = []
-            return moves
-    
-    def king_right(self, color, matrix, coord):
-        moves = []
-        aux = False
-        for i in range(1,8):
-            if(coord[1]+i > 7):
-                break
-            else:
-                piece = matrix[(coord[0], coord[1]+i)]['piece']
-                if(piece and piece.color == color):
-                    if(get_piece_type(piece.name) in ['king']):
-                        aux = True
-                        break
-                    else:
-                        break
-                elif(not(piece)):
-                    moves.append((coord[0],coord[1]+i, 'mov'))
-                else:
-                    break
-        if(aux):
-            moves.insert(0, 3)
-            return moves
-        else:
-            moves = []
-            return moves
-    
+        return []
+
+    '''
     def verify_squares_bottom(self, color, matrix, coord):
         moves = []
         aux = False
@@ -346,3 +290,4 @@ class GameRules:
         else:
             moves = []
             return moves
+    '''

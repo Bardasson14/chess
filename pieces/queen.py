@@ -11,12 +11,14 @@ class Queen(Piece):
     def get_possible_moves(self, coord, matrix):
         game_rules = GameRules()
         list_aux = game_rules.can_move(self.color, matrix, coord)
+
+        if(list_aux):
+            return list_aux
+            
         self.possible_moves = []
         self.mov_h(coord,matrix)
         self.mov_v(coord,matrix)
         self.mov_d(coord,matrix)
-        if(len(list_aux) > 0):
-            return list_aux
         return self.possible_moves
 
     def mov_v(self,coord,matrix):
