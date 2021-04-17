@@ -4,6 +4,7 @@ from functools import partial
 
 ALPHABETIC_COORDS = list(ascii_lowercase)[:8]
 DIRECTIONS = ['bottom', 'top', 'right', 'left', 'upper_right', 'upper_left', 'lower_right', 'lower_left']
+INVERTED_DIRECTIONS = ['top', 'bottom', 'left', 'right', 'lower_left', 'lower_right', 'upper_left', 'upper_right']
 
 def convert_coord(originalRow, originalCol):
     row = 8 - originalRow
@@ -35,6 +36,7 @@ def piece_in(piece, arr):
             return True
     return False
 
+'''
 def possible_directions(piece):
     piece_type = get_piece_type(piece.name)
     directions = {
@@ -50,5 +52,4 @@ def possible_directions(piece):
         'white_king': DIRECTIONS
     }
     return directions[piece.color + '_' + piece_type]
-
-    
+'''

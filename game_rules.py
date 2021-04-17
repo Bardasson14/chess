@@ -1,4 +1,4 @@
-from utils import DIRECTIONS, get_piece_type, piece_in, possible_directions
+from utils import INVERTED_DIRECTIONS, DIRECTIONS, get_piece_type, piece_in
 from game_state import GameState
 from time import time
 
@@ -148,24 +148,17 @@ class GameRules:
 
         for i in range(1,8):
             if(self.king_check_boundaries(coord, string_mode, i)):
-                break
+                return []
             else:
                 piece = matrix[coord_aux]['piece']
                 
                 if(piece and piece.color == color):
                     if(get_piece_type(piece.name) == 'king'):
-                        aux = True
-                    break
-                
+                        moves.insert(0, INVERTED_DIRECTIONS.index(string_mode))
+                        return moves
+                    return []
                 elif not piece:
                     moves.append((coord_aux[0], coord_aux[1], 'mov'))
-                else:
-                    break
-        INVERTED_DIR = ['top', 'bottom', 'left', 'right', 'lower_left', 'lower_right', 'upper_left', 'upper_right']
-
-        if(aux):
-            moves.insert(0, INVERTED_DIR.index(string_mode))
-            return moves
 
         return []
     
