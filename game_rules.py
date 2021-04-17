@@ -117,23 +117,24 @@ class GameRules:
     
     def can_move(self, color, matrix, coord):
 
-        possible_moves = self.append_moves(color, matrix, coord) # ok
-        print("possible_moves", possible_moves)
+        limited_moves = self.append_moves(color, matrix, coord)
+        print(limited_moves)
         
-        if (possible_moves):
-            selected_dir = DIRECTIONS[possible_moves.pop(0)]
+        if (limited_moves):
+            selected_dir = DIRECTIONS[limited_moves.pop(0)]
+            
             list_aux = self.verify_squares(color, matrix, coord, selected_dir)
             print("Verificacao: ", list_aux)
             if (list_aux):
-                return possible_moves + list_aux
+                return limited_moves + list_aux
 
         return []
 
     def append_moves(self, color, matrix, coord):
-        dirs = possible_directions(matrix[coord]['piece']) 
+        #dirs = possible_directions(matrix[coord]['piece']) 
         aux = []
         
-        for direction in ['left', 'right', 'bottom', 'top']:
+        for direction in DIRECTIONS:
             aux += self.king_check(matrix, coord, direction, color)
         
         return aux
@@ -160,42 +161,48 @@ class GameRules:
                     moves.append((coord_aux[0], coord_aux[1], 'mov'))
                 else:
                     break
+        INVERTED_DIR = ['top', 'bottom', 'left', 'right', 'lower_left', 'lower_right', 'upper_left', 'upper_right']
 
         if(aux):
-            # print(string_mode)
-            # print(DIRECTIONS.index(string_mode))
-            moves.insert(0, DIRECTIONS.index(string_mode))
+            moves.insert(0, INVERTED_DIR.index(string_mode))
             return moves
 
         return []
     
 
-    def king_check_boundaries(self, coord, string_mode, i): # feita
+    def king_check_boundaries(self, coord, string_mode, i):
         boundaries = {'left': coord[1]-i < 0, 'top': coord[0]-i < 0, 'right': coord[1]+i > 7, 'bottom': coord[0]+i > 7, 'upper_right': coord[0]-i < 0 or coord[1]+i > 7, 'upper_left': coord[0]-i < 0 or coord[1]-i < 0, 'lower_right': coord[0]+i > 7 or coord[1]+i > 7, 'lower_left': coord[0]+i > 7 or coord[1]-i < 0}
+        print(boundaries[string_mode])
         return boundaries[string_mode]
 
-    def verify_squares(self, color, matrix, coord, string_mode): # ok
+    def verify_squares(self, color, matrix, coord, string_mode):
         mode = {'left': (0, -1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)}
         selected_mode = mode[string_mode]
-        coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
+        # coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
         moves = []
-        aux = False
+        # aux = False
         piece_list = ['rook', 'queen'] if len(string_mode.split('_')) == 1 else ['bishop', 'queen']
         
         for i in range(1,8):
             if(self.king_check_boundaries(coord, string_mode, i)):
-                break
+                return []
             else:
-                piece = matrix[coord_aux]['piece']
+                piece = matrix[coord[0] + self.iterate_board(i, string_mode)[0], coord[1] + self.iterate_board(i, string_mode)[1]]['piece']
+                
                 if not piece:
-                    moves.append((coord_aux[0], coord_aux[1],'mov'))
-                elif(piece and piece.color != color and (get_piece_type(piece.name) in piece_list)):
-                    aux = True
-                    moves.append((coord_aux[0], coord_aux[1], 'mov'))
-                    break
-                else: 
-                    break
-        if(aux):
-            return moves
+                    moves.append((coord[0] + self.iterate_board(i, string_mode)[0], coord[1] + self.iterate_board(i, string_mode)[1], 'mov'))
+
+                elif (piece and (get_piece_type(piece.name) in piece_list)):
+                    
+                    if (piece.color == color):
+                        return 
+                        
+                    moves.append((coord[0] + self.iterate_board(i, string_mode)[0], coord[1] + self.iterate_board(i, string_mode)[1], 'mov'))
+                    return moves
 
         return []
+
+    def iterate_board (self, i, string_mode):
+        mode = {'left': (0, -i), 'top': (-i,0), 'right':(0,i), 'bottom':(i,0), 'upper_right': (-i,i), 'upper_left': (-i,-i), 'lower_right': (i,i), 'lower_left':(i,-i)}
+        print("iterate_board: ", mode[string_mode])
+        return mode[string_mode]

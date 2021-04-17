@@ -182,6 +182,7 @@ class Board(tk.Frame):
                         elif(self.lock and piece.selected):
                             self.clear_square(piece)
                         
+                        print("----------------------------------------------------------------------")
                         print()
                         print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
                         print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
