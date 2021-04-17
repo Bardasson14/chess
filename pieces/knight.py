@@ -10,12 +10,13 @@ class Knight(Piece):
 
     def get_possible_moves(self, coord, matrix):
 
+        '''
         game_rules = GameRules()
         list_aux = game_rules.can_move(self.color, matrix, coord)
         print("can move?", list_aux)
         if(list_aux):
             return list_aux
-
+        '''
         self.possibleMoves=[]
         self.mov_ul(coord,matrix)
         self.mov_ur(coord,matrix)

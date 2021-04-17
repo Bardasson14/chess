@@ -1,4 +1,4 @@
-from utils import get_piece_type, piece_in
+from utils import DIRECTIONS, get_piece_type, piece_in, possible_directions
 from game_state import GameState
 from time import time
 
@@ -66,13 +66,11 @@ class GameRules:
 
             if (self.check_diagonal_boundaries(coord, string_mode, i)):
                 piece = matrix[(coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i)]['piece']
-                if(piece and (piece.color != current_king.color)) :
-                    #print(piece.color)
-                    #print(get_piece_type(piece.name))
-                    #print(string_mode.split('_')[0])
-
+                if(piece and (piece.color != current_king.color)):
+                    
                     if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower') or (piece.color=='black' and string_mode.split('_')[0] == 'upper'))):
                         return True
+
                 elif(piece):
                     break
         return False
@@ -94,9 +92,7 @@ class GameRules:
         reverse_x = reverse_mode[string_mode][0]
         reverse_y = reverse_mode[string_mode][1]
         current_king = matrix[coord]['piece']
-        #print(coord)
-        #print(x,y)
-    
+        
         if (self.check_knight_boundaries(coord, string_mode)[0]):
             piece = matrix[(coord[0]+x, coord[1]+y)]['piece']
             if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name)=='knight')):
@@ -121,25 +117,29 @@ class GameRules:
     
     def can_move(self, color, matrix, coord):
 
-        possible_moves = self.append_moves(color, matrix, coord) # 
+        possible_moves = self.append_moves(color, matrix, coord) # ok
+        print("possible_moves", possible_moves)
         
         if (possible_moves):
-            directions = ['bottom', 'top', 'right', 'left', 'upper_right', 'upper_left', 'lower_right', 'lower_left']
-            print(directions[possible_moves[0]])
-            list_aux = self.verify_squares(color, matrix, coord, directions[possible_moves[0]])
-            print("verification_result: ", list_aux)
-            possible_moves.pop(0)
-        
+            selected_dir = DIRECTIONS[possible_moves.pop(0)]
+            list_aux = self.verify_squares(color, matrix, coord, selected_dir)
+            print("Verificacao: ", list_aux)
             if (list_aux):
-                print("a")
                 return possible_moves + list_aux
 
-        print("b")
         return []
+
+    def append_moves(self, color, matrix, coord):
+        dirs = possible_directions(matrix[coord]['piece']) 
+        aux = []
+        
+        for direction in ['left', 'right', 'bottom', 'top']:
+            aux += self.king_check(matrix, coord, direction, color)
+        
+        return aux
         
     def king_check(self, matrix, coord, string_mode, color):
-        directions = ['bottom', 'top', 'right', 'left', 'upper_right', 'upper_left', 'lower_right', 'lower_left']
-        mode = {'left': (0, -1), 'top': (-1,0), 'right': (0,1), 'bottom': (1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)}
+        mode = {'left': (0, -1), 'top': (-1,0), 'right': (0,1), 'bottom': (1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)} # talvez seja necessário trocar
         selected_mode = mode[string_mode]
         coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
         moves = []
@@ -162,33 +162,26 @@ class GameRules:
                     break
 
         if(aux):
-            moves.insert(0, directions.index(string_mode))
+            # print(string_mode)
+            # print(DIRECTIONS.index(string_mode))
+            moves.insert(0, DIRECTIONS.index(string_mode))
             return moves
 
         return []
+    
 
-    def king_check_boundaries(self, coord, string_mode, i):
+    def king_check_boundaries(self, coord, string_mode, i): # feita
         boundaries = {'left': coord[1]-i < 0, 'top': coord[0]-i < 0, 'right': coord[1]+i > 7, 'bottom': coord[0]+i > 7, 'upper_right': coord[0]-i < 0 or coord[1]+i > 7, 'upper_left': coord[0]-i < 0 or coord[1]-i < 0, 'lower_right': coord[0]+i > 7 or coord[1]+i > 7, 'lower_left': coord[0]+i > 7 or coord[1]-i < 0}
         return boundaries[string_mode]
 
-    def append_moves(self, color, matrix, coord):
-        dirs = ['left', 'top', 'right', 'bottom', 'upper_right', 'upper_left', 'lower_right', 'lower_left']
-        aux = []
-
-        for direction in dirs:
-            aux += self.king_check(matrix, coord, direction, color)
-        
-        return aux
-
-    def verify_squares(self, color, matrix, coord, string_mode):
+    def verify_squares(self, color, matrix, coord, string_mode): # ok
         mode = {'left': (0, -1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)}
         selected_mode = mode[string_mode]
         coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
         moves = []
         aux = False
         piece_list = ['rook', 'queen'] if len(string_mode.split('_')) == 1 else ['bishop', 'queen']
-        print(piece_list)
-
+        
         for i in range(1,8):
             if(self.king_check_boundaries(coord, string_mode, i)):
                 break
