@@ -116,13 +116,11 @@ def check_knight_boundaries(coord, string_mode):
 def can_move(color, matrix, coord):
 
     limited_moves = append_moves(color, matrix, coord)
-    print(limited_moves)
     
     if (limited_moves):
         selected_dir = DIRECTIONS[limited_moves.pop(0)]
         
         list_aux = verify_squares(color, matrix, coord, selected_dir)
-        print("Verificacao: ", list_aux)
         if (list_aux):
             return limited_moves + list_aux
 
@@ -163,7 +161,6 @@ def king_check(matrix, coord, string_mode, color):
 
 def king_check_boundaries(coord, string_mode, i):
     boundaries = {'left': coord[1]-i < 0, 'top': coord[0]-i < 0, 'right': coord[1]+i > 7, 'bottom': coord[0]+i > 7, 'upper_right': coord[0]-i < 0 or coord[1]+i > 7, 'upper_left': coord[0]-i < 0 or coord[1]-i < 0, 'lower_right': coord[0]+i > 7 or coord[1]+i > 7, 'lower_left': coord[0]+i > 7 or coord[1]-i < 0}
-    print(boundaries[string_mode])
     return boundaries[string_mode]
 
 def verify_squares(color, matrix, coord, string_mode):
