@@ -49,10 +49,10 @@ class SpecialMoves:
         index = PIECES_EN.index(self.selected_piece)
         filename = player_color + (get_piece_type(modified_pawn.name)).title()
         modified_pawn.name += str(self.promoted[index])
-        ###print(self.promoted)
+        ####print(self.promoted)
         self.promoted[index] += 1
         modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
-        ###print("DICT: ", modified_pawn.__dict__)
+        ####print("DICT: ", modified_pawn.__dict__)
         board.add_piece(modified_pawn, row, col)
 
     def movRoque(self,board,gr,coord):

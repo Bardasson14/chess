@@ -71,7 +71,7 @@ class Board(tk.Frame):
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-       # ##print(self.squares[(row, column)])
+       # ###print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
@@ -198,11 +198,11 @@ class Board(tk.Frame):
                     piece = self.squares[(col,row)]['piece']#guarda se o quadrado clicado eh uma peca
                     if(piece):
                         color=piece.color
-                        print(color)
+                        #print(color)
                         
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
-                    ###print(GameState.possible_en_passant)
+                    ####print(GameState.possible_en_passant)
 
                     if piece and GameState.turn(color):    # clicou na peca
               
@@ -211,11 +211,11 @@ class Board(tk.Frame):
                         elif(self.lock and piece.selected):
                             self.clear_square(piece,piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         
-                        print()
-                        print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
-                        print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
-                        print()
-                        print("----------------------------------------------------------------------")
+                        #print()
+                        #print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
+                        #print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
+                        #print()
+                        #print("----------------------------------------------------------------------")
 
                     if ref:  # clicou no quadrado vermelho
 

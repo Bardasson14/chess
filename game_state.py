@@ -25,6 +25,6 @@ class GameState:
 
     @classmethod
     def turn(self,color):
-        #print(self.player)
+        ##print(self.player)
         r=(self.player==color)
         return r

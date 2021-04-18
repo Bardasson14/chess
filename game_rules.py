@@ -18,7 +18,7 @@ def diagonal_checks(matrix, coord):
 def vertical_check(matrix, coord, string_mode): 
     # string_mode = 'up' or 'lower'
     mode = {'lower': 1, 'up': -1} 
-    ##print(string_mode)
+    ###print(string_mode)
 
     current_king = matrix[coord]['piece']
     for i in range(1,8):
@@ -104,7 +104,7 @@ def knight_check(matrix, coord, string_mode):
         return False
 
 def check_knight_boundaries(coord, string_mode):
-    ##print('knight', string_mode)
+    ###print('knight', string_mode)
     if string_mode == 'upper_left':
         return [coord[0]-2 >= 0 and coord[1]-1 >= 0, coord[1]-2 >=0 and coord[0]-1 >=0]
     elif string_mode == 'upper_right':
@@ -192,5 +192,5 @@ def verify_squares(color, matrix, coord, string_mode):
 
 def iterate_board (i, string_mode):
     mode = {'left': (0, -i), 'top': (-i,0), 'right':(0,i), 'bottom':(i,0), 'upper_right': (-i,i), 'upper_left': (-i,-i), 'lower_right': (i,i), 'lower_left':(i,-i)}
-    print("iterate_board: ", mode[string_mode])
+    #print("iterate_board: ", mode[string_mode])
     return mode[string_mode]
