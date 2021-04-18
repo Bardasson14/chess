@@ -14,6 +14,8 @@ class GameState:
         self.board.position_pieces(players[0])
         self.board.position_pieces(players[1])
 
+
+        
     @classmethod
     def troca(self):
         if(self.player=='white'):
@@ -26,4 +28,3 @@ class GameState:
         #print(self.player)
         r=(self.player==color)
         return r
-

@@ -6,6 +6,8 @@ from game_state import GameState
 import pieces
 from pieces.special_moves import *
 from game_rules import *
+from timer import *
+
 
 class Board(tk.Frame):
 
@@ -24,16 +26,33 @@ class Board(tk.Frame):
         global special_moves
         special_moves = SpecialMoves()
         self.populate_grid()
-
         canvas_width = columns * size
         canvas_height = rows * size
-        
         tk.Frame.__init__(self, parent)
         self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
                                 width=canvas_width, height=canvas_height, background="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
         self.canvas.bind("<Configure>", self.refresh)
         self.canvas.bind("<Button-1>", self.click_event_handler)
+        
+        global timerp1
+        global timerp2
+
+
+        LabelC1 = tk.LabelFrame(self, text="player2", height = 100, width = 150)
+        LabelC1.pack()
+        LabelC1.place(x = 600, y= 5)
+        timerp2  = Countdown(LabelC1)
+        timerp2.pack(padx = 30, pady = 10)
+        
+        LabelC2 = tk.LabelFrame(self, text="player1", height = 100, width = 150)
+        LabelC2.pack()
+        LabelC2.place(x = 600, y= 450)
+        timerp1  = Countdown(LabelC2)
+        timerp1.pack(padx = 30, pady = 10)
+        timerp1.start_timer()
+
+
 
     def populate_grid(self):
 
@@ -145,8 +164,9 @@ class Board(tk.Frame):
             self.canvas.delete(capturedPiece.name)
         
     def move_piece(self, piece, ref, coord): 
-        selected = piece.get_possible_moves(self.squares[ref]['coord'],self.squares)
         
+        selected = piece.get_possible_moves(self.squares[ref]['coord'],self.squares)
+        color = piece.color
         if (not piece.was_moved_before):
 
             if (get_piece_type(piece.name) == "pawn"):
@@ -159,8 +179,15 @@ class Board(tk.Frame):
         self.capture_piece(coord)
         self.place_piece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
+        if(color == 'white'):
+            timerp2.start_timer()
+            timerp1.stop_timer()
+        else:
+            timerp2.stop_timer()
+            timerp1.start_timer()
     
     # dividir callback
+    
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
         
     
@@ -171,23 +198,17 @@ class Board(tk.Frame):
                     piece = self.squares[(col,row)]['piece']
                     if(piece):
                         color=piece.color
+                        print(color)
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     ###print(GameState.possible_en_passant)
 
                     if piece and GameState.turn(color):    # clicou na peca
-                        #print("SEL_PIECE: ", piece.__dict__)
+              
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
                             self.clear_square(piece)
-                        
-                        print("----------------------------------------------------------------------")
-                        print()
-                        print('BLACK_KING=', check_all(self.squares, GameState.blackcoord))
-                        print('WHITE_KING=', check_all(self.squares, GameState.whitecoord))
-                        print()
-                        print("----------------------------------------------------------------------")
 
                     if ref:  # clicou no quadrado vermelho
 
@@ -210,6 +231,7 @@ class Board(tk.Frame):
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
 
                             elif (get_piece_type(piece.name)=='king'):
+                              
                                 if (piece.color == 'white'):
                                     GameState.whitecoord = (col, row)
                                 else:
@@ -219,7 +241,6 @@ class Board(tk.Frame):
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
-                            
-                            
+
     def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
