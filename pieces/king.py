@@ -1,4 +1,5 @@
 from .piece import Piece
+from game_rules import can_move
 
 class King(Piece):
     
@@ -36,6 +37,13 @@ class King(Piece):
         self.little_roque(coord,matrix)
         
     def get_possible_moves(self, coord, matrix):
+
+        
+        list_aux = can_move(self.color, matrix, coord)
+
+        if(list_aux):
+            return list_aux
+            
         self.possible_moves=[]
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
