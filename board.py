@@ -11,7 +11,7 @@ from timer import *
 
 class Board(tk.Frame):
 
-    def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
+    def __init__(self, parent, rows=8, columns=8, size=32, color1="light steel blue", color2="steel blue"):
         
         self.rows = rows
         self.columns = columns
@@ -142,12 +142,12 @@ class Board(tk.Frame):
             self.squares[(vec[i][0],vec[i][1])]['gamerule']=vec[i][2]
             x1 = (vec[i][0] * self.size)
             y1 = (vec[i][1] * self.size)
-            x2 = x1 + self.size
-            y2 = y1 + self.size
+            x2 = x1 + self.size*0.8
+            y2 = y1 + self.size*0.8
             if(vec[i][2]=='mov'):
-                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square"))
             else:
-                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="green", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square"))
 
     def clear_square(self,piece,selected=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
