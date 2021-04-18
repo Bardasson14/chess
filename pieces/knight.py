@@ -1,4 +1,5 @@
 from .piece import Piece
+from game_rules import can_move
 
 class Knight(Piece):
     
@@ -8,11 +9,19 @@ class Knight(Piece):
         super(Knight,self).__init__(color,name)
 
     def get_possible_moves(self, coord, matrix):
+
+        
+        list_aux = can_move(self.color, matrix, coord)
+        
         self.possibleMoves=[]
         self.mov_ul(coord,matrix)
         self.mov_ur(coord,matrix)
         self.mov_ll(coord,matrix)
         self.mov_lr(coord,matrix)
+
+        if(list_aux):
+            return [move for move in list_aux if move in self.possible_moves]
+        
         return self.possibleMoves
 
     def mov_ul(self, coord, matrix):
