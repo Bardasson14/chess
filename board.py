@@ -5,10 +5,8 @@ from utils import *
 from game_state import GameState
 import pieces
 from pieces.special_moves import *
+from game_rules import *
 from timer import *
-
-
-
 
 
 class Board(tk.Frame):
@@ -73,7 +71,7 @@ class Board(tk.Frame):
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-       # print(self.squares[(row, column)])
+       # ##print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
@@ -131,6 +129,8 @@ class Board(tk.Frame):
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
+        # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
+        #     vec = []
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -189,53 +189,58 @@ class Board(tk.Frame):
     # dividir callback
     
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
+        
+    
         for row in range(self.rows):
             for col in range(self.columns):
 
-                if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
+                if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']
                     if(piece):
                         color=piece.color
                         print(color)
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
-                    print(GameState.possible_en_passant)
+                    ###print(GameState.possible_en_passant)
 
-                    if piece and GameState.turno(color):    # clicou na peca
-                        #print("SEL_PIECE: ", piece.__dict__)
-                        
+                    if piece and GameState.turn(color):    # clicou na peca
+              
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
                             self.clear_square(piece)
-                    
+
                     if ref:  # clicou no quadrado vermelho
+
                         piece = self.squares[ref]['piece']
-                            
+                                
                         if(piece and piece.selected):
-                              
+                            
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                   special_moves.en_passant(self, piece, col, row, ref)
+                                    special_moves.en_passant(self, piece, col, row, ref)
                                     
                                 else:
                                     GameState.possible_en_passant = None
-   
+
                             GameState.first_move = False                        
                             self.move_piece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
                                 self.lock=True
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
-                        
+
+                            elif (get_piece_type(piece.name)=='king'):
+                              
+                                if (piece.color == 'white'):
+                                    GameState.whitecoord = (col, row)
+                                else:
+                                    GameState.blackcoord = (col, row)
+
                         GameState.troca()
+                        
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
 
-                                 
-    
-    def clickIsValid(self, row, col, event):
+    def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
-
-
-    
