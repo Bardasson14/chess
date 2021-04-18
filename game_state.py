@@ -6,7 +6,7 @@ class GameState:
     white_king_checked = False
     black_king_checked = False
 
-    player='white'#indica o turno
+    player='white'#indica o turn
     
     def __init__(self, board, players):
         self.board = board
@@ -22,7 +22,7 @@ class GameState:
             self.player='white'
 
     @classmethod
-    def turno(self,color):
+    def turn(self,color):
         #print(self.player)
         r=(self.player==color)
         return r

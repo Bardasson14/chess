@@ -1,5 +1,5 @@
 from .piece import Piece
-from game_rules import GameRules
+from game_rules import can_move
 
 class Bishop(Piece):
     
@@ -10,9 +10,8 @@ class Bishop(Piece):
 
     def get_possible_moves(self, coord, matrix):
 
-        
-        game_rules = GameRules()
-        list_aux = game_rules.can_move(self.color, matrix, coord)
+
+        list_aux = can_move(self.color, matrix, coord)
 
         
         self.possible_moves=[]

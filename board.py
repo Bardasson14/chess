@@ -5,7 +5,7 @@ from utils import *
 from game_state import GameState
 import pieces
 from pieces.special_moves import *
-from game_rules import GameRules
+from game_rules import *
 
 class Board(tk.Frame):
 
@@ -106,7 +106,7 @@ class Board(tk.Frame):
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
     
-    def add_square(self, piece, coord, game_rules): # trava a movimentacao no tabuleiro 
+    def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
@@ -162,7 +162,7 @@ class Board(tk.Frame):
     
     # dividir callback
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
-        game_rules = GameRules()
+        
     
         for row in range(self.rows):
             for col in range(self.columns):
@@ -175,17 +175,17 @@ class Board(tk.Frame):
                     gr = self.squares[(col,row)]['gamerule']
                     ###print(GameState.possible_en_passant)
 
-                    if piece:    # clicou na peca
+                    if piece and GameState.turn(color):    # clicou na peca
                         #print("SEL_PIECE: ", piece.__dict__)
                         if(not(self.lock) and not(piece.selected)):
-                            self.add_square(piece,(col,row), game_rules)
+                            self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
                             self.clear_square(piece)
                         
                         print("----------------------------------------------------------------------")
                         print()
-                        print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
-                        print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
+                        print('BLACK_KING=', check_all(self.squares, GameState.blackcoord))
+                        print('WHITE_KING=', check_all(self.squares, GameState.whitecoord))
                         print()
                         print("----------------------------------------------------------------------")
 
