@@ -1,4 +1,5 @@
 from .piece import Piece
+from game_rules import can_move
 
 class Rook(Piece):
     
@@ -8,6 +9,14 @@ class Rook(Piece):
         super(Rook,self).__init__(color,name)
     
     def get_possible_moves(self, coord, matrix):
+        
+        
+        list_aux = can_move(self.color, matrix, coord)
+
+        if(list_aux):
+            return [move for move in list_aux if move in self.possible_moves]
+
+        
         self.possible_moves = []
         self.mov_h(coord, matrix)
         self.mov_v(coord, matrix)

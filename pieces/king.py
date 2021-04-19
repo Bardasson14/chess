@@ -1,4 +1,5 @@
 from .piece import Piece
+from game_rules import can_move
 
 class King(Piece):
     
@@ -16,7 +17,7 @@ class King(Piece):
                         if((coord[1] + i)==7 and (piece.name=='white_rook_2'or piece.name=='black_rook_2') and not (piece.was_moved_before)):
                             self.possible_moves.append((coord[0], coord[1]+i-1, 'lr'))
                         else:
-                            print(piece.name)
+                            ###print(piece.name)
                             break
 
     def big_roque(self, coord, matrix):
@@ -28,7 +29,7 @@ class King(Piece):
                         if((coord[1] - i)==0 and (piece.name=='white_rook_1' or piece.name=='black_rook_1') and not (piece.was_moved_before)):
                             self.possible_moves.append((coord[0], coord[1]-i+2, 'br'))
                         else:
-                            print(piece.name)
+                            ###print(piece.name)
                             break
 
     def roque(self,coord,matrix):
@@ -36,6 +37,13 @@ class King(Piece):
         self.little_roque(coord,matrix)
         
     def get_possible_moves(self, coord, matrix):
+
+        
+        list_aux = can_move(self.color, matrix, coord)
+
+        if(list_aux):
+            return list_aux
+            
         self.possible_moves=[]
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
@@ -107,6 +115,3 @@ class King(Piece):
             bottom_left_piece = matrix[(coord[0]+1,coord[1]-1)]['piece']
             if((bottom_left_piece and bottom_left_piece.color!=self.color) or (not bottom_left_piece)):
                 self.possible_moves.append((coord[0]+1,coord[1]-1,'mov'))
-
-
-    

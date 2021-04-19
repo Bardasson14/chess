@@ -1,7 +1,12 @@
 class GameState:
     possible_en_passant = None
     first_move = True
-    player='white'#indica o turno
+    blackcoord = (0,4)
+    whitecoord = (7,4)
+    white_king_checked = False
+    black_king_checked = False
+
+    player='white'#indica o turn
     
     def __init__(self, board, players):
         self.board = board
@@ -9,6 +14,8 @@ class GameState:
         self.board.position_pieces(players[0])
         self.board.position_pieces(players[1])
 
+
+        
     @classmethod
     def troca(self):
         if(self.player=='white'):
@@ -17,8 +24,7 @@ class GameState:
             self.player='white'
 
     @classmethod
-    def turno(self,color):
-        print(self.player)
+    def turn(self,color):
+        ##print(self.player)
         r=(self.player==color)
         return r
-
