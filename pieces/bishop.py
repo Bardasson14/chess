@@ -10,10 +10,8 @@ class Bishop(Piece):
 
     def get_possible_moves(self, coord, matrix):
 
-
         list_aux = can_move(self.color, matrix, coord)
-
-        
+    
         self.possible_moves=[]
         self.mov_d(coord,matrix)
         
