@@ -110,20 +110,20 @@ class Board(tk.Frame):
             first_line = 7
             second_line = 6
         
-        self.add_piece(player.pieces[0], first_line, 4)
-        self.add_piece(player.pieces[1], first_line, 3)
+        #self.add_piece(player.pieces[0], first_line, 4)
+        #self.add_piece(player.pieces[1], first_line, 3)
         rooks = player.pieces[2:4]
-        bishops = player.pieces[4:6]
-        knights = player.pieces[6:8]
-        pawns = player.pieces[8:16]
+        #bishops = player.pieces[4:6]
+        #knights = player.pieces[6:8]
+        #pawns = player.pieces[8:16]
 
-        for i in range (2):
-            self.add_piece(rooks[i], first_line, i*7)
-            self.add_piece(bishops[i], first_line, 2 + 3*i)
-            self.add_piece(knights[i], first_line, 1 + 5*i)
+        #for i in range (2):
+        self.add_piece(rooks[0], first_line, 1*7)
+        #    self.add_piece(bishops[i], first_line, 2 + 3*i)
+        #    self.add_piece(knights[i], first_line, 1 + 5*i)
         
-        for i in range(8):
-            self.add_piece(pawns[i], second_line, i)
+        #for i in range(8):
+        #    self.add_piece(pawns[i], second_line, i)
     
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
@@ -131,9 +131,11 @@ class Board(tk.Frame):
         vec = piece.get_possible_moves(coord,self.squares)
         # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
         #     vec = []
+
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
+
         self.draw_square(vec,coord)
         
     def draw_square(self, vec, coord): # desenha os possiveis movimentos na tela
@@ -204,12 +206,12 @@ class Board(tk.Frame):
                     gr = self.squares[(col,row)]['gamerule']
                     ####print(GameState.possible_en_passant)
 
-                    if piece and GameState.turn(color):    # clicou na peca
-              
+                    if piece:    # clicou na peca
+                        print(piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
-                            self.clear_square(piece,piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
+                            self.clear_square(piece, piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         
                         #print()
                         #print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
