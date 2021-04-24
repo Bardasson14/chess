@@ -1,4 +1,8 @@
 import unittest
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../src')
+
 from player import Player
 from utils import get_piece_type
 
