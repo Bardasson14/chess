@@ -6,7 +6,6 @@ sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../src')
 from player import Player
 from utils import get_piece_type
 
-
 class PlayerTest(unittest.TestCase):
 
     def test_piece_list(self):

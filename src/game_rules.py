@@ -24,9 +24,9 @@ def vertical_check(matrix, coord, string_mode):
     for i in range(1,8):
         if (check_vertical_boundaries(coord, string_mode, i)):
             piece = matrix[(coord[0]+(mode[string_mode])*i, coord[1])]['piece']
-            if (piece and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen']):
+            if ((piece is not None) and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen']):
                 return True
-            elif (piece):
+            elif (piece is not None):
                 break
     return False
 

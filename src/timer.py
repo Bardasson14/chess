@@ -15,18 +15,14 @@ class Countdown(tk.Frame):
         self.timer_on = False
 
     def show_widgets(self):
-
         self.label.pack()
-        #self.entry.pack()
-        #self.start.pack()
-
+        
     def create_widgets(self):
 
         self.label = tk.Label(self, text="00:10:00")
         self.entry = tk.Entry(self, justify='center')
         self.entry.focus_set()
-        #self.start = tk.Button(self, text="Start", command=self.stop_timer)
-
+        
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
         self.label['text'] = self.convert_seconds_left_to_time()
@@ -51,13 +47,3 @@ class Countdown(tk.Frame):
 
     def convert_seconds_left_to_time(self):
         return datetime.timedelta(seconds=self.seconds_left)
-
-
-'''
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.resizable(False, False)
-    countdown = Countdown(root)
-    countdown.pack()
-    root.mainloop()
-'''
