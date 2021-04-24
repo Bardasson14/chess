@@ -1,4 +1,4 @@
-from utils import INVERTED_DIRECTIONS, DIRECTIONS, get_piece_type, piece_in
+from utils import INVERTED_DIRECTIONS, DIRECTIONS, get_piece_type
 from game_state import GameState
 from time import time
 
@@ -127,7 +127,6 @@ def can_move(color, matrix, coord):
     return []
 
 def append_moves(color, matrix, coord):
-    #dirs = possible_directions(matrix[coord]['piece']) 
     aux = []
     
     for direction in DIRECTIONS:
@@ -166,9 +165,7 @@ def king_check_boundaries(coord, string_mode, i):
 def verify_squares(color, matrix, coord, string_mode):
     mode = {'left': (0, -1), 'top': (-1,0), 'right':(0,1), 'bottom':(1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)}
     selected_mode = mode[string_mode]
-    # coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
     moves = []
-    # aux = False
     piece_list = ['rook', 'queen'] if len(string_mode.split('_')) == 1 else ['bishop', 'queen']
     
     for i in range(1,8):
@@ -192,5 +189,4 @@ def verify_squares(color, matrix, coord, string_mode):
 
 def iterate_board (i, string_mode):
     mode = {'left': (0, -i), 'top': (-i,0), 'right':(0,i), 'bottom':(i,0), 'upper_right': (-i,i), 'upper_left': (-i,-i), 'lower_right': (i,i), 'lower_left':(i,-i)}
-    #print("iterate_board: ", mode[string_mode])
     return mode[string_mode]

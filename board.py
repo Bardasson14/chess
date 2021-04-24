@@ -53,7 +53,6 @@ class Board(tk.Frame):
         timerp1.start_timer()
 
 
-
     def populate_grid(self):
 
         for i in range(8):

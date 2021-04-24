@@ -8,7 +8,6 @@ class Player:
         #0 - white
         #1 - black
         self.color = color
-        self.remaining_pieces = 16
         self.pieces = generate_piece_list(color)
        
 def generate_piece_list(color):

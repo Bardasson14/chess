@@ -1,5 +1,4 @@
 import unittest
-import sys
 from board import Board
 from pieces.bishop import Bishop
 from pieces.knight import Knight
@@ -50,15 +49,12 @@ class PieceTest(unittest.TestCase):
         expectations = {
             (1, 0): [(2, 0, 'mov'), (3, 0, 'mov')],
             (1, 7): [(2, 7, 'mov'), (3, 7, 'mov')],
-            #(3, 4): [(4, 4, 'mov')],
             (6, 0): [(7, 0, 'mov')],
             (6, 7): [(7, 7, 'mov')]
         }
         
         for pos in positions:
             possible_moves = pawn.get_possible_moves(pos, matrix)
-            # print(possible_moves)
-            # print(expectations[pos])
             self.assertCountEqual(list(set(possible_moves)), expectations[pos])
 
     def test_queen_get_possible_moves(self):
@@ -80,20 +76,15 @@ class PieceTest(unittest.TestCase):
 
         expectations = {
             (0,0): [(0, 1, 'mov'), (0, 2, 'mov'), (0, 3, 'mov'), (0, 4, 'mov'), (0, 5, 'mov'), (0, 6, 'mov'), (0, 7, 'mov'), (1, 0, 'mov'), (2, 0, 'mov'), (3, 0, 'mov'), (4, 0, 'mov'), (5, 0, 'mov'), (6, 0, 'mov'), (7, 0, 'mov')],
-
             (0,7): [(0, 6, 'mov'), (0, 5, 'mov'), (0, 4, 'mov'), (0, 3, 'mov'), (0, 2, 'mov'), (0, 1, 'mov'), (0, 0, 'mov'), (1, 7, 'mov'), (2, 7, 'mov'), (3, 7, 'mov'), (4, 7, 'mov'), (5, 7, 'mov'), (6, 7, 'mov'), (7, 7, 'mov')], 
-
             (3,4): [(3, 3, 'mov'), (3, 2, 'mov'), (3, 1, 'mov'), (3, 0, 'mov'), (3, 5, 'mov'), (3, 6, 'mov'), (3, 7, 'mov'), (2, 4, 'mov'), (1, 4, 'mov'), (0, 4, 'mov'), (4, 4, 'mov'), (5, 4, 'mov'), (6, 4, 'mov'), (7, 4, 'mov')], 
-
             (7,0): [(7, 1, 'mov'), (7, 2, 'mov'), (7, 3, 'mov'), (7, 4, 'mov'), (7, 5, 'mov'), (7, 6, 'mov'), (7, 7, 'mov'), (6, 0, 'mov'), (5, 0, 'mov'), (4, 0, 'mov'), (3, 0, 'mov'), (2, 0, 'mov'), (1, 0, 'mov'), (0, 0, 'mov')], 
-
             (7,7): [(7, 6, 'mov'), (7, 5, 'mov'), (7, 4, 'mov'), (7, 3, 'mov'), (7, 2, 'mov'), (7, 1, 'mov'), (7, 0, 'mov'), (6, 7, 'mov'), (5, 7, 'mov'), (4, 7, 'mov'), (3, 7, 'mov'), (2, 7, 'mov'), (1, 7, 'mov'), (0, 7, 'mov')]
         }
 
         for pos in positions:
             possible_moves = rook.get_possible_moves(pos, matrix)
             self.assertCountEqual(possible_moves, expectations[pos])
-
 
     @classmethod
     def initialize_empty_grid(self):
@@ -105,33 +96,3 @@ class PieceTest(unittest.TestCase):
                 squares[(i,j)] = square_info
 
         return squares
-
-
-'''
-class BishopTest(unittest.TestCase):
-
-    def test_get_possible_moves():
-        pass
-
-class KingTest(unittest.TestCase):
-    
-    def test_get_possible_moves():
-        pass
-
-class KnightTest(unittest.TestCase):
-    
-    def test_get_possible_moves():
-        pass
-
-class PawnTest(unittest.TestCase):
-    def test_get_possible_moves():
-        pass
-
-class QueenTest(unittest.TestCase):
-    def test_get_possible_moves():
-        pass
-
-class RookTest(unittest.TestCase):
-    def test_get_possible_moves():
-        pass
-'''
