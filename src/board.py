@@ -200,7 +200,7 @@ class Board(tk.Frame):
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     
-                    if piece:    # clicou na peca
+                    if piece and GameState.turn(color):    # clicou na peca
                         print(piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))
