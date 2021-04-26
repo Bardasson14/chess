@@ -5,55 +5,76 @@ from utils import *
 from game_state import GameState
 import pieces
 from pieces.special_moves import *
+from game_rules import *
+from timer import *
+from ai import *
+
 
 class Board(tk.Frame):
 
-    def __init__(self, parent, rows=8, columns=8, size=32, color1="grey", color2="blue"):
+    def __init__(self, parent, rows=8, columns=8, size=32, color1="light steel blue", color2="steel blue"):
         
         self.rows = rows
         self.columns = columns
         self.size = size
         self.color1 = color1
         self.color2 = color2
-        self.squares = {} #this dict will be populated with the board grid using tuple(row, col) as key
+        self.squares = {}
         global sprites
         sprites = []
-        self.lock = False # indica se existe alguma peca selecionada no tabuleiro
-        self.selsquare = [] # guarda as variaveis dos quadrados que indicam os possiveis movimentos
+        self.lock = False
+        self.selsquare = []
         global special_moves
         special_moves = SpecialMoves()
-
-        for i in range(8):
-            for j in range(8):
-                newSquareInfo = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None} #each entry in self.squares has a piece and a coordinate
-                self.squares[(i,j)] = newSquareInfo
-
+        self.populate_grid()
         canvas_width = columns * size
         canvas_height = rows * size
-
-        #print(self.squares)
-
         tk.Frame.__init__(self, parent)
         self.canvas = tk.Canvas(self, borderwidth=0, highlightthickness=0,
                                 width=canvas_width, height=canvas_height, background="black")
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
         self.canvas.bind("<Configure>", self.refresh)
-        self.canvas.bind("<Button-1>", self.clickEventHandler)
+        self.canvas.bind("<Button-1>", self.click_event_handler)
+        
+        global timerp1
+        global timerp2
 
-    def addPiece(self, piece, row=0, column=0):
-        sprites.append(tk.PhotoImage(file = piece.spriteDir))
-        piece.spriteID = len(sprites)-1 #saves the sprite position in global sprites array
-        self.canvas.create_image(row, column, image=sprites[piece.spriteID], tags=(piece.name, "piece_name"), anchor="c")
-        self.placePiece(piece, row, column)
 
-    def placePiece(self, piece, row, column):
-        print(row, column)
-        print(piece.name, "entrou")
+        LabelC1 = tk.LabelFrame(self, text="player2", height = 100, width = 150)
+        LabelC1.pack()
+        LabelC1.place(x = 600, y= 5)
+        timerp2  = Countdown(LabelC1)
+        timerp2.pack(padx = 30, pady = 10)
+        
+        LabelC2 = tk.LabelFrame(self, text="player1", height = 100, width = 150)
+        LabelC2.pack()
+        LabelC2.place(x = 600, y= 450)
+        timerp1  = Countdown(LabelC2)
+        timerp1.pack(padx = 30, pady = 10)
+        timerp1.start_timer()
+
+        self.ai=None
+
+
+
+    def populate_grid(self):
+
+        for i in range(8):
+            for j in range(8):
+                square_info = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None,'aicoord':None}
+                self.squares[(i,j)] = square_info
+
+    def add_piece(self, piece, row=0, column=0):
+        sprites.append(tk.PhotoImage(file = piece.sprite_dir))
+        piece.sprite_ID = len(sprites)-1 #saves the sprite position in global sprites array
+        self.canvas.create_image(row, column, image=sprites[piece.sprite_ID], tags=(piece.name, "piece_name"), anchor="c")
+        self.place_piece(piece, row, column)
+
+    def place_piece(self, piece, row, column):
         self.squares[(row, column)]['piece'] = piece
-        print(self.squares[(row, column)]['piece'])
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-       # print(self.squares[(row, column)])
+       # ###print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
     def refresh(self, event):
@@ -77,146 +98,168 @@ class Board(tk.Frame):
             
             if item[1]['piece']: #if statement is only true if square isn't empty
                 piece = item[1]['piece']
-                self.placePiece(piece, item[0][0], item[0][1])
+                self.place_piece(piece, item[0][0], item[0][1])
         
         # puts piece over the square
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
     
-    def positionPieces(self, player):
+    def position_pieces(self, player):
         
-        firstLine = 0
-        secondLine = 1
+        first_line = 0
+        second_line = 1
         
         if (player.color != 0):
-            firstLine = 7
-            secondLine = 6
+            first_line = 7
+            second_line = 6
         
-        self.addPiece(player.pieces[0], firstLine, 4)
-        self.addPiece(player.pieces[1], firstLine, 3)
+        self.add_piece(player.pieces[0], first_line, 4)
+        self.add_piece(player.pieces[1], first_line, 3)
         rooks = player.pieces[2:4]
         bishops = player.pieces[4:6]
         knights = player.pieces[6:8]
         pawns = player.pieces[8:16]
 
         for i in range (2):
-            self.addPiece(rooks[i], firstLine, i*7)
-            self.addPiece(bishops[i], firstLine, 2 + 3*i)
-            self.addPiece(knights[i], firstLine, 1 + 5*i)
+            self.add_piece(rooks[i], first_line, i*7)
+            self.add_piece(bishops[i], first_line, 2 + 3*i)
+            self.add_piece(knights[i], first_line, 1 + 5*i)
         
         for i in range(8):
-            self.addPiece(pawns[i], secondLine, i)
+            self.add_piece(pawns[i], second_line, i)
+
+        self.ai=Ai('black',self.squares,self)
     
-    def addSquare(self,piece,coord): # trava a movimentacao no tabuleiro 
+    def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
-        vec = piece.getPossibleMoves(coord,self.squares)
+        vec = piece.get_possible_moves(coord,self.squares)
+        # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
+        #     vec = []
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
-        self.drawSquare(vec,coord)
+        self.draw_square(vec,coord)
         
-    def drawSquare(self,vec,coord): # desenha os possiveis movimentos na tela
+    def draw_square(self, vec, coord): # desenha os possiveis movimentos na tela
         for i in range (len(vec)):
             self.squares[(vec[i][0],vec[i][1])]['selected']=coord
             self.squares[(vec[i][0],vec[i][1])]['gamerule']=vec[i][2]
             x1 = (vec[i][0] * self.size)
             y1 = (vec[i][1] * self.size)
-            x2 = x1 + self.size
-            y2 = y1 + self.size
+            x2 = x1 + self.size*0.8
+            y2 = y1 + self.size*0.8
             if(vec[i][2]=='mov'):
-                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="red", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square"))
             else:
-                self.selsquare.append(self.canvas.create_rectangle(y1, x1, y2, x2, width=2,outline="green", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square"))
 
-
-    def clearSquare(self,piece,selected=[]): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
+    def clear_square(self,piece,selected): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
         self.lock = False
         for i in range(len(self.selsquare)):# libera da tela os quadrados referentes aos possiveis movimentos 
             self.canvas.delete(self.selsquare[i])
         for i in range(len(selected)): # libera do dicionario as referencias a peca selecionada                     
-            self.squares[(selected[i][0],selected[i][1])]['selected']=None
+            self.squares[(selected[i][0], selected[i][1])]['selected']=None
         self.selsquare = []
         
-    def pieceCapture(self, coord):
+    def capture_piece(self, coord):
         capturedPiece = self.squares[coord]['piece']
         if capturedPiece:
+            aicoord=self.squares[coord]['aicoord']
+            if aicoord:
+                self.squares[coord]['aicoord']=None
+                self.ai.update(aicoord)
             self.canvas.delete(capturedPiece.name)
         
-    def movePiece(self, piece, ref, coord): 
-        selected = piece.getPossibleMoves(self.squares[ref]['coord'],self.squares)
-        piece.wasMovedBefore = True
-        self.clearSquare(piece,selected)
-        self.pieceCapture(coord)
+    def move_piece(self, piece, ref, coord): 
         
-        self.placePiece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
+        selected = piece.get_possible_moves(self.squares[ref]['coord'],self.squares)
+        color = piece.color
+        if (not piece.was_moved_before):
+
+            if (get_piece_type(piece.name) == "pawn"):
+                if (abs(ref[0]-coord[0]) == 2 and ((coord[1] < 7 and self.squares[(coord[0], coord[1]+1)]['piece']) or (coord[1]>0 and self.squares[(coord[0], coord[1]-1)]['piece']))):
+                    GameState.possible_en_passant = coord   
+
+            piece.was_moved_before = True
+
+        self.clear_square(piece,selected)
+        self.capture_piece(coord)
+        self.place_piece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
-
-    def movRoque(self,gr,coord):
-        piece = self.squares[coord]['piece']
-        if(gr=='lr'):
-            if(piece.color=='white'):
-                reftorre=(7,7)
-                torre=self.squares[reftorre]['piece']
-                print(torre.name)
-            else:
-                reftorre=(0,7)
-                torre=self.squares[reftorre]['piece']
-            self.placePiece(torre,coord[0],coord[1]-1)
-            self.squares[reftorre]['piece'] = None
+        if(color == 'white'):
+            timerp2.start_timer()
+            timerp1.stop_timer()
         else:
-            if(piece.color=='white'):
-                reftorre=(7,0)
-                torre=self.squares[reftorre]['piece']
-            else:
-                reftorre=(0,0)
-                torre=self.squares[reftorre]['piece']
-            self.placePiece(torre,coord[0],coord[1]+1)
-            self.squares[reftorre]['piece'] = None
-
-
+            timerp2.stop_timer()
+            timerp1.start_timer()
+    
     # dividir callback
-    def clickEventHandler(self, event): # encaminha funcoes dependendo do click do mouse
+    
+    def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
         for row in range(self.rows):
             for col in range(self.columns):
-                if(self.clickIsValid(row, col, event)):  # tratamento do click mouse
-                    piece = self.squares[(col,row)]['piece']
+
+                if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
+                    piece = self.squares[(col,row)]['piece']#guarda se o quadrado clicado eh uma peca
+                    if(piece):
+                        color=piece.color
+                        #print(color)
+                        
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
-                    if piece:    # clicou na peca
+                    ####print(GameState.possible_en_passant)
+
+                    if piece and GameState.turn(color):    # clicou na peca
+              
                         if(not(self.lock) and not(piece.selected)):
-                            self.addSquare(piece,(col,row))
+                            self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
-                            self.clearSquare(piece)
+                            self.clear_square(piece,piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
+                        
+                        #print()
+                        #print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
+                        #print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
+                        #print()
+                        #print("----------------------------------------------------------------------")
+
                     if ref:  # clicou no quadrado vermelho
+
                         piece = self.squares[ref]['piece']
                                 
                         if(piece and piece.selected):
-                              
+                            
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    print(special_moves.selected_piece)
-                                    special_moves.en_passant(self, piece, row, col, ref)
-   
-                            if not GameState.first_move and GameState.possible_en_passant == piece:
-                                GameState.possible_en_passant = None
+                                    special_moves.en_passant(self, piece, col, row, ref)
+                                    
+                                else:
+                                    GameState.possible_en_passant = None
 
-                            else:
-                                GameState.first_move = False
-                                if (get_piece_type(piece.name) == 'pawn' and (abs(col-ref[0]) == 2)):
-                                    GameState.possible_en_passant = piece                                        
-                            
-                            self.movePiece(piece,ref,(col,row))
+                            GameState.first_move = False                        
+                            self.move_piece(piece,ref,(col,row))
 
                             if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
-                                print("ocupa a casa no momento: ", piece.name)
-                                print(special_moves.selected_piece)
+                                self.lock=True
                                 special_moves.pawn_promotion(self, piece, col, row, sprites)
 
+                            elif (get_piece_type(piece.name)=='king'):
+                              
+                                if (piece.color == 'white'):
+                                    GameState.whitecoord = (col, row)
+                                else:
+                                    GameState.blackcoord = (col, row)
+
+                        GameState.troca()#troca a cor do turno
+                        
                         if(gr!='mov'):
-                                self.movRoque(gr,(col,row))
-                            
-                            
-    def clickIsValid(self, row, col, event):
+                            special_moves.movRoque(self,gr,(col,row))
+                        if GameState.turn(self.ai.color):
+                            self.ai.board=self
+                            self.ai.aiMove()
+                            GameState.troca()
+
+
+    def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
