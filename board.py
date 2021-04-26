@@ -7,6 +7,7 @@ import pieces
 from pieces.special_moves import *
 from game_rules import *
 from timer import *
+from ai import *
 
 
 class Board(tk.Frame):
@@ -52,13 +53,15 @@ class Board(tk.Frame):
         timerp1.pack(padx = 30, pady = 10)
         timerp1.start_timer()
 
+        self.ai=None
+
 
 
     def populate_grid(self):
 
         for i in range(8):
             for j in range(8):
-                square_info = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None}
+                square_info = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None,'aicoord':None}
                 self.squares[(i,j)] = square_info
 
     def add_piece(self, piece, row=0, column=0):
@@ -124,6 +127,8 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
+
+        self.ai=Ai('black',self.squares,self)
     
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
@@ -161,6 +166,10 @@ class Board(tk.Frame):
     def capture_piece(self, coord):
         capturedPiece = self.squares[coord]['piece']
         if capturedPiece:
+            aicoord=self.squares[coord]['aicoord']
+            if aicoord:
+                self.squares[coord]['aicoord']=None
+                self.ai.update(aicoord)
             self.canvas.delete(capturedPiece.name)
         
     def move_piece(self, piece, ref, coord): 
@@ -189,8 +198,6 @@ class Board(tk.Frame):
     # dividir callback
     
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
-        
-    
         for row in range(self.rows):
             for col in range(self.columns):
 
@@ -248,6 +255,11 @@ class Board(tk.Frame):
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
+                        if GameState.turn(self.ai.color):
+                            self.ai.board=self
+                            self.ai.aiMove()
+                            GameState.troca()
+
 
     def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
