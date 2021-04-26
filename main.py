@@ -6,31 +6,44 @@ from board import *
 from player import Player
 from game_state import GameState
 import pieces
+from tkinter import messagebox
+import webbrowser
+
+
+
 
 def main():
     root = tk.Tk()
     root.title("chess")
-    menubar = Menu(root)
     
+    
+    menubar = Menu(root)
     root.config(menu=menubar)
     gameMenu = Menu(menubar)
 
     gameMenu = Menu(menubar, tearoff=False)
     sub_menu = Menu(gameMenu, tearoff=0)
+    gameMenu.add_cascade(label='Mode', menu = sub_menu)
     sub_menu.add_command(label='Versus')
     sub_menu.add_command(label='IA')
-    gameMenu.add_cascade(label='Mode', menu = sub_menu)
     
-    gameMenu.add_separator()
+    gameMenu.add_separator()    
     
     gameMenu.add_command(label='Exit', command = root.destroy)
     menubar.add_cascade(label="Game", menu = gameMenu, underline=1)     
     
     help_menu = Menu(menubar, tearoff=0)
+    
+    def msg():
+        stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
+        tk.messagebox.showinfo("About", stri, parent= root)
+    
+    def callback(url):
+        webbrowser.open_new(url)
 
-    help_menu.add_command(label='Rules')
-    help_menu.add_command(label='About...')
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
+    help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
+    help_menu.add_command(label='About...', command = lambda: msg())
 
     
     board = Board(root)
