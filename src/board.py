@@ -221,7 +221,7 @@ class Board(tk.Frame):
                             
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    special_moves.en_passant(self, piece, col, row, ref)
+                                    special_moves.en_passant(self)
                                     
                                 else:
                                     GameState.possible_en_passant = None

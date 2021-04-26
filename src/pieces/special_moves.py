@@ -17,8 +17,10 @@ class SpecialMoves:
 
     def __init__(self):
         self.selected_piece = None
+
+
     
-    def en_passant(self, board, piece, row, col, ref):
+    def en_passant(self, board):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
        
