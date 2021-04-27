@@ -129,8 +129,8 @@ class Board(tk.Frame):
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
-        # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
-        #     vec = []
+        # if(check_all(self.squares, GameState.blackcoord, "black") or check_all(self.squares, GameState.whitecoord, "white")):
+        #     print("TRUE")
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -204,7 +204,7 @@ class Board(tk.Frame):
                     gr = self.squares[(col,row)]['gamerule']
                     ####print(GameState.possible_en_passant)
 
-                    if piece and GameState.turn(color):    # clicou na peca
+                    if piece :    # clicou na peca
               
                         if(not(self.lock) and not(piece.selected)):
                             self.add_square(piece,(col,row))

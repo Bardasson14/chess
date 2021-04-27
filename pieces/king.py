@@ -1,5 +1,6 @@
 from .piece import Piece
 from game_rules import can_move
+from game_rules import check_all
 
 class King(Piece):
     
@@ -48,7 +49,9 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-        self.roque(coord,matrix)
+        self.roque(coord, matrix)
+        self.possible_moves = list(set(self.possible_moves))
+        self.king_moves(coord, matrix)
         return self.possible_moves
 
     def mov_h(self, coord, matrix):
@@ -115,3 +118,11 @@ class King(Piece):
             bottom_left_piece = matrix[(coord[0]+1,coord[1]-1)]['piece']
             if((bottom_left_piece and bottom_left_piece.color!=self.color) or (not bottom_left_piece)):
                 self.possible_moves.append((coord[0]+1,coord[1]-1,'mov'))
+
+    def king_moves(self, coord, matrix):
+        list_aux = []
+        for i in range(len(self.possible_moves)):
+            if(not check_all(matrix, self.possible_moves[i], self.color)):
+                list_aux.append(self.possible_moves[i])
+        self.possible_moves = list(set(list_aux) & set(self.possible_moves))
+        

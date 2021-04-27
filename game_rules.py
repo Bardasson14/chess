@@ -1,32 +1,40 @@
 from utils import INVERTED_DIRECTIONS, DIRECTIONS, get_piece_type, piece_in
 from game_state import GameState
 from time import time
+from game_state import GameState
 
-def check_all(matrix, coord):
-    return regular_checks(matrix, coord) or diagonal_checks(matrix, coord)
+def check_all(matrix, coord, color):
+    return regular_checks(matrix, coord, color) or diagonal_checks(matrix, coord, color)
 
-def regular_checks(matrix, coord):
-    return vertical_check(matrix, coord, 'lower') or vertical_check(matrix, coord, 'up') or horizontal_check(matrix, coord, 'left') or horizontal_check(matrix, coord, 'right')    
+def regular_checks(matrix, coord, color):
+    return vertical_check(matrix, coord, 'lower', color) or vertical_check(matrix, coord, 'up', color) or horizontal_check(matrix, coord, 'left', color) or horizontal_check(matrix, coord, 'right', color)    
 
-def diagonal_checks(matrix, coord):
+def diagonal_checks(matrix, coord, color):
     string_modes = ['upper_left', 'upper_right', 'lower_left', 'lower_right']
     for mode in string_modes:
-        if diagonal_check(matrix, coord, mode) or knight_check(matrix, coord, mode):
+        if diagonal_check(matrix, coord, mode, color) or knight_check(matrix, coord, mode, color):
             return True
     return False
 
-def vertical_check(matrix, coord, string_mode): 
+def vertical_check(matrix, coord, string_mode, color): 
     # string_mode = 'up' or 'lower'
     mode = {'lower': 1, 'up': -1} 
     ###print(string_mode)
-
-    current_king = matrix[coord]['piece']
+    if(color == 'white'):
+        current_king = matrix[GameState.whitecoord]['piece']
+    else:
+        current_king = matrix[GameState.blackcoord]['piece']
+    list_aux = []
     for i in range(1,8):
         if (check_vertical_boundaries(coord, string_mode, i)):
             piece = matrix[(coord[0]+(mode[string_mode])*i, coord[1])]['piece']
-            if (piece and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen']):
-                return True
-            elif (piece):
+            list_aux.append((coord[0]+(mode[string_mode])*i, coord[1], 'mov')) #lista para fazer a interseção com o possible_moves caso o rei esteja em xeque
+            if (piece and piece.color != current_king.color):
+                if(get_piece_type(piece.name) in ['rook', 'queen']):
+                    return list_aux
+                else:
+                    break
+            elif(piece is not None):
                 break
     return False
 
@@ -35,17 +43,24 @@ def check_vertical_boundaries(coord, string_mode, i):
         return (coord[0] - i) >= 0
     return (coord[0] + i) <= 7
 
-def horizontal_check(matrix, coord, string_mode):
+def horizontal_check(matrix, coord, string_mode, color):
     # string_mode = 'left' or 'right'
     mode = {'left': -1, 'right':1}
-    current_king = matrix[coord]['piece']
-
+    if(color == 'white'):
+        current_king = matrix[GameState.whitecoord]['piece']
+    else:
+        current_king = matrix[GameState.blackcoord]['piece']
+    list_aux = []
     for i in range(1,8):
         if (check_horizontal_boundaries(coord, string_mode, i)):
             piece = matrix[(coord[0],coord[1]+mode[string_mode]*i)]['piece']
-            if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name) in ['rook', 'queen'])):
-                return True
-            elif (piece):
+            list_aux.append((coord[0],coord[1]+mode[string_mode]*i, 'mov'))
+            if ((piece and piece.color != current_king.color)): 
+                if(get_piece_type(piece.name) in ['rook', 'queen']):
+                    return list_aux
+                else:
+                    break
+            elif(piece is not None):
                 break
     return False
     
@@ -55,21 +70,29 @@ def check_horizontal_boundaries(coord, string_mode, i):
     return (coord[1] + i) <= 7
 
 
-def diagonal_check(matrix, coord, string_mode):
+def diagonal_check(matrix, coord, string_mode, color):
     # string_mode = 'upper_left', 'lower_left', 'upper_right', 'lower_right'
     mode = {'upper_left': (-1,-1), 'lower_left': (1, -1), 'upper_right': (-1, 1), 'lower_right': (1,1)}
     selected_mode = mode[string_mode]
-    current_king = matrix[coord]['piece']
+    if(color == 'white'):
+        current_king = matrix[GameState.whitecoord]['piece']
+    else:
+        current_king = matrix[GameState.blackcoord]['piece']
+    list_aux = []
     for i in range(1,8):
 
         if (check_diagonal_boundaries(coord, string_mode, i)):
-            piece = matrix[(coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i)]['piece']
+            coord_piece = (coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i)
+            piece = matrix[coord_piece]['piece']
+            diff = (abs(coord_piece[0] - coord[0]),abs(coord_piece[1] - coord[1]))
+            list_aux.append((coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i, 'mov'))
             if(piece and (piece.color != current_king.color)):
-                
-                if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower') or (piece.color=='black' and string_mode.split('_')[0] == 'upper'))):
-                    return True
+                if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower' and (diff[0] < 2 and diff[1] < 2)) or (piece.color=='black' and string_mode.split('_')[0] == 'upper' and (diff[0] < 2 and diff[1] < 2)))):
+                    return list_aux
+                else:
+                    break
 
-            elif(piece):
+            elif(piece is not None):
                 break
     return False
 
@@ -82,24 +105,31 @@ def check_diagonal_boundaries(coord, string_mode, i):
         return coord[0]+i <= 7 and coord[1]-i >= 0
     return coord[0]+i <= 7 and coord[1]+i <= 7
 
-def knight_check(matrix, coord, string_mode):
+def knight_check(matrix, coord, string_mode, color):
     mode = {'upper_left': (-2, -1), 'upper_right': (-2, 1), 'lower_left': (2,-1), 'lower_right': (2,1)}
     reverse_mode = {'upper_left': (-2, -1), 'upper_right': (2, -1), 'lower_left': (-2,1), 'lower_right': (2,1)}
     x = mode[string_mode][0]
     y = mode[string_mode][1]
     reverse_x = reverse_mode[string_mode][0]
     reverse_y = reverse_mode[string_mode][1]
-    current_king = matrix[coord]['piece']
-    
+    if(color == 'white'):
+        current_king = matrix[GameState.whitecoord]['piece']
+    else:
+        current_king = matrix[GameState.blackcoord]['piece']
+    list_aux = []
     if (check_knight_boundaries(coord, string_mode)[0]):
         piece = matrix[(coord[0]+x, coord[1]+y)]['piece']
+        list_aux.append((coord[0]+x, coord[1]+y, 'mov'))
         if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name)=='knight')):
-            return True
+            print(list_aux)
+            return list_aux
 
     if (check_knight_boundaries(coord, string_mode)[1]):
         piece = matrix[(coord[0]+reverse_y, coord[1]+reverse_x)]['piece']
+        list_aux.append((coord[0]+reverse_y, coord[1]+reverse_x, 'mov'))
         if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name)=='knight')):
-            return True
+            print(list_aux)
+            return list_aux
 
         return False
 
@@ -146,15 +176,16 @@ def king_check(matrix, coord, string_mode, color):
         if(king_check_boundaries(coord, string_mode, i)):
             return []
         else:
-            piece = matrix[coord_aux]['piece']
+            piece = matrix[(coord[0]+selected_mode[0]*i , coord[1]+selected_mode[1]*i )]['piece']
             
             if(piece and piece.color == color):
                 if(get_piece_type(piece.name) == 'king'):
+                    print(moves)
                     moves.insert(0, INVERTED_DIRECTIONS.index(string_mode))
                     return moves
                 return []
             elif not piece:
-                moves.append((coord_aux[0], coord_aux[1], 'mov'))
+                moves.append((coord[0]+selected_mode[0]*i, coord[1]+selected_mode[1]*i, 'mov'))
 
     return []
 
@@ -187,6 +218,14 @@ def verify_squares(color, matrix, coord, string_mode):
                     
                 moves.append((coord[0] + iterate_board(i, string_mode)[0], coord[1] + iterate_board(i, string_mode)[1], 'mov'))
                 return moves
+
+            # elif(piece and piece.color != color):
+            #     moves.append((coord[0] + iterate_board(i, string_mode)[0], coord[1] + iterate_board(i, string_mode)[1], 'mov'))
+            #     print(moves)
+            #     return moves
+            
+            elif(piece):
+                return
 
     return []
 
