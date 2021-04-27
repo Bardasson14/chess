@@ -26,6 +26,9 @@ class Countdown(tk.Frame):
         self.entry.focus_set()
         #self.start = tk.Button(self, text="Start", command=self.stop_timer)
 
+    def restart(self):
+        self.seconds_left = 600
+
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
         self.label['text'] = self.convert_seconds_left_to_time()

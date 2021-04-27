@@ -37,6 +37,7 @@ def main():
     
     help_menu = Menu(menubar, tearoff=0)
     
+    
     def msg():
         stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
         tk.messagebox.showinfo("About", stri, parent= root)
@@ -48,23 +49,31 @@ def main():
     help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
     help_menu.add_command(label='About...', command = lambda: msg())
 
+
+
     
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+    GameState(board, [Player(0), Player(1)])
+
+        
+    def criaB():
+        board = Board(root)
+        board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+        GameState(board, [Player(0), Player(1)])
 
 
-    state = GameState(board, [Player(0), Player(1)])
     #for sq in board.squares.values():
     #    ###print(sq)
     
 
     #recebendo a cor da ia
-    sub_menu.add_command(label='Versus', command = lambda: board.mode("None"))
-    color.add_command(label='Black', command = lambda: board.mode("black"))
-    color.add_command(label='White', command = lambda: board.mode("white"))
+    sub_menu.add_command(label='Versus', command = lambda: [board.mode("None")])
+    color.add_command(label='Black', command = lambda: [board.mode("black"), board.reset(board), criaB()])
+    color.add_command(label='White', command = lambda: [board.mode("white")])
     
     
-    
+ 
     
     root.geometry('1000x600')
     root.resizable(width=0, height=0)

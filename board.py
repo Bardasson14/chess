@@ -283,5 +283,11 @@ class Board(tk.Frame):
                             GameState.troca()
 
 
+    def reset(self, board):
+        board.destroy()
+        timerp1.restart()
+        timerp2.restart()
+        
+
     def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
