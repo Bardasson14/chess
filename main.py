@@ -23,10 +23,13 @@ def main():
 
     gameMenu = Menu(menubar, tearoff=False)
     sub_menu = Menu(gameMenu, tearoff=0)
+    color = Menu(sub_menu, tearoff=0)
     gameMenu.add_cascade(label='Mode', menu = sub_menu)
-    sub_menu.add_command(label='Versus')
-    sub_menu.add_command(label='IA')
     
+    sub_menu.add_cascade(label='IA', menu = color)
+
+
+
     gameMenu.add_separator()    
     
     gameMenu.add_command(label='Exit', command = root.destroy)
@@ -53,6 +56,16 @@ def main():
     state = GameState(board, [Player(0), Player(1)])
     #for sq in board.squares.values():
     #    ###print(sq)
+    
+
+    #recebendo a cor da ia
+    sub_menu.add_command(label='Versus', command = lambda: board.mode("None"))
+    color.add_command(label='Black', command = lambda: board.mode("black"))
+    color.add_command(label='White', command = lambda: board.mode("white"))
+    
+    
+    
+    
     root.geometry('1000x600')
     root.resizable(width=0, height=0)
     root.mainloop()

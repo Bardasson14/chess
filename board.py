@@ -35,6 +35,7 @@ class Board(tk.Frame):
         self.canvas.pack(side="top", fill="both", expand=True, padx=2, pady=2)
         self.canvas.bind("<Configure>", self.refresh)
         self.canvas.bind("<Button-1>", self.click_event_handler)
+        self.contadorPosPieces = 0
         
         global timerp1
         global timerp2
@@ -71,11 +72,26 @@ class Board(tk.Frame):
         self.place_piece(piece, row, column)
 
     def place_piece(self, piece, row, column):
+        self.contadorPosPieces += 1
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
        # ###print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
+        if(GameState.first_move and piece.color == "white" and self.contadorPosPieces == 65):
+            timerp1.start_timer()
+            timerp2.stop_timer()
+        elif(self.contadorPosPieces >64):
+            if(piece.color == "white"):
+                timerp2.start_timer()
+                timerp1.stop_timer()
+            else:
+                timerp2.stop_timer()
+                timerp1.start_timer()
+
+
+
+
 
     def refresh(self, event):
         xsize = int((event.width-1) / self.columns)
@@ -104,6 +120,16 @@ class Board(tk.Frame):
         self.canvas.tag_raise("piece")
         self.canvas.tag_lower("square")
     
+
+    def mode(self, str): 
+        self.ai=Ai(str,self.squares,self)
+        if (GameState.turn(self.ai.color)):
+            self.ai.board=self
+            self.ai.aiMove()
+            GameState.troca()
+
+
+
     def position_pieces(self, player):
         
         first_line = 0
@@ -128,7 +154,9 @@ class Board(tk.Frame):
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
 
-        self.ai=Ai('black',self.squares,self)
+        
+
+
     
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
@@ -188,12 +216,6 @@ class Board(tk.Frame):
         self.capture_piece(coord)
         self.place_piece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
-        if(color == 'white'):
-            timerp2.start_timer()
-            timerp1.stop_timer()
-        else:
-            timerp2.stop_timer()
-            timerp1.start_timer()
     
     # dividir callback
     
@@ -255,7 +277,7 @@ class Board(tk.Frame):
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
-                        if GameState.turn(self.ai.color):
+                        if (GameState.turn(self.ai.color)):
                             self.ai.board=self
                             self.ai.aiMove()
                             GameState.troca()

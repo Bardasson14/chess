@@ -4,7 +4,6 @@ from game_state import GameState
 from player import Player
 
 
-
 class Countdown(tk.Frame):
     
     def __init__(self, master):

@@ -30,10 +30,11 @@ class Ai:
         global special_moves
         special_moves = SpecialMoves()
         self.populate_grid(matrix)
-
+    
+    
     def populate_grid(self,matrix):
         if(self.color=='white'):#define o intervalo linha dependendo da cor escolhida para ia
-            self.rangex=(6,7) 
+            self.rangex=(6,8) 
         else:
             self.rangex=(0,2)
         for i in range(self.rangex[0],self.rangex[1]):#define um dicionario com base no tabuleiro
@@ -63,7 +64,7 @@ class Ai:
         if(mov!='mov'):#faz o roque
             special_moves.movRoque(self.board,mov,(row,col))
 
-    def aiMove(self):
+    def aiMove(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):
             self.aleatorio()
