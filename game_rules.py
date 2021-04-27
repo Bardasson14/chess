@@ -4,7 +4,7 @@ from time import time
 from game_state import GameState
 
 def check_all(matrix, coord, color):
-    return regular_checks(matrix, coord, color) or diagonal_checks(matrix, coord, color)
+    return regular_checks(matrix, coord, color) or diagonal_checks(matrix, coord, color) or first_knight_check(matrix, coord, color)
 
 def regular_checks(matrix, coord, color):
     return vertical_check(matrix, coord, 'lower', color) or vertical_check(matrix, coord, 'up', color) or horizontal_check(matrix, coord, 'left', color) or horizontal_check(matrix, coord, 'right', color)    
@@ -12,9 +12,16 @@ def regular_checks(matrix, coord, color):
 def diagonal_checks(matrix, coord, color):
     string_modes = ['upper_left', 'upper_right', 'lower_left', 'lower_right']
     for mode in string_modes:
-        if diagonal_check(matrix, coord, mode, color) or knight_check(matrix, coord, mode, color):
-            return True
-    return False
+        if diagonal_check(matrix, coord, mode, color):
+            return diagonal_check(matrix, coord, mode, color)
+    return []
+
+def first_knight_check(matrix, coord, color):
+    string_modes = ['upper_left', 'upper_right', 'lower_left', 'lower_right']
+    for mode in string_modes:
+        if(knight_check(matrix, coord, mode, color)):
+            return knight_check(matrix, coord, mode, color)
+    return []
 
 def vertical_check(matrix, coord, string_mode, color): 
     # string_mode = 'up' or 'lower'
@@ -36,7 +43,7 @@ def vertical_check(matrix, coord, string_mode, color):
                     break
             elif(piece is not None):
                 break
-    return False
+    return []
 
 def check_vertical_boundaries(coord, string_mode, i):
     if string_mode == 'up':
@@ -62,7 +69,7 @@ def horizontal_check(matrix, coord, string_mode, color):
                     break
             elif(piece is not None):
                 break
-    return False
+    return []
     
 def check_horizontal_boundaries(coord, string_mode, i):
     if string_mode == 'left':
@@ -94,7 +101,7 @@ def diagonal_check(matrix, coord, string_mode, color):
 
             elif(piece is not None):
                 break
-    return False
+    return []
 
 def check_diagonal_boundaries(coord, string_mode, i):
     if string_mode == 'upper_left':
@@ -121,17 +128,15 @@ def knight_check(matrix, coord, string_mode, color):
         piece = matrix[(coord[0]+x, coord[1]+y)]['piece']
         list_aux.append((coord[0]+x, coord[1]+y, 'mov'))
         if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name)=='knight')):
-            print(list_aux)
             return list_aux
 
     if (check_knight_boundaries(coord, string_mode)[1]):
         piece = matrix[(coord[0]+reverse_y, coord[1]+reverse_x)]['piece']
         list_aux.append((coord[0]+reverse_y, coord[1]+reverse_x, 'mov'))
         if ((piece and piece.color != current_king.color) and (get_piece_type(piece.name)=='knight')):
-            print(list_aux)
             return list_aux
 
-        return False
+        return []
 
 def check_knight_boundaries(coord, string_mode):
     ###print('knight', string_mode)
@@ -168,9 +173,7 @@ def append_moves(color, matrix, coord):
 def king_check(matrix, coord, string_mode, color):
     mode = {'left': (0, -1), 'top': (-1,0), 'right': (0,1), 'bottom': (1,0), 'upper_right': (-1,1), 'upper_left': (-1,-1), 'lower_right': (1,1), 'lower_left':(1,-1)} # talvez seja necessário trocar
     selected_mode = mode[string_mode]
-    coord_aux = (coord[0]+selected_mode[0], coord[1]+selected_mode[1])
     moves = []
-    aux = False
 
     for i in range(1,8):
         if(king_check_boundaries(coord, string_mode, i)):
@@ -180,7 +183,6 @@ def king_check(matrix, coord, string_mode, color):
             
             if(piece and piece.color == color):
                 if(get_piece_type(piece.name) == 'king'):
-                    print(moves)
                     moves.insert(0, INVERTED_DIRECTIONS.index(string_mode))
                     return moves
                 return []
@@ -233,3 +235,6 @@ def iterate_board (i, string_mode):
     mode = {'left': (0, -i), 'top': (-i,0), 'right':(0,i), 'bottom':(i,0), 'upper_right': (-i,i), 'upper_left': (-i,-i), 'lower_right': (i,i), 'lower_left':(i,-i)}
     #print("iterate_board: ", mode[string_mode])
     return mode[string_mode]
+
+# def check_mate(matrix, coord):
+    

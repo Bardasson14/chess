@@ -7,6 +7,7 @@ import pieces
 from pieces.special_moves import *
 from game_rules import *
 from timer import *
+from utils import get_piece_type
 
 
 class Board(tk.Frame):
@@ -129,8 +130,16 @@ class Board(tk.Frame):
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
-        # if(check_all(self.squares, GameState.blackcoord, "black") or check_all(self.squares, GameState.whitecoord, "white")):
-        #     print("TRUE")
+        list_aux = []
+        if(piece.color == 'white'):
+            list_aux = check_all(self.squares, GameState.whitecoord, piece.color)
+        else:
+            list_aux = check_all(self.squares, GameState.blackcoord, piece.color)
+        if(list_aux):
+            print(list_aux)
+            vec = list(set(vec) & set(list_aux))
+        if(get_piece_type(piece.name) == 'king'):
+            vec = piece.get_possible_moves(coord,self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -197,7 +206,7 @@ class Board(tk.Frame):
                 if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece']#guarda se o quadrado clicado eh uma peca
                     if(piece):
-                        color=piece.color
+                        color = piece.color
                         #print(color)
                         
                     ref = self.squares[(col,row)]['selected']
