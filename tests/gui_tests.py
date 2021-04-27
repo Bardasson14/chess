@@ -12,9 +12,6 @@ from game_state import *
 
 class GUITest(unittest.TestCase):
 
-    def test_click_is_valid(self):
-        pass
-
     def test_start_timer(self):
         root = tk.Tk()
         test_timer = Countdown(tk.LabelFrame(root, text="test", height = 0, width = 0))
