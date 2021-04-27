@@ -49,7 +49,6 @@ def main():
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
 
-
     state = GameState(board, [Player(0), Player(1)])
     #for sq in board.squares.values():
     #    ###print(sq)

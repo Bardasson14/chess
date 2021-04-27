@@ -39,7 +39,6 @@ class Board(tk.Frame):
         global timerp1
         global timerp2
 
-
         LabelC1 = tk.LabelFrame(self, text="player2", height = 100, width = 150)
         LabelC1.pack()
         LabelC1.place(x = 600, y= 5)
@@ -198,10 +197,9 @@ class Board(tk.Frame):
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
         for row in range(self.rows):
             for col in range(self.columns):
-
                 if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
                     piece = self.squares[(col,row)]['piece'] # guarda se o quadrado clicado eh uma peca
-
+                    
                     if(piece):
                         color = piece.color
                         
@@ -209,45 +207,11 @@ class Board(tk.Frame):
                     gr = self.squares[(col,row)]['gamerule']
                     
                     if piece and GameState.turn(color):    # clicou na peca
-                        print(piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
-                        if(not(self.lock) and not(piece.selected)):
-                            self.add_square(piece,(col,row))
-                        elif(self.lock and piece.selected):
-                            self.clear_square(piece, piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
+                        self.handle_board_lock(piece, row, col)
                         
-                        #print()
-                        #print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
-                        #print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
-                        #print()
-                        #print("----------------------------------------------------------------------")
-
                     if ref:  # clicou no quadrado vermelho
-
-                        piece = self.squares[ref]['piece']
-                                
-                        if(piece and piece.selected):
-                            
-                            if (get_piece_type(piece.name)=='pawn'):
-                                if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    special_moves.en_passant(self)
-                                    
-                                else:
-                                    GameState.possible_en_passant = None
-
-                            GameState.first_move = False                        
-                            self.move_piece(piece,ref,(col,row))
-
-                            if (get_piece_type(piece.name)=='pawn' and col in [0,7]):
-                                self.lock=True
-                                special_moves.pawn_promotion(self, piece, col, row, sprites)
-
-                            elif (get_piece_type(piece.name)=='king'):
-                              
-                                if (piece.color == 'white'):
-                                    GameState.whitecoord = (col, row)
-                                else:
-                                    GameState.blackcoord = (col, row)
-
+                        piece = self.squares[ref]['piece']    
+                        self.handle_piece_movimentation(piece, col, row, ref)
                         GameState.switch() # troca a cor do turno
                         
                         if(gr!='mov'):
@@ -257,6 +221,34 @@ class Board(tk.Frame):
                             self.ai.aiMove()
                             GameState.switch()
 
-
     def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
+
+    def handle_board_lock(self, piece, row, col):
+        if(not(self.lock) and not(piece.selected)):
+            self.add_square(piece,(col,row))
+        elif(self.lock and piece.selected):
+            self.clear_square(piece, piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
+                        
+
+    def handle_piece_movimentation(self, piece, row, col, ref):
+
+        if(piece and piece.selected):
+            if (get_piece_type(piece.name)=='pawn'):
+                if (abs(col-ref[1])==1) and not self.squares[(row, col)]['piece']:
+                    special_moves.en_passant(self)
+                else:
+                    GameState.possible_en_passant = None
+
+            GameState.first_move = False                        
+            self.move_piece(piece,ref,(row,col))
+
+            if (get_piece_type(piece.name)=='pawn' and row in [0,7]):
+                self.lock=True
+                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                
+            elif (get_piece_type(piece.name)=='king'):      
+                if (piece.color == 'white'):
+                    GameState.whitecoord = (row, col)
+                else:
+                    GameState.blackcoord = (row, col)
