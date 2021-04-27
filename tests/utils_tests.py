@@ -12,6 +12,6 @@ class UtilsTest(unittest.TestCase):
         piece_name = 'white_bishop_1'
         self.assertEqual(get_piece_type(piece_name), 'bishop')
 
-     def test_get_canvas_keys(self):
+    def test_get_canvas_keys(self):
         canvas_keys = ['!listbox2', '!label2', '!button2']
         self.assertEqual(get_canvas_keys(canvas_keys), canvas_keys)
