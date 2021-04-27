@@ -15,10 +15,10 @@ inicia ai(cor da ia , squares inicial da board, board atualizada)
 if GameState.turn(ai.color):
     ai.board=board
     ai.move()
-    GameState.troca()
+    GameState.switch()
 '''
 class Ai:
-    def __init__(self,color,matrix,board):
+    def __init__(self,color,board):
         self.color=color
         self.squares = {}#possiveis pecas para movimentacao ia
         self.rangex=None#intervalo linha
@@ -29,7 +29,7 @@ class Ai:
         self.contpieces=16
         global special_moves
         special_moves = SpecialMoves()
-        self.populate_grid(matrix)
+        self.populate_grid(board.squares)
 
     def populate_grid(self,matrix):
         if(self.color=='white'):#define o intervalo linha dependendo da cor escolhida para ia
@@ -41,18 +41,16 @@ class Ai:
                 square_info = {'piece': matrix[(i,j)]['piece'], 'coord':matrix[(i,j)]['coord'],'selected':matrix[(i,j)]['selected'],'gamerule':matrix[(i,j)]['gamerule']}
                 self.squares[(i,j)] = square_info
                 self.board.squares[(i,j)]['aicoord']=(i,j)
-                print(square_info)
-
+                
     def aleatorio(self):#escolha da peca pela ia
         self.rowpiece=random.randrange(self.rangex[0],self.rangex[1])
         self.colpiece=random.randrange(self.rangey[0],self.rangey[1])
 
     def update(self,coord):
-        self.squares[(coord[0],coord[1])]['piece']=None
-        self.squares[(coord[0],coord[1])]['mov']=None
+        self.squares[coord]['piece']=None
+        self.squares[coord]['mov']=None
         self.contpieces-=1
-        print('cont='+str(self.contpieces))
-
+        
     def movAiPiece(self,piece,row,col,mov,capture):
         if(capture):#se ia capturou uma peca
             self.board.capture_piece((row,col))
@@ -66,6 +64,7 @@ class Ai:
     def aiMove(self):
         continua=True
         while(continua and self.contpieces>0):
+            print(0)
             self.aleatorio()
             piece=self.squares[(self.rowpiece,self.colpiece)]['piece']
             if piece :#se ia escolheu uma peca valida para o loop

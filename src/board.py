@@ -126,7 +126,7 @@ class Board(tk.Frame):
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
 
-        self.ai=Ai('black',self.squares,self)
+        self.ai=Ai('black',self)
     
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
@@ -255,7 +255,7 @@ class Board(tk.Frame):
                         if GameState.turn(self.ai.color):
                             self.ai.board=self
                             self.ai.aiMove()
-                            GameState.troca()
+                            GameState.switch()
 
 
     def click_is_valid(self, row, col, event):

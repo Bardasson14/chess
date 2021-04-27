@@ -14,7 +14,7 @@ class BoardTest(unittest.TestCase):
         self.assertNotEqual(board.squares, {})
 
     def test_add_piece(self): # Teste de Integração entre a interface e o módulo Board
-        board = Board(tk.Tk())
+        board = Board(tk.Toplevel())
         pawn = Pawn('white', 'white_pawn_x')
         previous_dir = pawn.sprite_dir
         pawn.sprite_dir = os.path.dirname(os.path.realpath(__file__)) + '/../src/' + previous_dir
@@ -22,7 +22,7 @@ class BoardTest(unittest.TestCase):
         self.assertIsNotNone(board.canvas.find_withtag(pawn.name))
 
     def test_capture_piece(self):
-        board = Board(tk.Tk())
+        board = Board(tk.Toplevel())
         p1 = Pawn('white', 'white_pawn_xxx')
         p2 = Pawn('black', 'black_pawn_xxx')
         board.squares[(2,2)]['piece'] = p1
