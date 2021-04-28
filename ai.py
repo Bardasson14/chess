@@ -54,7 +54,7 @@ class Ai:
         self.contpieces-=1
         print('cont='+str(self.contpieces))
 
-    def movAiPiece(self,piece,row,col,mov,capture):#falta an passant
+    def movAiPiece(self,piece,row,col,mov,capture):
         if(capture):#se ia capturou uma peca
             self.board.capture_piece((row,col))
         if (not piece.was_moved_before):
