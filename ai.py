@@ -18,7 +18,7 @@ if GameState.turn(ai.color):
     GameState.troca()
 '''
 class Ai:
-    def __init__(self,color,matrix,board):
+    def __init__(self,color,matrix,board,sprites):
         self.color=color
         self.squares = {}#possiveis pecas para movimentacao ia
         self.rangex=None#intervalo linha
@@ -27,6 +27,7 @@ class Ai:
         self.colpiece=None#coluna da peca escolhida no dicionario de ia pelo random
         self.board=board
         self.contpieces=16
+        self.sprites=sprites
         global special_moves
         special_moves = SpecialMoves()
         self.populate_grid(matrix)
@@ -54,15 +55,21 @@ class Ai:
         self.contpieces-=1
         print('cont='+str(self.contpieces))
 
-    def movAiPiece(self,piece,row,col,mov,capture):
+    def movAiPiece(self,piece,row,col,mov,capture):#falta an passant
         if(capture):#se ia capturou uma peca
             self.board.capture_piece((row,col))
+        if (not piece.was_moved_before):
+            piece.was_moved_before = True
         self.board.place_piece(piece,row,col)#move a peca
         self.board.squares[self.squares[(self.rowpiece,self.colpiece)]['coord']]['piece']=None#apaga posicao anterior
         self.board.squares[(row,col)]['aicoord']=(self.rowpiece,self.colpiece)
         self.squares[(self.rowpiece,self.colpiece)]['coord']=(row,col)#atualiza dicionario da ia
         if(mov!='mov'):#faz o roque
             special_moves.movRoque(self.board,mov,(row,col))
+        if(get_piece_type(piece.name)=='pawn' and row in [0,7]):
+            special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
+            self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
+            
 
     def aiMove(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True

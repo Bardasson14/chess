@@ -92,7 +92,6 @@ class Board(tk.Frame):
 
 
 
-
     def refresh(self, event):
         xsize = int((event.width-1) / self.columns)
         ysize = int((event.height-1) / self.rows)
@@ -122,7 +121,7 @@ class Board(tk.Frame):
     
 
     def mode(self, str): 
-        self.ai=Ai(str,self.squares,self)
+        self.ai=Ai(str,self.squares,self,sprites)
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.aiMove()
@@ -239,7 +238,6 @@ class Board(tk.Frame):
                             self.add_square(piece,(col,row))
                         elif(self.lock and piece.selected):
                             self.clear_square(piece,piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
-                        
                         #print()
                         #print('BLACK_KING=', game_rules.check_all(self.squares, GameState.blackcoord))
                         #print('WHITE_KING=', game_rules.check_all(self.squares, GameState.whitecoord))
@@ -277,7 +275,7 @@ class Board(tk.Frame):
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
-                        if (GameState.turn(self.ai.color)):
+                        if (self.ai and GameState.turn(self.ai.color)):
                             self.ai.board=self
                             self.ai.aiMove()
                             GameState.troca()
