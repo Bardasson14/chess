@@ -48,36 +48,29 @@ def main():
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
     help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
     help_menu.add_command(label='About...', command = lambda: msg())
-
-
-
     
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-    GameState(board, [Player(0), Player(1)])
-
-        
-    def criaB():
-        board = Board(root)
-        board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-        GameState(board, [Player(0), Player(1)])
-
-
-    #for sq in board.squares.values():
-    #    ###print(sq)
-    
 
     #recebendo a cor da ia
     sub_menu.add_command(label='Versus', command = lambda: [board.mode("None")])
-    color.add_command(label='Black', command = lambda: [board.mode("black"), board.reset(board), criaB()])
-    color.add_command(label='White', command = lambda: [board.mode("white")])
-    
-    
- 
+    color.add_command(label='Black', command = lambda: reset(root))
+    color.add_command(label='White', command = lambda: reset(root))
     
     root.geometry('1000x600')
     root.resizable(width=0, height=0)
     root.mainloop()
+
+def reset(root):
+    tag_name = '!board'
+    i = 2
+    while tag_name not in root.children:
+        tag_name = "!board{}".format(i)
+    board = root.children[tag_name]
+    board.destroy()
+    board = Board(root)
+    board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+
 
 main()
 

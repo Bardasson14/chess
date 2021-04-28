@@ -36,10 +36,10 @@ class Board(tk.Frame):
         self.canvas.bind("<Configure>", self.refresh)
         self.canvas.bind("<Button-1>", self.click_event_handler)
         self.contadorPosPieces = 0
+        self.state = GameState(self, [Player(0), Player(1)])
         
         global timerp1
         global timerp2
-
 
         LabelC1 = tk.LabelFrame(self, text="player2", height = 100, width = 150)
         LabelC1.pack()
@@ -153,10 +153,6 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
-
-        
-
-
     
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
@@ -282,12 +278,10 @@ class Board(tk.Frame):
                             self.ai.aiMove()
                             GameState.troca()
 
-
-    def reset(self, board):
-        board.destroy()
-        timerp1.restart()
-        timerp2.restart()
-        
+    #def reset(self):   
+    #    self.state = GameState(self, [Player(0), Player(1)])
+    #    timerp1.restart()
+    #    timerp2.restart()
 
     def click_is_valid(self, row, col, event):
         return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
