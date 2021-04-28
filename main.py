@@ -51,17 +51,17 @@ def main():
     
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
-
+    GameState(board, [Player(0), Player(1)])
     #recebendo a cor da ia
-    sub_menu.add_command(label='Versus', command = lambda: [board.mode("None")])
-    color.add_command(label='Black', command = lambda: reset(root))
-    color.add_command(label='White', command = lambda: reset(root))
+    sub_menu.add_command(label='Versus', command = lambda: [reset(root, "")])
+    color.add_command(label='Black', command = lambda: reset(root, "black"))
+    color.add_command(label='White', command = lambda: reset(root, "white"))
     
     root.geometry('1000x600')
     root.resizable(width=0, height=0)
     root.mainloop()
 
-def reset(root):
+def reset(root, cor):
     tag_name = '!board'
     i = 2
     while tag_name not in root.children:
@@ -70,8 +70,12 @@ def reset(root):
     board.destroy()
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
+    GameState(board, [Player(0), Player(1)])
+    board.mode(cor)
+    i += 1
 
 
 main()
+
 
 # Descartar main

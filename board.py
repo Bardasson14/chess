@@ -36,7 +36,6 @@ class Board(tk.Frame):
         self.canvas.bind("<Configure>", self.refresh)
         self.canvas.bind("<Button-1>", self.click_event_handler)
         self.contadorPosPieces = 0
-        self.state = GameState(self, [Player(0), Player(1)])
         
         global timerp1
         global timerp2
@@ -278,8 +277,8 @@ class Board(tk.Frame):
                             self.ai.aiMove()
                             GameState.troca()
 
-    #def reset(self):   
-    #    self.state = GameState(self, [Player(0), Player(1)])
+    # def resetC(self):   
+    #    self.canvas.destroy()
     #    timerp1.restart()
     #    timerp2.restart()
 
