@@ -18,9 +18,10 @@ class SpecialMoves:
     def __init__(self):
         self.selected_piece = None
     
-    def en_passant(self, board, piece, row, col, ref):
+    def en_passant(self, board,ai):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
+       
        
     def pawn_promotion(self, board, original_pawn, row, col, sprites):
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)

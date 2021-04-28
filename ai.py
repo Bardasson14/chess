@@ -18,7 +18,7 @@ if GameState.turn(ai.color):
     GameState.troca()
 '''
 class Ai:
-    def __init__(self,color,matrix,board,sprites):
+    def __init__(self,color,matrix,board,sprites,sp):
         self.color=color
         self.squares = {}#possiveis pecas para movimentacao ia
         self.rangex=None#intervalo linha
@@ -28,8 +28,7 @@ class Ai:
         self.board=board
         self.contpieces=16
         self.sprites=sprites
-        global special_moves
-        special_moves = SpecialMoves()
+        self.special_moves = sp
         self.populate_grid(matrix)
     
     
@@ -60,14 +59,20 @@ class Ai:
             self.board.capture_piece((row,col))
         if (not piece.was_moved_before):
             piece.was_moved_before = True
+        if(get_piece_type(piece.name)=='pawn'):
+            pcoord=self.squares[self.rowpiece,self.colpiece]['coord']
+            if (abs(pcoord[0]-row) == 2 and ((col < 7 and self.board.squares[(row, col+1)]['piece']) or (col>0 and self.board.squares[(row, col-1)]['piece']))):
+                GameState.possible_en_passant = (row,col)   
+            if (abs(pcoord[1]-col) == 1) and not self.board.squares[(row, col)]['piece']:
+                self.special_moves.en_passant(self.board, None)
         self.board.place_piece(piece,row,col)#move a peca
         self.board.squares[self.squares[(self.rowpiece,self.colpiece)]['coord']]['piece']=None#apaga posicao anterior
         self.board.squares[(row,col)]['aicoord']=(self.rowpiece,self.colpiece)
         self.squares[(self.rowpiece,self.colpiece)]['coord']=(row,col)#atualiza dicionario da ia
         if(mov!='mov'):#faz o roque
-            special_moves.movRoque(self.board,mov,(row,col))
+            self.special_moves.movRoque(self.board,mov,(row,col))
         if(get_piece_type(piece.name)=='pawn' and row in [0,7]):
-            special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
+            self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
             self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
             
 
