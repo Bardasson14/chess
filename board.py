@@ -121,7 +121,7 @@ class Board(tk.Frame):
     
 
     def mode(self, str): 
-        self.ai=Ai(str,self.squares,self,sprites)
+        self.ai=Ai(str,self.squares,self,sprites,special_moves)
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.aiMove()
@@ -252,7 +252,7 @@ class Board(tk.Frame):
                             
                             if (get_piece_type(piece.name)=='pawn'):
                                 if (abs(row-ref[1])==1) and not self.squares[(col, row)]['piece']:
-                                    special_moves.en_passant(self, piece, col, row, ref)
+                                    special_moves.en_passant(self,self.ai)
                                     
                                 else:
                                     GameState.possible_en_passant = None
@@ -276,6 +276,7 @@ class Board(tk.Frame):
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
                         if (self.ai and GameState.turn(self.ai.color)):
+                            self.ai.special_moves=special_moves
                             self.ai.board=self
                             self.ai.aiMove()
                             GameState.troca()
