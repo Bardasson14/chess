@@ -20,20 +20,6 @@ def main():
     root.geometry('1000x600')
     root.resizable(width=0, height=0)
     root.mainloop()
-
-
-def clear_board(board):
-    pieces_1 = board.state.players[0].pieces
-    pieces_2 = board.state.players[1].pieces
-
-    for i in range (len(pieces_1)):
-        board.canvas.delete(pieces_1[i].name)
-        board.canvas.delete(pieces_2[i].name)
-
-    board.squares = {}
-    board.populate_grid()
-    board.state = GameState(board, [Player(0), Player(1)])
-    board.reset_timer()
         
 def msg():
     stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
@@ -59,8 +45,8 @@ def create_menu(root, board):
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
     help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
     help_menu.add_command(label='About...', command = lambda: msg())
-    sub_menu.add_command(label='Versus', command = lambda: [root.after(500, clear_board(board)), board.mode("")])
-    color.add_command(label='Black', command = lambda: [root.after(500, clear_board(board)), board.mode("black")])
-    color.add_command(label='White', command = lambda: [root.after(500, clear_board(board)), board.mode("white")])
+    sub_menu.add_command(label='Versus', command = lambda: [root.after(500, board.clear(), board.mode(""))])
+    color.add_command(label='Black', command = lambda: [root.after(500, board.clear(), board.mode("black"))])
+    color.add_command(label='White', command = lambda: [root.after(500, board.clear(), board.mode("white"))])
 
 main()

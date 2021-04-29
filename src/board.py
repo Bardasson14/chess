@@ -122,6 +122,20 @@ class Board(tk.Frame):
             self.ai.board=self
             self.ai.ai_move()
             GameState.switch()
+
+
+    def clear(self):
+        pieces_1 = self.state.players[0].pieces
+        pieces_2 = self.state.players[1].pieces
+
+        for i in range (len(pieces_1)):
+            self.canvas.delete(pieces_1[i].name)
+            self.canvas.delete(pieces_2[i].name)
+
+        self.squares = {}
+        self.populate_grid()
+        self.state = GameState(self, [Player(0), Player(1)])
+        self.reset_timer()
     
     def position_pieces(self, player):
         

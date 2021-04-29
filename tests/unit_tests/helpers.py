@@ -9,4 +9,4 @@ def initialize_empty_grid():
 
 def fix_sprite_dir(piece):
     previous_dir = piece.sprite_dir
-    piece.sprite_dir = os.path.dirname(os.path.realpath(__file__)) + '/../src/' + previous_dir
+    piece.sprite_dir = os.path.dirname(os.path.realpath(__file__)) + '/../../src/' + previous_dir
