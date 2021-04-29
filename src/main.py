@@ -8,10 +8,8 @@ import pieces
 from tkinter import messagebox
 import webbrowser
 
-
 def main():
     root = tk.Tk()
-    
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
     create_menu(root, board)
@@ -22,26 +20,13 @@ def main():
     root.mainloop()
 
 
-def clear_board(board):
-    pieces_1 = board.state.players[0].pieces
-    pieces_2 = board.state.players[1].pieces
-
-    for i in range (len(pieces_1)):
-        board.canvas.delete(pieces_1[i].name)
-        board.canvas.delete(pieces_2[i].name)
-
-    board.squares = {}
-    board.populate_grid()
-    board.state = GameState(board, [Player(0), Player(1)])
-    board.reset_timer()
-        
 def msg():
     stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
     tk.messagebox.showinfo("About", stri)
 
 def callback(url):
     webbrowser.open_new(url)
-
+        
 def create_menu(root, board):
     root.title("chess")
     menubar = Menu(root)
@@ -59,8 +44,8 @@ def create_menu(root, board):
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
     help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
     help_menu.add_command(label='About...', command = lambda: msg())
-    sub_menu.add_command(label='Versus', command = lambda: [root.after(500, clear_board(board)), board.mode("")])
-    color.add_command(label='Black', command = lambda: [root.after(500, clear_board(board)), board.mode("black")])
-    color.add_command(label='White', command = lambda: [root.after(500, clear_board(board)), board.mode("white")])
+    sub_menu.add_command(label='Versus', command = lambda: [root.after(500, board.clear(), board.mode(""))])
+    color.add_command(label='Black', command = lambda: [root.after(500, board.clear(), board.mode("black"))])
+    color.add_command(label='White', command = lambda: [root.after(500, board.clear(), board.mode("white"))])
 
 main()

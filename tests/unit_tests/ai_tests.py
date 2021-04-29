@@ -2,7 +2,7 @@ import tkinter as tk
 import unittest
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../src')
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + '/../../src')
 
 from ai import Ai
 from board import Board

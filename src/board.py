@@ -57,6 +57,7 @@ class Board(tk.Frame):
         self.ai=None
 
 
+
     def populate_grid(self):
 
         for i in range(8):
@@ -122,6 +123,20 @@ class Board(tk.Frame):
             self.ai.board=self
             self.ai.ai_move()
             GameState.switch()
+
+
+    def clear(self):
+        pieces_1 = self.state.players[0].pieces
+        pieces_2 = self.state.players[1].pieces
+
+        for i in range (len(pieces_1)):
+            self.canvas.delete(pieces_1[i].name)
+            self.canvas.delete(pieces_2[i].name)
+
+        self.squares = {}
+        self.populate_grid()
+        self.state = GameState(self, [Player(0), Player(1)])
+        self.reset_timer()
     
     def position_pieces(self, player):
         
@@ -157,8 +172,42 @@ class Board(tk.Frame):
         else:
             list_aux = check_all(self.squares, GameState.blackcoord, piece.color)
         if(list_aux):
-            print(list_aux)
             vec = list(set(vec) & set(list_aux))
+            aux = 0
+            for i in range(8):
+                aux = 0
+                for j in range(8):
+                    piece_aux = self.squares[(i,j)]['piece']
+                    if(piece_aux is not None and piece.color != piece_aux.color):
+                        aux = 2
+                    if(piece_aux is not None and piece.color == piece_aux.color):
+                        vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.squares)) & set(list_aux))
+                        if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.squares))):
+                            aux = 1
+                            break
+                if(aux == 1):
+                    break
+            if(aux == 0 or aux == 2):
+                stri = "Xeque-Mate"
+                tk.messagebox.showinfo("Xeque-Mate", stri)
+        else:
+            aux = 0
+            for i in range(1,8):
+                aux = 0
+                for j in range(1,8):
+                    piece_aux = self.squares[(i,j)]['piece']
+                    if(piece_aux is not None and piece.color != piece_aux.color):
+                        aux = 2
+                    if(piece_aux is not None and piece.color == piece_aux.color):
+                        vec_aux = piece_aux.get_possible_moves((i,j), self.squares)
+                        if(vec_aux):
+                            aux = 1
+                            break
+                if(aux == 1):
+                    break
+            if(aux == 0 or aux == 2):
+                stri = "Afogamento"
+                tk.messagebox.showinfo("Empate por afogamento", stri)
         if(get_piece_type(piece.name) == 'king'):
             vec = piece.get_possible_moves(coord,self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
