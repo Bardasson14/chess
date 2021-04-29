@@ -23,7 +23,7 @@ class SpecialMoves:
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
 
-      def pawn_promotion(self, board, original_pawn, row, col, sprites):
+    def pawn_promotion(self, board, original_pawn, row, col, sprites):
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)
         listbox.pack(expand = True, fill = "both")
         label = tk.Label(board, text = "Selecione a peça na qual o peão se transformará")
