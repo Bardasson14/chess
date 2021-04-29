@@ -145,7 +145,7 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
-
+            
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
@@ -329,7 +329,6 @@ class Board(tk.Frame):
                             self.ai.board=self
                             self.ai.aiMove()
                             GameState.switch()
-
 
     def reset(self, board):
         board.destroy()
