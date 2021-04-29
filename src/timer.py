@@ -3,8 +3,6 @@ import datetime
 from game_state import GameState
 from player import Player
 
-
-
 class Countdown(tk.Frame):
     
     def __init__(self, master):
@@ -26,6 +24,9 @@ class Countdown(tk.Frame):
         self.entry = tk.Entry(self, justify='center')
         self.entry.focus_set()
         #self.start = tk.Button(self, text="Start", command=self.stop_timer)
+
+    def restart(self):
+        self.seconds_left = 600
 
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
@@ -51,13 +52,3 @@ class Countdown(tk.Frame):
 
     def convert_seconds_left_to_time(self):
         return datetime.timedelta(seconds=self.seconds_left)
-
-
-'''
-if __name__ == '__main__':
-    root = tk.Tk()
-    root.resizable(False, False)
-    countdown = Countdown(root)
-    countdown.pack()
-    root.mainloop()
-'''

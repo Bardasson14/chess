@@ -13,8 +13,6 @@ class GameState:
         self.players = players
         self.board.position_pieces(players[0])
         self.board.position_pieces(players[1])
-
-
         
     @classmethod
     def troca(self):
