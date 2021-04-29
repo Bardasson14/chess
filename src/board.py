@@ -269,7 +269,7 @@ class Board(tk.Frame):
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     
-                    if piece:# and GameState.turn(color):    # clicou na peca
+                    if piece and GameState.turn(color):    # clicou na peca
                         self.handle_board_lock(piece, row, col)
                         
                     if ref:  # clicou no quadrado vermelho
