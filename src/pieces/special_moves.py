@@ -72,7 +72,7 @@ class SpecialMoves:
             board.place_piece(torre,coord[0],coord[1]-1)
             board.squares[reftorre]['piece'] = None
 
-       else:
+        else:
             if(piece.color=='white'):
                 reftorre=(7,0)
                 torre=board.squares[reftorre]['piece']

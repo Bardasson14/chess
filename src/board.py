@@ -120,7 +120,7 @@ class Board(tk.Frame):
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.aiMove()
-            GameState.troca()
+            GameState.switch()
     
     def position_pieces(self, player):
         
@@ -319,7 +319,7 @@ class Board(tk.Frame):
                                 else:
                                     GameState.blackcoord = (col, row)
 
-                        GameState.troca()#troca a cor do turno
+                        GameState.switch()#troca a cor do turno
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
@@ -328,7 +328,7 @@ class Board(tk.Frame):
                             self.ai.special_moves=special_moves
                             self.ai.board=self
                             self.ai.aiMove()
-                            GameState.troca()
+                            GameState.switch()
 
 
     def reset(self, board):
