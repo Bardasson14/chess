@@ -8,9 +8,15 @@ import pieces
 from tkinter import messagebox
 import webbrowser
 
-
 def main():
     root = tk.Tk()
+    
+    def msg():
+        stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
+        tk.messagebox.showinfo("About", stri, parent= root)
+    
+    def callback(url):
+        webbrowser.open_new(url)
     
     board = Board(root)
     board.pack(side="top", fill="both", expand="true", padx=4, pady=4)
@@ -21,13 +27,6 @@ def main():
     root.resizable(width=0, height=0)
     root.mainloop()
         
-def msg():
-    stri = "Feito alegremente por:\n\n Felipe Esser \n Pedro Henrique \n Vitor Bardasson \n Victor Brandão"
-    tk.messagebox.showinfo("About", stri)
-
-def callback(url):
-    webbrowser.open_new(url)
-
 def create_menu(root, board):
     root.title("chess")
     menubar = Menu(root)

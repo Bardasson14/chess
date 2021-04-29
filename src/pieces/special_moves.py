@@ -64,7 +64,6 @@ class SpecialMoves:
 
     def movRoque(self,board,gr,coord):
         piece = board.squares[coord]['piece']
-        print(str(piece)+str(coord))
         if(gr=='lr'):
             if(piece.color=='white'):
                 reftorre=(7,7)
