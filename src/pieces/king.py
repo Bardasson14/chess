@@ -1,5 +1,5 @@
 from .piece import Piece
-from game_rules import can_move
+from game_rules import *
 
 class King(Piece):
     
@@ -31,14 +31,16 @@ class King(Piece):
                         else:
                             ###print(piece.name)
                             break
-
+                            
     def roque(self,coord,matrix):
-        self.big_roque(coord,matrix)
-        self.little_roque(coord,matrix)
-        
+        if(not(check_all(matrix,coord,self.color))):#xeque do rei
+            if(not(check_all(matrix,(coord[0],coord[1]+1),self.color)and check_all(matrix,(coord[0],coord[1]+2),self.color))):#xeque do lr
+                self.little_roque(coord,matrix)
+            if(not(check_all(matrix,(coord[0],coord[1]-1),self.color)and check_all(matrix,(coord[0],coord[1]-2),self.color))):#xeque do br
+                self.big_roque(coord,matrix)
+                
     def get_possible_moves(self, coord, matrix):
 
-        
         list_aux = can_move(self.color, matrix, coord)
 
         if(list_aux):
@@ -48,7 +50,9 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-        self.roque(coord,matrix)
+
+        if(not(self.was_moved_before)):
+            self.roque(coord,matrix)
         return self.possible_moves
 
     def mov_h(self, coord, matrix):

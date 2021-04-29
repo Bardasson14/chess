@@ -6,11 +6,12 @@ class GameState:
     white_king_checked = False
     black_king_checked = False
 
-    player='white' #indica o turno
+    player='white'
     
     def __init__(self, board, players):
         self.board = board
         self.players = players
+
         if (board is not None and players is not None): # workaround p/ facilitar o teste
             self.board.position_pieces(players[0])
             self.board.position_pieces(players[1])

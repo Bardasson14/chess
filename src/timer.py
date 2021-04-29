@@ -3,8 +3,6 @@ import datetime
 from game_state import GameState
 from player import Player
 
-
-
 class Countdown(tk.Frame):
     
     def __init__(self, master):
@@ -16,12 +14,14 @@ class Countdown(tk.Frame):
 
     def show_widgets(self):
         self.label.pack()
-        
+    
     def create_widgets(self):
-
         self.label = tk.Label(self, text="00:10:00")
         self.entry = tk.Entry(self, justify='center')
         self.entry.focus_set()
+
+    def restart(self):
+        self.seconds_left = 600
         
     def countdown(self):
         '''Atualuza o label conforme o tempo restante.'''
