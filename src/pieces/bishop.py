@@ -13,7 +13,7 @@ class Bishop(Piece):
         list_aux = can_move(self.color, matrix, coord)
     
         self.possible_moves=[]
-        self.mov_d(coord,matrix)
+        self.mov_d(coord, matrix)
         
         if(list_aux):
             return [move for move in list_aux if move in self.possible_moves]

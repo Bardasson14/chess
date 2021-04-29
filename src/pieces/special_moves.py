@@ -18,7 +18,7 @@ class SpecialMoves:
 
     def __init__(self):
         self.selected_piece = None
-    
+
     def en_passant(self, board,ai):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
@@ -32,7 +32,7 @@ class SpecialMoves:
             listbox.insert(listbox.size(), piece)
         submit = tk.Button(master = board, text = "Escolher", command = lambda: self.destroy_promotion_menu(board, original_pawn, row, col, sprites))
         submit.pack()
-        
+
     def ai_pawn_promotion(self, board, original_pawn, row, col, sprites):
         self.selected_piece = PIECES_EN[random.randrange(0,4)]
         self.set_piece(board, original_pawn, row, col, sprites)
@@ -54,15 +54,14 @@ class SpecialMoves:
         index = PIECES_EN.index(self.selected_piece)
         filename = player_color + (get_piece_type(modified_pawn.name)).title()
         modified_pawn.name += str(self.promoted[index])
-        ####print(self.promoted)
+        
         self.promoted[index] += 1
         modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
-        ####print("DICT: ", modified_pawn.__dict__)
         board.add_piece(modified_pawn, row, col)
 
     def movRoque(self,board,gr,coord):
         piece = board.squares[coord]['piece']
-        
+
         if(gr=='lr'):
             if(piece.color=='white'):
                 reftorre=(7,7)
@@ -72,8 +71,8 @@ class SpecialMoves:
                 torre=board.squares[reftorre]['piece']
             board.place_piece(torre,coord[0],coord[1]-1)
             board.squares[reftorre]['piece'] = None
-            
-        else:
+
+       else:
             if(piece.color=='white'):
                 reftorre=(7,0)
                 torre=board.squares[reftorre]['piece']

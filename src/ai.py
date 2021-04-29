@@ -9,14 +9,16 @@ from pieces.special_moves import *
 from game_rules import *
 from timer import *
 import random
+
 '''
 encontrar um loop e chamar
 inicia ai(cor da ia , squares inicial da board, board atualizada)
 if GameState.turn(ai.color):
     ai.board=board
     ai.move()
-    GameState.troca()
+    GameState.switch()
 '''
+
 class Ai:
     def __init__(self,color,matrix,board,sprites,sp):
         self.color=color
@@ -31,7 +33,6 @@ class Ai:
         self.special_moves = sp
         self.populate_grid(matrix)
     
-    
     def populate_grid(self,matrix):
         if(self.color=='white'):#define o intervalo linha dependendo da cor escolhida para ia
             self.rangex=(6,8) 
@@ -42,7 +43,6 @@ class Ai:
                 square_info = {'piece': matrix[(i,j)]['piece'], 'coord':matrix[(i,j)]['coord'],'selected':matrix[(i,j)]['selected'],'gamerule':matrix[(i,j)]['gamerule']}
                 self.squares[(i,j)] = square_info
                 self.board.squares[(i,j)]['aicoord']=(i,j)
-                print(square_info)
 
     def aleatorio(self):#escolha da peca pela ia
         self.rowpiece=random.randrange(self.rangex[0],self.rangex[1])
@@ -75,7 +75,6 @@ class Ai:
             self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
             self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
             
-
     def aiMove(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):

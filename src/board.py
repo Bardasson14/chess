@@ -40,7 +40,6 @@ class Board(tk.Frame):
         global timerp1
         global timerp2
 
-
         LabelC1 = tk.LabelFrame(self, text="player2", height = 100, width = 150)
         LabelC1.pack()
         LabelC1.place(x = 600, y= 5)
@@ -61,7 +60,6 @@ class Board(tk.Frame):
 
         for i in range(8):
             for j in range(8):
-
                 square_info = {'piece': None, 'coord':(i, j),'selected':None,'gamerule':None,'aicoord':None}
                 self.squares[(i,j)] = square_info
 
@@ -123,7 +121,7 @@ class Board(tk.Frame):
             self.ai.board=self
             self.ai.aiMove()
             GameState.troca()
-
+    
     def position_pieces(self, player):
         
         first_line = 0
@@ -147,13 +145,12 @@ class Board(tk.Frame):
         
         for i in range(8):
             self.add_piece(pawns[i], second_line, i)
-    
+
     def add_square(self, piece, coord): # trava a movimentacao no tabuleiro 
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
-        # if(game_rules.check_all(self.squares, GameState.blackcoord) or game_rules.check_all(self.squares, GameState.whitecoord)):
-        #     vec = []
+
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -207,7 +204,7 @@ class Board(tk.Frame):
         self.capture_piece(coord)
         self.place_piece(self.squares[ref]['piece'],coord[0],coord[1]) # move a peca                    
         self.squares[ref]['piece'] = None
-        
+
         if(color == 'white'):
             timerp2.start_timer()
             timerp1.stop_timer()
@@ -215,7 +212,65 @@ class Board(tk.Frame):
             timerp2.stop_timer()
             timerp1.start_timer()
     
-    # dividir callback
+    def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
+        for row in range(self.rows):
+            for col in range(self.columns):
+                if(self.click_is_valid(row, col, event)):  # tratamento do click mouse
+                    piece = self.squares[(col,row)]['piece'] # guarda se o quadrado clicado eh uma peca
+                    
+                    if(piece):
+                        color = piece.color
+                        
+                    ref = self.squares[(col,row)]['selected']
+                    gr = self.squares[(col,row)]['gamerule']
+                    
+                    if piece and GameState.turn(color):    # clicou na peca
+                        self.handle_board_lock(piece, row, col)
+                        
+                    if ref:  # clicou no quadrado vermelho
+                        piece = self.squares[ref]['piece']    
+                        self.handle_piece_movimentation(piece, col, row, ref)
+                        GameState.switch() # troca a cor do turno
+                        
+                        if(gr!='mov'):
+                            special_moves.movRoque(self,gr,(col,row))
+                        if GameState.turn(self.ai.color):
+                            self.ai.board=self
+                            self.ai.aiMove()
+                            GameState.switch()
+
+    def click_is_valid(self, row, col, event):
+        return (row*self.size<event.x<=(row+1)*self.size) and (col*self.size<event.y<=(col+1)*self.size)    
+
+    def handle_board_lock(self, piece, row, col):
+        if(not(self.lock) and not(piece.selected)):
+            self.add_square(piece,(col,row))
+        elif(self.lock and piece.selected):
+            self.clear_square(piece, piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
+                        
+
+    def handle_piece_movimentation(self, piece, row, col, ref):
+
+        if(piece and piece.selected):
+            if (get_piece_type(piece.name)=='pawn'):
+                if (abs(col-ref[1])==1) and not self.squares[(row, col)]['piece']:
+                    special_moves.en_passant(self)
+                else:
+                    GameState.possible_en_passant = None
+
+            GameState.first_move = False                        
+            self.move_piece(piece,ref,(row,col))
+
+            if (get_piece_type(piece.name)=='pawn' and row in [0,7]):
+                self.lock=True
+                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                
+            elif (get_piece_type(piece.name)=='king'):      
+                if (piece.color == 'white'):
+                    GameState.whitecoord = (row, col)
+                else:
+                    GameState.blackcoord = (row, col)
+
     def click_event_handler(self, event): # encaminha funcoes dependendo do click do mouse
 
       for row in range(self.rows):
