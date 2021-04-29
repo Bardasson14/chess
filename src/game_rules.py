@@ -77,7 +77,6 @@ def check_horizontal_boundaries(coord, string_mode, i):
         return (coord[1] - i) >= 0
     return (coord[1] + i) <= 7
 
-
 def diagonal_check(matrix, coord, string_mode, color):
     # string_mode = 'upper_left', 'lower_left', 'upper_right', 'lower_right'
     mode = {'upper_left': (-1,-1), 'lower_left': (1, -1), 'upper_right': (-1, 1), 'lower_right': (1,1)}
@@ -120,6 +119,7 @@ def knight_check(matrix, coord, string_mode, color):
     y = mode[string_mode][1]
     reverse_x = reverse_mode[string_mode][0]
     reverse_y = reverse_mode[string_mode][1]
+
     if(color == 'white'):
         current_king = matrix[GameState.whitecoord]['piece']
     else:
@@ -140,7 +140,6 @@ def knight_check(matrix, coord, string_mode, color):
         return []
 
 def check_knight_boundaries(coord, string_mode):
-    ###print('knight', string_mode)
     if string_mode == 'upper_left':
         return [coord[0]-2 >= 0 and coord[1]-1 >= 0, coord[1]-2 >=0 and coord[0]-1 >=0]
     elif string_mode == 'upper_right':
@@ -180,8 +179,7 @@ def king_check(matrix, coord, string_mode, color):
         if(king_check_boundaries(coord, string_mode, i)):
             return []
         else:
-            piece = matrix[(coord[0]+selected_mode[0]*i , coord[1]+selected_mode[1]*i )]['piece']
-            
+            piece = matrix[(coord[0]+selected_mode[0]*i , coord[1]+selected_mode[1]*i )]['piece']            
             if(piece and piece.color == color):
                 if(get_piece_type(piece.name) == 'king'):
                     moves.insert(0, INVERTED_DIRECTIONS.index(string_mode))
@@ -189,7 +187,7 @@ def king_check(matrix, coord, string_mode, color):
                 return []
             elif not piece:
                 moves.append((coord[0]+selected_mode[0]*i, coord[1]+selected_mode[1]*i, 'mov'))
-
+                
     return []
 
 
@@ -222,11 +220,6 @@ def verify_squares(color, matrix, coord, string_mode):
                 moves.append((coord[0] + iterate_board(i, string_mode)[0], coord[1] + iterate_board(i, string_mode)[1], 'mov'))
                 return moves
 
-            # elif(piece and piece.color != color):
-            #     moves.append((coord[0] + iterate_board(i, string_mode)[0], coord[1] + iterate_board(i, string_mode)[1], 'mov'))
-            #     print(moves)
-            #     return moves
-            
             elif(piece):
                 return
 
@@ -236,5 +229,3 @@ def iterate_board (i, string_mode):
     mode = {'left': (0, -i), 'top': (-i,0), 'right':(0,i), 'bottom':(i,0), 'upper_right': (-i,i), 'upper_left': (-i,-i), 'lower_right': (i,i), 'lower_left':(i,-i)}
     #print("iterate_board: ", mode[string_mode])
     return mode[string_mode]
-
-# def check_mate(matrix, coord):

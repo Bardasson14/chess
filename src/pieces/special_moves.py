@@ -8,6 +8,7 @@ from pieces.rook import Rook
 from copy import deepcopy
 from game_state import GameState
 import random
+
 PIECES_EN = ['bishop', 'knight', 'queen', 'rook']
 PIECES_PT = ['Bispo', 'Cavalo', 'Rainha', 'Torre']
 
@@ -21,9 +22,8 @@ class SpecialMoves:
     def en_passant(self, board,ai):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
-       
-       
-    def pawn_promotion(self, board, original_pawn, row, col, sprites):
+
+      def pawn_promotion(self, board, original_pawn, row, col, sprites):
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)
         listbox.pack(expand = True, fill = "both")
         label = tk.Label(board, text = "Selecione a peça na qual o peão se transformará")
@@ -62,7 +62,7 @@ class SpecialMoves:
 
     def movRoque(self,board,gr,coord):
         piece = board.squares[coord]['piece']
-        print(str(piece)+str(coord))
+        
         if(gr=='lr'):
             if(piece.color=='white'):
                 reftorre=(7,7)
@@ -72,6 +72,7 @@ class SpecialMoves:
                 torre=board.squares[reftorre]['piece']
             board.place_piece(torre,coord[0],coord[1]-1)
             board.squares[reftorre]['piece'] = None
+            
         else:
             if(piece.color=='white'):
                 reftorre=(7,0)
