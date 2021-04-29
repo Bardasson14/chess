@@ -74,6 +74,11 @@ class Ai:
         if(get_piece_type(piece.name)=='pawn' and row in [0,7]):
             self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
             self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
+        if (get_piece_type(piece.name)=='king'):
+            if (piece.color == 'white'):
+                GameState.whitecoord = (row, col)
+            else:
+                GameState.blackcoord = (row, col)
             
     def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
