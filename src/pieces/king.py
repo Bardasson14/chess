@@ -1,5 +1,7 @@
 from .piece import Piece
 from game_rules import *
+from game_rules import check_all
+from game_state import GameState
 import os
 
 class King(Piece):
@@ -52,7 +54,8 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-        self.roque(coord, matrix)
+        if(GameState.first_move):
+            self.roque(coord, matrix)
         self.possible_moves = list(set(self.possible_moves))
         self.king_moves(coord, matrix)
         self.attacking_king(coord, matrix)
