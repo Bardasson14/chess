@@ -11,14 +11,14 @@ class AiTest(unittest.TestCase):
 
     def test_update(self):
         board = Board(tk.Toplevel())
-        ai = Ai('black', board)
+        ai = Ai('black', board.squares, board, None, None)
         ai.update((1,0))
         self.assertEqual(ai.contpieces, 15)
 
     def test_random(self):
         board = Board(tk.Toplevel())
-        ai = Ai('black', board)
+        ai = Ai('black', board.squares, board, None, None)
         ai.random() 
         piece = board.squares[(ai.rowpiece, ai.colpiece)]['piece'] 
         if piece is not None:
-            assertTrue(piece.color == 'black')
+            self.assertTrue(piece.color == 'black')
