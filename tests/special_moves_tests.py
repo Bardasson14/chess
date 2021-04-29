@@ -18,7 +18,7 @@ class SpecialMovesTest(unittest.TestCase):
         pawn = Pawn('white', 'white_pawn_x')
         previous_dir = pawn.sprite_dir
         pawn.sprite_dir = os.path.dirname(os.path.realpath(__file__)) + '/../src/' + previous_dir
-        # print(pawn.__dict__)
+        # #print(pawn.__dict__)
         board.add_piece(pawn, 3, 4)
         GameState.possible_en_passant = (3,4)
         special_moves = SpecialMoves()

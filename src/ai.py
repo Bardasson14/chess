@@ -52,7 +52,7 @@ class Ai:
         self.squares[(coord[0],coord[1])]['piece']=None
         self.squares[(coord[0],coord[1])]['mov']=None
         self.contpieces-=1
-        print('cont='+str(self.contpieces))
+        #print('cont='+str(self.contpieces))
 
     def movAiPiece(self,piece,row,col,mov,capture):
         if(capture):#se ia capturou uma peca
@@ -75,13 +75,12 @@ class Ai:
             self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
             self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
             
-    def aiMove(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
+    def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):
             self.aleatorio()
             piece=self.squares[(self.rowpiece,self.colpiece)]['piece']
             if piece :#se ia escolheu uma peca valida para o loop
-                print(piece.name)
                 ai_possible_moves=piece.get_possible_moves(self.squares[(self.rowpiece,self.colpiece)]['coord'],self.board.squares)#pega um vetor de possiveis movimentos da peca escolhida
                 if(ai_possible_moves):#se o vetor nao e vazio vai movimentar
                     intervalo=random.randrange(0,len(ai_possible_moves))#qual movimento vai fazer

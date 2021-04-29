@@ -24,8 +24,8 @@ class Pawn(Piece):
         if (GameState.possible_en_passant):
             self.check_en_passant(coord, matrix)
 
-        #print("possible_moves", self.possible_moves)
-        #print("list_aux", list_aux)
+        ##print("possible_moves", self.possible_moves)
+        ##print("list_aux", list_aux)
         
         if (list_aux):
             return [move for move in list_aux if move in self.possible_moves] # falhando, pois peão está há 2 ataques de distância do rei
@@ -33,14 +33,14 @@ class Pawn(Piece):
         return self.possible_moves
 
     def mov_v(self, coord, matrix): 
-        ####print(first_move)
+        #####print(first_move)
         if (self.color == 'white'):
             self.check_upper_edge(coord, matrix)
         else:
             self.check_lower_edge(coord, matrix)
 
     def mov_d(self, coord, matrix):
-        ####print(first_move)
+        #####print(first_move)
         if (self.color == 'white'):
             self.check_upper_left_edge(coord, matrix)
             self.check_upper_right_edge(coord, matrix)   

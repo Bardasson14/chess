@@ -57,7 +57,7 @@ def create_menu(root, board):
     menubar.add_cascade(label="Help", menu=help_menu, underline=0)
     help_menu.add_command(label='Rules', command = lambda: callback("https://www.chess.com/pt-BR/como-jogar-xadrez") )
     help_menu.add_command(label='About...', command = lambda: msg())
-    sub_menu.add_command(label='Versus', command = lambda: [board.mode("")])
+    sub_menu.add_command(label='Versus', command = lambda: [root.after(500, clear_board(board)), board.mode("")])
     color.add_command(label='Black', command = lambda: [root.after(500, clear_board(board)), board.mode("black")])
     color.add_command(label='White', command = lambda: [root.after(500, clear_board(board)), board.mode("white")])
 
