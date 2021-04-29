@@ -42,6 +42,7 @@ class King(Piece):
                 
     def get_possible_moves(self, coord, matrix):
 
+        
         list_aux = can_move(self.color, matrix, coord)
 
         if(list_aux):
@@ -51,9 +52,10 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-
-        if(not(self.was_moved_before)):
-            self.roque(coord,matrix)
+        self.roque(coord, matrix)
+        self.possible_moves = list(set(self.possible_moves))
+        self.king_moves(coord, matrix)
+        self.attacking_king(coord, matrix)
         return self.possible_moves
 
     def mov_h(self, coord, matrix):
