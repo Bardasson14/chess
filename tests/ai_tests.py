@@ -15,11 +15,10 @@ class AiTest(unittest.TestCase):
         ai.update((1,0))
         self.assertEqual(ai.contpieces, 15)
 
-    def test_aleatorio(self):
+    def test_random(self):
         board = Board(tk.Toplevel())
         ai = Ai('black', board)
-        ai.aleatorio() 
+        ai.random() 
         piece = board.squares[(ai.rowpiece, ai.colpiece)]['piece'] 
         if piece is not None:
             assertTrue(piece.color == 'black')
-        

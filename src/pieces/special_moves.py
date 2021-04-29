@@ -8,6 +8,8 @@ from pieces.rook import Rook
 from copy import deepcopy
 from game_state import GameState
 import random
+import os
+
 PIECES_EN = ['bishop', 'knight', 'queen', 'rook']
 PIECES_PT = ['Bispo', 'Cavalo', 'Rainha', 'Torre']
 
@@ -18,7 +20,7 @@ class SpecialMoves:
     def __init__(self):
         self.selected_piece = None
     
-    def en_passant(self, board,ai):
+    def en_passant(self, board):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
        
@@ -56,7 +58,7 @@ class SpecialMoves:
         modified_pawn.name += str(self.promoted[index])
         ####print(self.promoted)
         self.promoted[index] += 1
-        modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
+        modified_pawn.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + filename  + '.png')
         ####print("DICT: ", modified_pawn.__dict__)
         board.add_piece(modified_pawn, row, col)
 

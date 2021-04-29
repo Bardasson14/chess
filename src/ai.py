@@ -44,7 +44,7 @@ class Ai:
                 self.squares[(i,j)] = square_info
                 self.board.squares[(i,j)]['aicoord']=(i,j)
 
-    def aleatorio(self):#escolha da peca pela ia
+    def random(self):#escolha da peca pela ia
         self.rowpiece=random.randrange(self.rangex[0],self.rangex[1])
         self.colpiece=random.randrange(self.rangey[0],self.rangey[1])
 
@@ -54,7 +54,7 @@ class Ai:
         self.contpieces-=1
         #print('cont='+str(self.contpieces))
 
-    def movAiPiece(self,piece,row,col,mov,capture):
+    def mov_ai_piece(self,piece,row,col,mov,capture):
         if(capture):#se ia capturou uma peca
             self.board.capture_piece((row,col))
         if (not piece.was_moved_before):
@@ -78,7 +78,7 @@ class Ai:
     def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):
-            self.aleatorio()
+            self.random()
             piece=self.squares[(self.rowpiece,self.colpiece)]['piece']
             if piece :#se ia escolheu uma peca valida para o loop
                 ai_possible_moves=piece.get_possible_moves(self.squares[(self.rowpiece,self.colpiece)]['coord'],self.board.squares)#pega um vetor de possiveis movimentos da peca escolhida
@@ -88,5 +88,5 @@ class Ai:
                     next_col=ai_possible_moves[intervalo][1]#coluna que vai mover
                     mov=ai_possible_moves[intervalo][2]#se eh roque
                     capture=self.board.squares[(next_row,next_col)]['piece']
-                    self.movAiPiece(piece,next_row,next_col,mov,capture)
+                    self.mov_ai_piece(piece,next_row,next_col,mov,capture)
                     continua=False

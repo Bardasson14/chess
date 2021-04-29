@@ -254,10 +254,10 @@ class Board(tk.Frame):
 
     def handle_piece_movimentation(self, piece, row, col, ref):
 
-        if(piece and piece.selected):
+        if(piece is not None and piece.selected):
             if (get_piece_type(piece.name)=='pawn'):
                 if (abs(col-ref[1])==1) and not self.squares[(row, col)]['piece']:
-                    special_moves.en_passant(self, self.ai)
+                    special_moves.en_passant(self)
                 else:
                     GameState.possible_en_passant = None
 
@@ -274,7 +274,7 @@ class Board(tk.Frame):
                 else:
                     GameState.blackcoord = (row, col)
 
-    def reset_timer(self):
+    def reset_timer(self): # consertar
         timerp1.restart()
         timerp2.restart()
 

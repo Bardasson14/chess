@@ -1,10 +1,11 @@
 from .piece import Piece
 from game_rules import can_move
+import os
 
 class Rook(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = 'assets/img/' + color + 'Rook.png'
+        self.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + color + 'Rook.png')
         self.name = name
         super(Rook,self).__init__(color,name)
     
@@ -57,7 +58,7 @@ class Rook(Piece):
                 piece = matrix[(coord[0],coord[1]+i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0],coord[1]+i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0],coord[1]+i,'mov'))
                     break
                 else:
@@ -69,7 +70,7 @@ class Rook(Piece):
                 piece = matrix[(coord[0],coord[1]-i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0],coord[1]-i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0],coord[1]-i,'mov'))
                     break
                 else:

@@ -93,7 +93,7 @@ def diagonal_check(matrix, coord, string_mode, color):
             piece = matrix[coord_piece]['piece']
             diff = (abs(coord_piece[0] - coord[0]),abs(coord_piece[1] - coord[1]))
             list_aux.append((coord[0] + selected_mode[0]*i, coord[1] + selected_mode[1]*i, 'mov'))
-            if(piece and (piece.color != current_king.color)):
+            if(piece is not None and (piece.color != current_king.color)):
                 if (get_piece_type(piece.name) in ['bishop', 'queen']) or (get_piece_type(piece.name) == 'pawn' and ((piece.color == 'white' and string_mode.split('_')[0] == 'lower' and (diff[0] < 2 and diff[1] < 2)) or (piece.color=='black' and string_mode.split('_')[0] == 'upper' and (diff[0] < 2 and diff[1] < 2)))):
                     return list_aux
                 else:
@@ -180,7 +180,7 @@ def king_check(matrix, coord, string_mode, color):
         else:
             piece = matrix[(coord[0]+selected_mode[0]*i , coord[1]+selected_mode[1]*i )]['piece']
             
-            if(piece and piece.color == color):
+            if(piece is not None and piece.color == color):
                 if(get_piece_type(piece.name) == 'king'):
                     moves.insert(0, INVERTED_DIRECTIONS.index(string_mode))
                     return moves

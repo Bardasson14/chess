@@ -12,7 +12,7 @@ class GameRulesTest(unittest.TestCase):
         matrix = self.initialize_empty_grid()
         matrix[(1,1)]['piece'] = Pawn('white', 'white_pawn_1')
         matrix[(0,0)]['piece'] = King('black', 'black_king')
-        self.assertTrue(check_all(matrix, (0,0)))
+        self.assertTrue(check_all(matrix, (0,0), 'black'))
 
     @classmethod
     def initialize_empty_grid(self):
