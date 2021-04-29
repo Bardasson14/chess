@@ -1,11 +1,13 @@
 from .piece import Piece
-from game_rules import can_move
+from game_rules import *
+from game_rules import check_all, king_check_boundaries
+import os
 
 class King(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = 'assets/img/' + color + 'King.png'
-        self.name = name
+        self.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + color + 'King.png')
+        self.name = name 
         super(King,self).__init__(color,name)
 
     def little_roque(self, coord, matrix):
@@ -31,14 +33,16 @@ class King(Piece):
                         else:
                             ###print(piece.name)
                             break
-
+                            
     def roque(self,coord,matrix):
-        self.big_roque(coord,matrix)
-        self.little_roque(coord,matrix)
-        
+        if(not(check_all(matrix,coord,self.color))):#xeque do rei
+            if coord[1] <= 5 and (not(check_all(matrix,(coord[0],coord[1]+1),self.color) and check_all(matrix,(coord[0],coord[1]+2),self.color))):#xeque do lr
+                self.little_roque(coord,matrix)
+            if coord[1] >= 2 and (not(check_all(matrix,(coord[0],coord[1]-1),self.color)and check_all(matrix,(coord[0],coord[1]-2),self.color))):#xeque do br
+                self.big_roque(coord,matrix)
+                
     def get_possible_moves(self, coord, matrix):
 
-        
         list_aux = can_move(self.color, matrix, coord)
 
         if(list_aux):
@@ -48,7 +52,13 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-        self.roque(coord,matrix)
+
+        if(not self.was_moved_before):
+            self.roque(coord, matrix)
+
+        self.possible_moves = list(set(self.possible_moves))
+        self.king_moves(coord, matrix)
+        self.attacking_king(coord, matrix)
         return self.possible_moves
 
     def mov_h(self, coord, matrix):
@@ -115,3 +125,22 @@ class King(Piece):
             bottom_left_piece = matrix[(coord[0]+1,coord[1]-1)]['piece']
             if((bottom_left_piece and bottom_left_piece.color!=self.color) or (not bottom_left_piece)):
                 self.possible_moves.append((coord[0]+1,coord[1]-1,'mov'))
+
+    def king_moves(self, coord, matrix):
+        list_aux = []
+        for i in range(len(self.possible_moves)):
+            if(not check_all(matrix, self.possible_moves[i], self.color)):
+                list_aux.append(self.possible_moves[i])
+        self.possible_moves = list(set(list_aux) & set(self.possible_moves))
+
+    def attacking_king(self, coord, matrix):
+        list_aux = check_all(matrix, coord, self.color)
+        if(list_aux):
+            invert_coord_att = (coord[0] - list_aux[0][0], coord[1] - list_aux[0][1], 'mov')
+            invert_coord_att = (invert_coord_att[0] + coord[0], invert_coord_att[1] + coord[1], 'mov') 
+            list_aux = []
+            for i in range(len(self.possible_moves)):
+                if (invert_coord_att == self.possible_moves[i]):
+                    list_aux.append(self.possible_moves[i])
+            for i in range(len(list_aux)):
+                self.possible_moves.remove(list_aux[i])

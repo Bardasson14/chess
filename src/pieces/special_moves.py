@@ -7,6 +7,8 @@ from pieces.queen import Queen
 from pieces.rook import Rook
 from copy import deepcopy
 from game_state import GameState
+import random
+import os
 
 PIECES_EN = ['bishop', 'knight', 'queen', 'rook']
 PIECES_PT = ['Bispo', 'Cavalo', 'Rainha', 'Torre']
@@ -18,9 +20,10 @@ class SpecialMoves:
     def __init__(self):
         self.selected_piece = None
     
-    def en_passant(self, board, piece, row, col, ref):
+    def en_passant(self, board):
        board.capture_piece(GameState.possible_en_passant)
        board.squares[GameState.possible_en_passant]['piece'] = None
+       
        
     def pawn_promotion(self, board, original_pawn, row, col, sprites):
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)
@@ -31,6 +34,10 @@ class SpecialMoves:
             listbox.insert(listbox.size(), piece)
         submit = tk.Button(master = board, text = "Escolher", command = lambda: self.destroy_promotion_menu(board, original_pawn, row, col, sprites))
         submit.pack()
+        
+    def ai_pawn_promotion(self, board, original_pawn, row, col, sprites):
+        self.selected_piece = PIECES_EN[random.randrange(0,4)]
+        self.set_piece(board, original_pawn, row, col, sprites)
 
     def destroy_promotion_menu(self, board, original_pawn, row, col, sprites):  
         keys = get_canvas_keys(board.children)
@@ -51,12 +58,13 @@ class SpecialMoves:
         modified_pawn.name += str(self.promoted[index])
         ####print(self.promoted)
         self.promoted[index] += 1
-        modified_pawn.sprite_dir = 'assets/img/' + filename  + '.png'
+        modified_pawn.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + filename  + '.png')
         ####print("DICT: ", modified_pawn.__dict__)
         board.add_piece(modified_pawn, row, col)
 
     def movRoque(self,board,gr,coord):
         piece = board.squares[coord]['piece']
+        print(str(piece)+str(coord))
         if(gr=='lr'):
             if(piece.color=='white'):
                 reftorre=(7,7)

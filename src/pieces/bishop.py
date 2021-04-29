@@ -1,21 +1,20 @@
 from .piece import Piece
 from game_rules import can_move
+import os
 
 class Bishop(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = 'assets/img/' + color + 'Bishop.png'
+        self.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + color + 'Bishop.png')
         self.name = name
         super(Bishop,self).__init__(color,name)
 
     def get_possible_moves(self, coord, matrix):
 
-
         list_aux = can_move(self.color, matrix, coord)
-
-        
+    
         self.possible_moves=[]
-        self.mov_d(coord,matrix)
+        self.mov_d(coord, matrix)
         
         if(list_aux):
             return [move for move in list_aux if move in self.possible_moves]

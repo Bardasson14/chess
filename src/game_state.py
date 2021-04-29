@@ -6,25 +6,25 @@ class GameState:
     white_king_checked = False
     black_king_checked = False
 
-    player='white'#indica o turn
+    player='white'
     
     def __init__(self, board, players):
         self.board = board
         self.players = players
-        self.board.position_pieces(players[0])
-        self.board.position_pieces(players[1])
 
-
+        if (board is not None and players is not None): # workaround p/ facilitar o teste
+            self.board.position_pieces(players[0])
+            self.board.position_pieces(players[1])
         
     @classmethod
-    def troca(self):
+    def switch(self):
         if(self.player=='white'):
-                self.player='black'
+            self.player='black'
         else:
             self.player='white'
 
     @classmethod
     def turn(self,color):
-        ##print(self.player)
+        ###print(self.player)
         r=(self.player==color)
         return r

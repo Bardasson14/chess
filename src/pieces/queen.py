@@ -1,10 +1,11 @@
 from .piece import Piece
 from game_rules import can_move
+import os
 
 class Queen(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = 'assets/img/' + color + 'Queen.png'
+        self.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + color + 'Queen.png')
         self.name = name
         super(Queen,self).__init__(color,name)
 
@@ -41,7 +42,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]-i,coord[1])]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]-i,coord[1],'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]-i,coord[1],'mov'))
                     break
                 else:
@@ -53,7 +54,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]+i,coord[1])]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]+i,coord[1],'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]+i,coord[1],'mov'))
                     break
                 else:
@@ -65,7 +66,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0],coord[1]+i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0],coord[1]+i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0],coord[1]+i,'mov'))
                     break
                 else:
@@ -77,7 +78,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0],coord[1]-i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0],coord[1]-i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0],coord[1]-i,'mov'))
                     break
                 else:
@@ -89,7 +90,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]-i,coord[1]-i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]-i,coord[1]-i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]-i,coord[1]-i,'mov'))
                     break
                 else:
@@ -101,7 +102,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]-i,coord[1]+i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]-i,coord[1]+i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]-i,coord[1]+i,'mov'))
                     break
                 else:
@@ -113,7 +114,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]+i,coord[1]+i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]+i,coord[1]+i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]+i,coord[1]+i,'mov'))
                     break
                 else:
@@ -125,7 +126,7 @@ class Queen(Piece):
                 piece = matrix[(coord[0]+i,coord[1]-i)]['piece']
                 if (not piece):
                     self.possible_moves.append((coord[0]+i,coord[1]-i,'mov'))
-                elif(piece and piece.color != self.color):
+                elif(piece is not None and piece.color != self.color):
                     self.possible_moves.append((coord[0]+i,coord[1]-i,'mov'))
                     break
                 else:
