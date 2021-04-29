@@ -53,7 +53,6 @@ class King(Piece):
         self.mov_d(coord, matrix)
         self.mov_v(coord, matrix)
         self.mov_h(coord, matrix)
-        print(self.was_moved_before)
         if(not self.was_moved_before):
             self.roque(coord, matrix)
         self.possible_moves = list(set(self.possible_moves))
