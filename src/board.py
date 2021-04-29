@@ -251,7 +251,6 @@ class Board(tk.Frame):
         elif(self.lock and piece.selected):
             self.clear_square(piece, piece.get_possible_moves(self.squares[(col,row)]['coord'],self.squares))
                         
-
     def handle_piece_movimentation(self, piece, row, col, ref):
 
         if(piece is not None and piece.selected):

@@ -18,7 +18,9 @@ class SpecialMovesTest(unittest.TestCase):
         board = Board(tk.Toplevel())
         special_moves = SpecialMoves()
         pawn = Pawn('white', 'white_pawn_x')
-        board[(3,4)]['piece'] = pawn
+        board.squares[(3,4)]['piece'] = pawn
         GameState.possible_en_passant = (3,4)
         special_moves.en_passant(board) 
         self.assertIsNone(board.squares[(3,4)]['piece'])
+
+    # Adicionar caso de teste para o roque

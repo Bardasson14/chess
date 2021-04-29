@@ -19,7 +19,7 @@ class GameState:
     @classmethod
     def switch(self):
         if(self.player=='white'):
-                self.player='black'
+            self.player='black'
         else:
             self.player='white'
 

@@ -13,6 +13,7 @@ from pieces.rook import Rook
 
 
 # Os testes são realizados considerando tabuleiros vazios
+# Adicionar roque
 
 class PieceTest(unittest.TestCase):
 

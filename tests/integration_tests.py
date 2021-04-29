@@ -7,7 +7,7 @@ from board import Board
 from pieces.pawn import Pawn
 
 
-class BoardTest(unittest.TestCase):
+class IntegrationTest(unittest.TestCase):
 
     # Testes de Integração entre a interface e o módulo Board
     def test_add_piece(self): 

@@ -6,7 +6,7 @@ from game_state import *
 
 class GameStateTest(unittest.TestCase):
 
-    def test_turn(self):
+    def test_switch_turn(self):
         state = GameState(None, None)
         GameState.switch()
-        self.assertEqual(state.player, 'black')
+        self.assertTrue(state.turn(state.player))
