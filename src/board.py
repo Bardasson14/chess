@@ -151,7 +151,16 @@ class Board(tk.Frame):
         piece.selected = True        # e encaminha os possiveis movimentos para o desenho 
         self.lock = True
         vec = piece.get_possible_moves(coord,self.squares)
-
+        list_aux = []
+        if(piece.color == 'white'):
+            list_aux = check_all(self.squares, GameState.whitecoord, piece.color)
+        else:
+            list_aux = check_all(self.squares, GameState.blackcoord, piece.color)
+        if(list_aux):
+            print(list_aux)
+            vec = list(set(vec) & set(list_aux))
+        if(get_piece_type(piece.name) == 'king'):
+            vec = piece.get_possible_moves(coord,self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
