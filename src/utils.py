@@ -21,7 +21,7 @@ def get_canvas_keys(canvas):
         
     if (i!=1):
         label_key = "!label{}".format(i)
-        button_key = "!button{}".format(i)
+        button_key = "!button{}".format(i+1)
     else: 
         button_key = "!button2"
 
