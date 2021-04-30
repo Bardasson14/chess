@@ -5,7 +5,7 @@ import os
 class Bishop(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = os.path.abspath("/home/vitor/chess/src/assets/img/" + color + "Bishop.png")
+        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "../assets/img/" + color + "Bishop.png")
         self.name = name
         super(Bishop,self).__init__(color,name)
 

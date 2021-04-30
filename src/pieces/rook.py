@@ -5,7 +5,7 @@ import os
 class Rook(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = os.path.abspath("/home/vitor/chess/src/assets/img/" + color + "Rook.png")
+        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "../assets/img/" + color + "Rook.png")
         self.name = name
         super(Rook,self).__init__(color,name)
     

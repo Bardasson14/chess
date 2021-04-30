@@ -58,11 +58,12 @@ class SpecialMoves:
         modified_pawn = globals()[piece_class](player_color, player_color + '_' + self.selected_piece + '_')
         player.pieces.append(modified_pawn)
         index = PIECES_EN.index(self.selected_piece)
-        filename = player_color + (get_piece_type(modified_pawn.name)).title()
+        filename = player_color + (get_piece_type(modified_pawn.name)).title() + ".png"
         modified_pawn.name += str(self.promoted[index])
         #####print(self.promoted)
         self.promoted[index] += 1
-        modified_pawn.sprite_dir = os.path.abspath("/home/vitor/chess/src/assets/img/" + filename + ".png")
+        modified_pawn.sprite_dir =  os.path.join((os.path.dirname(__file__)), "../assets/img/" + filename)
+
         #####print("DICT: ", modified_pawn.__dict__)
         player.pieces.append(modified_pawn)
         #print(player.pieces)
