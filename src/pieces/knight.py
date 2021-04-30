@@ -5,7 +5,7 @@ import os
 class Knight(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "../assets/img/" + color + "Knight.png")
+        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "/assets/img/" + color + "Knight.png")
         self.name = name
         super(Knight,self).__init__(color,name)
 

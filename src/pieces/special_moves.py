@@ -62,7 +62,7 @@ class SpecialMoves:
         modified_pawn.name += str(self.promoted[index])
         #####print(self.promoted)
         self.promoted[index] += 1
-        modified_pawn.sprite_dir =  os.path.join((os.path.dirname(__file__)), "../assets/img/" + filename)
+        modified_pawn.sprite_dir =  os.path.join((os.path.dirname(__file__)), "/assets/img/" + filename)
 
         #####print("DICT: ", modified_pawn.__dict__)
         player.pieces.append(modified_pawn)
