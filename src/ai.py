@@ -52,7 +52,7 @@ class Ai:
         self.squares[(coord[0],coord[1])]['piece']=None
         self.squares[(coord[0],coord[1])]['mov']=None
         self.contpieces-=1
-        #print('cont='+str(self.contpieces))
+        ##print('cont='+str(self.contpieces))
 
     def mov_ai_piece(self,piece,row,col,mov,capture):
         if(capture):#se ia capturou uma peca
@@ -110,7 +110,7 @@ class Ai:
                                 vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.board.squares)) & set(list_aux))
                                 if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.board.squares))):
                                     aux = 1
-                                    # print(piece_aux.get_possible_moves(i,j), self.board.squares)
+                                    # #print(piece_aux.get_possible_moves(i,j), self.board.squares)
                                     break
                         if(aux == 1):
                             break
@@ -138,11 +138,11 @@ class Ai:
                         stri = "Afogamento"
                         tk.messagebox.showinfo("Empate por afogamento", stri)
                         self.board.clear()
-                print("piece",piece.__dict__)
-                print("piece aux",piece_aux.__dict__)
+                #print("piece",piece.__dict__)
+                #print("piece aux",piece_aux.__dict__)
                 if(get_piece_type(piece.name) == 'king'):
                     vec = piece.possible_moves
-                    print("POSSIBLE MOVES KING",vec)
+                    #print("POSSIBLE MOVES KING",vec)
                 ai_possible_moves = vec #pega um vetor de possiveis movimentos da peca escolhida
                 if(ai_possible_moves):#se o vetor nao e vazio vai movimentar
                     intervalo=random.randrange(0,len(ai_possible_moves))#qual movimento vai fazer
@@ -152,5 +152,5 @@ class Ai:
                     capture=self.board.squares[(next_row,next_col)]['piece']
                     self.mov_ai_piece(piece,next_row,next_col,mov,capture)
                     continua=False
-                    print("next row", next_row)
-                    print("next col", next_col)
+                    #print("next row", next_row)
+                    #print("next col", next_col)

@@ -35,8 +35,8 @@ def vertical_check(matrix, coord, string_mode, color):
         if (check_vertical_boundaries(coord, string_mode, i)):
             piece = matrix[(coord[0]+(mode[string_mode])*i, coord[1])]['piece']
             list_aux.append((coord[0]+(mode[string_mode])*i, coord[1], 'mov')) #lista para fazer a interseção com o possible_moves caso o rei esteja em xeque
-            print("CURRENT KING",current_king)
-            print("PIECE", piece)
+            #print("CURRENT KING",current_king)
+            #print("PIECE", piece)
             if (piece is not None and piece.color != current_king.color):
                 if(get_piece_type(piece.name) in ['rook', 'queen']):
                     return list_aux
@@ -140,7 +140,7 @@ def knight_check(matrix, coord, string_mode, color):
         return []
 
 def check_knight_boundaries(coord, string_mode):
-    ####print('knight', string_mode)
+    #####print('knight', string_mode)
     if string_mode == 'upper_left':
         return [coord[0]-2 >= 0 and coord[1]-1 >= 0, coord[1]-2 >=0 and coord[0]-1 >=0]
     elif string_mode == 'upper_right':

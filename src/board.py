@@ -77,7 +77,7 @@ class Board(tk.Frame):
         self.squares[(row, column)]['piece'] = piece
         x0 = (column * self.size) + int(self.size/2)
         y0 = (row * self.size) + int(self.size/2)
-       # ####print(self.squares[(row, column)])
+       # #####print(self.squares[(row, column)])
         self.canvas.coords(piece.name, x0, y0)
 
         if(GameState.first_move and piece.color == "white" and self.contadorPosPieces == 65):
@@ -192,7 +192,7 @@ class Board(tk.Frame):
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.squares)) & set(list_aux))
                         if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.squares))):
-                            # print("TO NÂO")
+                            # #print("TO NÂO")
                             aux = 1
                             break
                 if(aux == 1):
@@ -211,7 +211,7 @@ class Board(tk.Frame):
                         aux = 2
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = piece_aux.get_possible_moves((i,j), self.squares)
-                        print(vec_aux)
+                        #print(vec_aux)
                         if(vec_aux):
                             aux = 1
                             break

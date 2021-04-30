@@ -19,7 +19,7 @@ class King(Piece):
                         if((coord[1] + i)==7 and (piece.name=='white_rook_2'or piece.name=='black_rook_2') and not (piece.was_moved_before)):
                             self.possible_moves.append((coord[0], coord[1]+i-1, 'lr'))
                         else:
-                            ###print(piece.name)
+                            ####print(piece.name)
                             break
 
     def big_roque(self, coord, matrix):
@@ -31,7 +31,7 @@ class King(Piece):
                         if((coord[1] - i)==0 and (piece.name=='white_rook_1' or piece.name=='black_rook_1') and not (piece.was_moved_before)):
                             self.possible_moves.append((coord[0], coord[1]-i+2, 'br'))
                         else:
-                            ###print(piece.name)
+                            ####print(piece.name)
                             break
                             
     def roque(self,coord,matrix):

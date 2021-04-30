@@ -26,6 +26,7 @@ class SpecialMoves:
        
        
     def pawn_promotion(self, board, original_pawn, row, col, sprites, player):
+        print("ANTES DE ABRIR MENU: ", board.children)
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)
         listbox.pack(expand = True, fill = "both")
         label = tk.Label(board, text = "Selecione a peça na qual o peão se transformará")
@@ -34,6 +35,7 @@ class SpecialMoves:
             listbox.insert(listbox.size(), piece)
         submit = tk.Button(master = board, text = "Escolher", command = lambda: self.destroy_promotion_menu(board, original_pawn, row, col, sprites, player))
         submit.pack()
+        print(board.children)
         
     def ai_pawn_promotion(self, board, original_pawn, row, col, sprites, player):
         self.selected_piece = PIECES_EN[random.randrange(0,4)]
@@ -44,6 +46,7 @@ class SpecialMoves:
         self.selected_piece = PIECES_EN[board.children[keys[0]].curselection()[0]]
         for key in keys:
             board.children[key].destroy()
+
         self.set_piece(board, original_pawn, row, col, sprites, player)
         board.lock=False
 
@@ -57,12 +60,12 @@ class SpecialMoves:
         index = PIECES_EN.index(self.selected_piece)
         filename = player_color + (get_piece_type(modified_pawn.name)).title()
         modified_pawn.name += str(self.promoted[index])
-        ####print(self.promoted)
+        #####print(self.promoted)
         self.promoted[index] += 1
         modified_pawn.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + filename  + '.png')
-        ####print("DICT: ", modified_pawn.__dict__)
+        #####print("DICT: ", modified_pawn.__dict__)
         player.pieces.append(modified_pawn)
-        print(player.pieces)
+        #print(player.pieces)
         board.add_piece(modified_pawn, row, col)
 
     def mov_roque(self,board,gr,coord):
