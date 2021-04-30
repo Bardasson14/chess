@@ -35,10 +35,10 @@ class King(Piece):
                             break
                             
     def roque(self,coord,matrix):
-        if(not(check_all(matrix,coord,self.color))):#xeque do rei
-            if coord[1] <= 5 and (not(check_all(matrix,(coord[0],coord[1]+1),self.color) and check_all(matrix,(coord[0],coord[1]+2),self.color))):#xeque do lr
+        if(check_all(matrix,coord,self.color)==[]):#xeque do rei
+            if not self.was_moved_before and (check_all(matrix,(coord[0],coord[1]+1),self.color)==[] and check_all(matrix,(coord[0],coord[1]+2),self.color)==[]):#xeque do lr
                 self.little_roque(coord,matrix)
-            if coord[1] >= 2 and (not(check_all(matrix,(coord[0],coord[1]-1),self.color)and check_all(matrix,(coord[0],coord[1]-2),self.color))):#xeque do br
+            if not self.was_moved_before and (check_all(matrix,(coord[0],coord[1]-1),self.color)==[] and check_all(matrix,(coord[0],coord[1]-2),self.color)==[]):#xeque do br
                 self.big_roque(coord,matrix)
                 
     def get_possible_moves(self, coord, matrix):
