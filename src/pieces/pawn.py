@@ -8,7 +8,7 @@ class Pawn(Piece):
     # add boundary checking functions
     
     def __init__(self, color, name):
-        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "/assets/img/" + color + "Pawn.png")
+        self.sprite_dir = color + "Pawn.png"
         self.name = name
         self.color=color
         super(Pawn,self).__init__(color,name)

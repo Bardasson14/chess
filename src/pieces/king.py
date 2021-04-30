@@ -6,8 +6,7 @@ import os
 class King(Piece):
     
     def __init__(self, color, name):
-        
-        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "/assets/img/" + color + "King.png")
+        self.sprite_dir = color + "King.png"
         self.name = name 
         super(King,self).__init__(color,name)
 

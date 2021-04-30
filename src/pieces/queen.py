@@ -5,7 +5,7 @@ import os
 class Queen(Piece):
     
     def __init__(self, color, name):
-        self.sprite_dir = os.path.join((os.path.dirname(__file__)), "/assets/img/" + color + "Queen.png")
+        self.sprite_dir = color + "Queen.png"
         self.name = name
         super(Queen,self).__init__(color,name)
 
