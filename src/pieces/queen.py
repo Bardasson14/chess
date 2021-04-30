@@ -19,8 +19,6 @@ class Queen(Piece):
         self.mov_h(coord,matrix)
         self.mov_v(coord,matrix)
         self.mov_d(coord,matrix)
-        if(self.color == "black"):
-            print(self.possible_moves)
         return self.possible_moves
 
     def mov_v(self,coord,matrix):

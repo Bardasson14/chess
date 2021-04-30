@@ -64,7 +64,7 @@ class Ai:
             if (abs(pcoord[0]-row) == 2 and ((col < 7 and self.board.squares[(row, col+1)]['piece']) or (col>0 and self.board.squares[(row, col-1)]['piece']))):
                 GameState.possible_en_passant = (row,col)   
             if (abs(pcoord[1]-col) == 1) and not self.board.squares[(row, col)]['piece']:
-                self.special_moves.en_passant(self.board, None)
+                self.special_moves.en_passant(self.board)
         self.board.place_piece(piece,row,col)#move a peca
         self.board.squares[self.squares[(self.rowpiece,self.colpiece)]['coord']]['piece']=None#apaga posicao anterior
         self.board.squares[(row,col)]['aicoord']=(self.rowpiece,self.colpiece)
@@ -86,7 +86,7 @@ class Ai:
         while(continua and self.contpieces>0):
             self.random()
             piece=self.squares[(self.rowpiece,self.colpiece)]['piece']
-            if piece :#se ia escolheu uma peca valida para o loop
+            if piece is not None :#se ia escolheu uma peca valida para o loop
                 vec = piece.get_possible_moves(self.squares[(self.rowpiece,self.colpiece)]['coord'],self.board.squares)
                 list_aux = []
                 if(piece.color == 'white'):
@@ -106,6 +106,7 @@ class Ai:
                                 vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.board.squares)) & set(list_aux))
                                 if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.board.squares))):
                                     aux = 1
+                                    # print(piece_aux.get_possible_moves(i,j), self.board.squares)
                                     break
                         if(aux == 1):
                             break
@@ -132,6 +133,11 @@ class Ai:
                         stri = "Afogamento"
                         tk.messagebox.showinfo("Empate por afogamento", stri)
                         self.board.clear()
+                print("piece",piece.__dict__)
+                print("piece aux",piece_aux.__dict__)
+                if(get_piece_type(piece.name) == 'king'):
+                    vec = piece.possible_moves
+                    print("POSSIBLE MOVES KING",vec)
                 ai_possible_moves = vec #pega um vetor de possiveis movimentos da peca escolhida
                 if(ai_possible_moves):#se o vetor nao e vazio vai movimentar
                     intervalo=random.randrange(0,len(ai_possible_moves))#qual movimento vai fazer
@@ -141,3 +147,5 @@ class Ai:
                     capture=self.board.squares[(next_row,next_col)]['piece']
                     self.mov_ai_piece(piece,next_row,next_col,mov,capture)
                     continua=False
+                    print("next row", next_row)
+                    print("next col", next_col)

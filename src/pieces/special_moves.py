@@ -25,34 +25,35 @@ class SpecialMoves:
        board.squares[GameState.possible_en_passant]['piece'] = None
        
        
-    def pawn_promotion(self, board, original_pawn, row, col, sprites):
+    def pawn_promotion(self, board, original_pawn, row, col, sprites, player):
         listbox = tk.Listbox(board, selectmode = 'single', width = 7, height=6)
         listbox.pack(expand = True, fill = "both")
         label = tk.Label(board, text = "Selecione a peça na qual o peão se transformará")
         label.pack()
         for piece in PIECES_PT:
             listbox.insert(listbox.size(), piece)
-        submit = tk.Button(master = board, text = "Escolher", command = lambda: self.destroy_promotion_menu(board, original_pawn, row, col, sprites))
+        submit = tk.Button(master = board, text = "Escolher", command = lambda: self.destroy_promotion_menu(board, original_pawn, row, col, sprites, player))
         submit.pack()
         
-    def ai_pawn_promotion(self, board, original_pawn, row, col, sprites):
+    def ai_pawn_promotion(self, board, original_pawn, row, col, sprites, player):
         self.selected_piece = PIECES_EN[random.randrange(0,4)]
-        self.set_piece(board, original_pawn, row, col, sprites)
+        self.set_piece(board, original_pawn, row, col, sprites, player)
 
-    def destroy_promotion_menu(self, board, original_pawn, row, col, sprites):  
+    def destroy_promotion_menu(self, board, original_pawn, row, col, sprites, player):  
         keys = get_canvas_keys(board.children)
         self.selected_piece = PIECES_EN[board.children[keys[0]].curselection()[0]]
         for key in keys:
             board.children[key].destroy()
-        self.set_piece(board, original_pawn, row, col, sprites)
+        self.set_piece(board, original_pawn, row, col, sprites, player)
         board.lock=False
 
-    def set_piece(self, board, original_pawn, row, col, sprites): 
+    def set_piece(self, board, original_pawn, row, col, sprites, player): 
         piece_class = self.selected_piece.title()
         board.canvas.delete(original_pawn.name)
         player_color = original_pawn.color
         modified_pawn = deepcopy(original_pawn)
         modified_pawn = globals()[piece_class](player_color, player_color + '_' + self.selected_piece + '_')
+        player.pieces.append(modified_pawn)
         index = PIECES_EN.index(self.selected_piece)
         filename = player_color + (get_piece_type(modified_pawn.name)).title()
         modified_pawn.name += str(self.promoted[index])

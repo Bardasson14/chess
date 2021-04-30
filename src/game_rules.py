@@ -35,8 +35,9 @@ def vertical_check(matrix, coord, string_mode, color):
         if (check_vertical_boundaries(coord, string_mode, i)):
             piece = matrix[(coord[0]+(mode[string_mode])*i, coord[1])]['piece']
             list_aux.append((coord[0]+(mode[string_mode])*i, coord[1], 'mov')) #lista para fazer a interseção com o possible_moves caso o rei esteja em xeque
-            #print(current_king)
-            if (piece and piece.color != current_king.color):
+            print("CURRENT KING",current_king)
+            print("PIECE", piece)
+            if (piece is not None and piece.color != current_king.color):
                 if(get_piece_type(piece.name) in ['rook', 'queen']):
                     return list_aux
                 else:

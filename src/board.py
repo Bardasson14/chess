@@ -119,7 +119,6 @@ class Board(tk.Frame):
     
     def mode(self, str): 
         self.ai = Ai(str,self.squares,self,sprites,special_moves)
-        print(str)
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.ai_move()
@@ -144,6 +143,8 @@ class Board(tk.Frame):
         timerp2.stop_timer()
         self.ai = None
         self.mode("")
+        GameState.blackcoord = (0,4)
+        GameState.whitecoord = (7,4)
     
     def position_pieces(self, player):
         
@@ -190,6 +191,7 @@ class Board(tk.Frame):
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.squares)) & set(list_aux))
                         if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.squares))):
+                            # print("TO NÂO")
                             aux = 1
                             break
                 if(aux == 1):
@@ -218,7 +220,7 @@ class Board(tk.Frame):
                 tk.messagebox.showinfo("Empate por afogamento", stri)
                 self.clear()
         if(get_piece_type(piece.name) == 'king'):
-            vec = piece.get_possible_moves(coord,self.squares)
+            vec = piece.get_possible_moves(coord, self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
