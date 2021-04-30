@@ -129,6 +129,8 @@ class Board(tk.Frame):
         pieces_1 = self.state.players[0].pieces
         pieces_2 = self.state.players[1].pieces
         GameState.player = 'white'
+        GameState.blackcoord = (0,4)
+        GameState.whitecoord = (7,4)
         for i in range (len(pieces_1)):
             self.canvas.delete(pieces_1[i].name)
             self.canvas.delete(pieces_2[i].name)
@@ -143,8 +145,6 @@ class Board(tk.Frame):
         timerp2.stop_timer()
         self.ai = None
         self.mode("")
-        GameState.blackcoord = (0,4)
-        GameState.whitecoord = (7,4)
     
     def position_pieces(self, player):
         
@@ -210,6 +210,7 @@ class Board(tk.Frame):
                         aux = 2
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = piece_aux.get_possible_moves((i,j), self.squares)
+                        print(vec_aux)
                         if(vec_aux):
                             aux = 1
                             break
@@ -218,7 +219,10 @@ class Board(tk.Frame):
             if(aux == 0 or aux == 2):
                 stri = "Afogamento"
                 tk.messagebox.showinfo("Empate por afogamento", stri)
-                self.clear()
+                piece.selected = False
+                self.lock = False
+                self.canvas.delete("square_selected")
+                self.after(200, self.clear())
         if(get_piece_type(piece.name) == 'king'):
             vec = piece.get_possible_moves(coord, self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
@@ -235,9 +239,9 @@ class Board(tk.Frame):
             x2 = x1 + self.size*0.8
             y2 = y1 + self.size*0.8
             if(vec[i][2]=='mov'):
-                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square_selected"))
             else:
-                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square_selected"))
 
     def clear_square(self,piece,selected): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
@@ -294,7 +298,7 @@ class Board(tk.Frame):
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     
-                    if piece and GameState.turn(color):    # clicou na peca
+                    if piece:# and GameState.turn(color):    # clicou na peca
                         self.handle_board_lock(piece, row, col)
                         
                     if ref:  # clicou no quadrado vermelho
