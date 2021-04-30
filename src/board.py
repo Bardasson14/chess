@@ -56,6 +56,7 @@ class Board(tk.Frame):
 
         self.ai=None
 
+        black = tk.Button(self, text = "black", command = self.mode("black"))
 
 
     def populate_grid(self):
@@ -118,25 +119,33 @@ class Board(tk.Frame):
         self.canvas.tag_lower("square")
     
     def mode(self, str): 
-        self.ai=Ai(str,self.squares,self,sprites,special_moves)
+        self.ai = Ai(str,self.squares,self,sprites,special_moves)
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.ai_move()
             GameState.switch()
 
-
     def clear(self):
         pieces_1 = self.state.players[0].pieces
         pieces_2 = self.state.players[1].pieces
-
+        GameState.player = 'white'
+        GameState.blackcoord = (0,4)
+        GameState.whitecoord = (7,4)
         for i in range (len(pieces_1)):
             self.canvas.delete(pieces_1[i].name)
+        for i in range (len(pieces_2)):
             self.canvas.delete(pieces_2[i].name)
-
+        timerp1.restart()
+        timerp1.seconds_left += 15
+        timerp2.restart()
+        timerp2.seconds_left += 15
         self.squares = {}
         self.populate_grid()
         self.state = GameState(self, [Player(0), Player(1)])
-        self.reset_timer()
+        timerp1.start_timer()
+        timerp2.stop_timer()
+        self.ai = None
+        self.mode("")
     
     def position_pieces(self, player):
         
@@ -183,6 +192,7 @@ class Board(tk.Frame):
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.squares)) & set(list_aux))
                         if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.squares))):
+                            # print("TO NÂO")
                             aux = 1
                             break
                 if(aux == 1):
@@ -190,6 +200,7 @@ class Board(tk.Frame):
             if(aux == 0 or aux == 2):
                 stri = "Xeque-Mate"
                 tk.messagebox.showinfo("Xeque-Mate", stri)
+                self.clear()
         else:
             aux = 0
             for i in range(1,8):
@@ -200,6 +211,7 @@ class Board(tk.Frame):
                         aux = 2
                     if(piece_aux is not None and piece.color == piece_aux.color):
                         vec_aux = piece_aux.get_possible_moves((i,j), self.squares)
+                        print(vec_aux)
                         if(vec_aux):
                             aux = 1
                             break
@@ -208,8 +220,12 @@ class Board(tk.Frame):
             if(aux == 0 or aux == 2):
                 stri = "Afogamento"
                 tk.messagebox.showinfo("Empate por afogamento", stri)
+                piece.selected = False
+                self.lock = False
+                self.canvas.delete("square_selected")
+                self.after(200, self.clear())
         if(get_piece_type(piece.name) == 'king'):
-            vec = piece.get_possible_moves(coord,self.squares)
+            vec = piece.get_possible_moves(coord, self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
             piece.selected = False
             self.lock = False
@@ -224,9 +240,9 @@ class Board(tk.Frame):
             x2 = x1 + self.size*0.8
             y2 = y1 + self.size*0.8
             if(vec[i][2]=='mov'):
-                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="black",stipple="gray50", tags="square_selected"))
             else:
-                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square"))
+                self.selsquare.append(self.canvas.create_oval(y1+self.size*0.2, x1+self.size*0.2, y2, x2,outline="",fill="green",stipple="gray50", tags="square_selected"))
 
     def clear_square(self,piece,selected): # libera da tela e do dicionarios os possiveis movimentos e destrava o tabuleiro
         piece.selected = False
@@ -292,8 +308,8 @@ class Board(tk.Frame):
                         GameState.switch() # troca a cor do turno
                         
                         if(gr!='mov'):
-                            special_moves.movRoque(self,gr,(col,row))
-
+                            special_moves.mov_roque(self,gr,(col,row))
+                            
                         if (self.ai and GameState.turn(self.ai.color)):
                             self.ai.special_moves=special_moves
                             self.ai.board=self
@@ -323,7 +339,8 @@ class Board(tk.Frame):
 
             if (get_piece_type(piece.name)=='pawn' and row in [0,7]):
                 self.lock=True
-                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                player = self.state.players[select_player(piece.color)]
+                special_moves.pawn_promotion(self, piece, row, col, sprites, player)
                 
             elif (get_piece_type(piece.name)=='king'):      
                 if (piece.color == 'white'):

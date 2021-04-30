@@ -12,7 +12,6 @@ class Queen(Piece):
     def get_possible_moves(self, coord, matrix):
         
         list_aux = can_move(self.color, matrix, coord)
-        
         if(list_aux):
             return list_aux
             

@@ -47,5 +47,6 @@ def create_menu(root, board):
     sub_menu.add_command(label='Versus', command = lambda: [root.after(500, board.clear(), board.mode(""))])
     color.add_command(label='Black', command = lambda: [root.after(500, board.clear(), board.mode("black"))])
     color.add_command(label='White', command = lambda: [root.after(500, board.clear(), board.mode("white"))])
+    
 
 main()
