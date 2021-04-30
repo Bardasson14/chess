@@ -124,13 +124,13 @@ class Board(tk.Frame):
             self.ai.ai_move()
             GameState.switch()
 
-
     def clear(self):
         pieces_1 = self.state.players[0].pieces
         pieces_2 = self.state.players[1].pieces
         GameState.player = 'white'
         for i in range (len(pieces_1)):
             self.canvas.delete(pieces_1[i].name)
+        for i in range (len(pieces_2)):
             self.canvas.delete(pieces_2[i].name)
         timerp1.restart()
         timerp1.seconds_left += 15
@@ -294,7 +294,7 @@ class Board(tk.Frame):
                     ref = self.squares[(col,row)]['selected']
                     gr = self.squares[(col,row)]['gamerule']
                     
-                    if piece and GameState.turn(color):    # clicou na peca
+                    if piece: #and GameState.turn(color):    # clicou na peca
                         self.handle_board_lock(piece, row, col)
                         
                     if ref:  # clicou no quadrado vermelho
@@ -303,7 +303,8 @@ class Board(tk.Frame):
                         GameState.switch() # troca a cor do turno
                         
                         if(gr!='mov'):
-                            special_moves.movRoque(self,gr,(col,row))
+                            special_moves.mov_roque(self,gr,(col,row))
+                            
                         if (self.ai and GameState.turn(self.ai.color)):
                             self.ai.special_moves=special_moves
                             self.ai.board=self
@@ -333,7 +334,8 @@ class Board(tk.Frame):
 
             if (get_piece_type(piece.name)=='pawn' and row in [0,7]):
                 self.lock=True
-                special_moves.pawn_promotion(self, piece, row, col, sprites)
+                player = self.state.players[select_player(piece.color)]
+                special_moves.pawn_promotion(self, piece, row, col, sprites, player)
                 
             elif (get_piece_type(piece.name)=='king'):      
                 if (piece.color == 'white'):

@@ -24,3 +24,8 @@ def get_canvas_keys(canvas):
         button_key = "!button{}".format(i)
 
     return [listbox_key, label_key, button_key]
+
+def select_player(color):
+    if color == 'white':
+        return 0
+    return 1

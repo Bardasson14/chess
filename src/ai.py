@@ -70,9 +70,9 @@ class Ai:
         self.board.squares[(row,col)]['aicoord']=(self.rowpiece,self.colpiece)
         self.squares[(self.rowpiece,self.colpiece)]['coord']=(row,col)#atualiza dicionario da ia
         if(mov!='mov'):#faz o roque
-            self.special_moves.movRoque(self.board,mov,(row,col))
+            self.special_moves.mov_roque(self.board,mov,(row,col))
         if(get_piece_type(piece.name)=='pawn' and row in [0,7]):
-            self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites)
+            self.special_moves.ai_pawn_promotion(self.board, piece, row, col, self.sprites, self.board.state.players[select_player(piece.color)])
             self.squares[(self.rowpiece,self.colpiece)]['piece']=self.board.squares[(row,col)]['piece']
         if (get_piece_type(piece.name)=='king'):
             if (piece.color == 'white'):
