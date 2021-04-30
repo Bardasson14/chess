@@ -81,6 +81,10 @@ class Ai:
                 GameState.blackcoord = (row, col)
         
             
+
+    
+
+
     def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):
@@ -114,6 +118,7 @@ class Ai:
                         stri = "Xeque-Mate"
                         tk.messagebox.showinfo("Xeque-Mate", stri)
                         self.board.clear()
+                        self.board.black.pack()
                 else:
                     aux = 0
                     for i in range(1,8):

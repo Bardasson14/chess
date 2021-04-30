@@ -56,6 +56,7 @@ class Board(tk.Frame):
 
         self.ai=None
 
+        black = tk.Button(self, text = "black", command = self.mode("black"))
 
 
     def populate_grid(self):
