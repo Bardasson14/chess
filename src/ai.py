@@ -81,10 +81,6 @@ class Ai:
                 GameState.blackcoord = (row, col)
         
             
-
-    
-
-
     def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
         while(continua and self.contpieces>0):
