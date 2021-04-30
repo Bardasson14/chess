@@ -61,9 +61,11 @@ class SpecialMoves:
         self.promoted[index] += 1
         modified_pawn.sprite_dir = os.path.join(os.path.dirname(__file__), '../assets/img/' + filename  + '.png')
         ####print("DICT: ", modified_pawn.__dict__)
+        player.pieces.append(modified_pawn)
+        print(player.pieces)
         board.add_piece(modified_pawn, row, col)
 
-    def movRoque(self,board,gr,coord):
+    def mov_roque(self,board,gr,coord):
         piece = board.squares[coord]['piece']
         if(gr=='lr'):
             if(piece.color=='white'):
