@@ -12,7 +12,6 @@ class Queen(Piece):
     def get_possible_moves(self, coord, matrix):
         
         list_aux = can_move(self.color, matrix, coord)
-        
         if(list_aux):
             return list_aux
             
@@ -20,6 +19,8 @@ class Queen(Piece):
         self.mov_h(coord,matrix)
         self.mov_v(coord,matrix)
         self.mov_d(coord,matrix)
+        if(self.color == "black"):
+            print(self.possible_moves)
         return self.possible_moves
 
     def mov_v(self,coord,matrix):

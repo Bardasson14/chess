@@ -118,7 +118,8 @@ class Board(tk.Frame):
         self.canvas.tag_lower("square")
     
     def mode(self, str): 
-        self.ai=Ai(str,self.squares,self,sprites,special_moves)
+        self.ai = Ai(str,self.squares,self,sprites,special_moves)
+        print(str)
         if (GameState.turn(self.ai.color)):
             self.ai.board=self
             self.ai.ai_move()
@@ -128,15 +129,21 @@ class Board(tk.Frame):
     def clear(self):
         pieces_1 = self.state.players[0].pieces
         pieces_2 = self.state.players[1].pieces
-
+        GameState.player = 'white'
         for i in range (len(pieces_1)):
             self.canvas.delete(pieces_1[i].name)
             self.canvas.delete(pieces_2[i].name)
-
+        timerp1.restart()
+        timerp1.seconds_left += 15
+        timerp2.restart()
+        timerp2.seconds_left += 15
         self.squares = {}
         self.populate_grid()
         self.state = GameState(self, [Player(0), Player(1)])
-        self.reset_timer()
+        timerp1.start_timer()
+        timerp2.stop_timer()
+        self.ai = None
+        self.mode("")
     
     def position_pieces(self, player):
         
@@ -190,6 +197,7 @@ class Board(tk.Frame):
             if(aux == 0 or aux == 2):
                 stri = "Xeque-Mate"
                 tk.messagebox.showinfo("Xeque-Mate", stri)
+                self.clear()
         else:
             aux = 0
             for i in range(1,8):
@@ -208,6 +216,7 @@ class Board(tk.Frame):
             if(aux == 0 or aux == 2):
                 stri = "Afogamento"
                 tk.messagebox.showinfo("Empate por afogamento", stri)
+                self.clear()
         if(get_piece_type(piece.name) == 'king'):
             vec = piece.get_possible_moves(coord,self.squares)
         if(not(vec)):# se nao tem movimentos libera a selecao de outras pecas
@@ -293,7 +302,6 @@ class Board(tk.Frame):
                         
                         if(gr!='mov'):
                             special_moves.movRoque(self,gr,(col,row))
-
                         if (self.ai and GameState.turn(self.ai.color)):
                             self.ai.special_moves=special_moves
                             self.ai.board=self

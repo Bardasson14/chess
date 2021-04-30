@@ -13,7 +13,6 @@ class GameRulesTest(unittest.TestCase):
         matrix = self.initialize_empty_grid()
         matrix[(1,4)]['piece'] = Pawn('white', 'white_pawn_1')
         matrix[(0,3)]['piece'] = King('black', 'black_king')
-        print(GameState.blackcoord)
         self.assertTrue(check_all(matrix, GameState.blackcoord, 'black'))
 
     @classmethod

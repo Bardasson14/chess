@@ -79,6 +79,7 @@ class Ai:
                 GameState.whitecoord = (row, col)
             else:
                 GameState.blackcoord = (row, col)
+        
             
     def ai_move(self):# o jogo entra em loop quando as peças restantes nãos tiverem mais movimentos 
         continua=True
@@ -86,7 +87,52 @@ class Ai:
             self.random()
             piece=self.squares[(self.rowpiece,self.colpiece)]['piece']
             if piece :#se ia escolheu uma peca valida para o loop
-                ai_possible_moves=piece.get_possible_moves(self.squares[(self.rowpiece,self.colpiece)]['coord'],self.board.squares)#pega um vetor de possiveis movimentos da peca escolhida
+                vec = piece.get_possible_moves(self.squares[(self.rowpiece,self.colpiece)]['coord'],self.board.squares)
+                list_aux = []
+                if(piece.color == 'white'):
+                    list_aux = check_all(self.board.squares, GameState.whitecoord, piece.color)
+                else:
+                    list_aux = check_all(self.board.squares, GameState.blackcoord, piece.color)
+                if(list_aux):
+                    vec = list(set(vec) & set(list_aux))
+                    aux = 0
+                    for i in range(8):
+                        aux = 0
+                        for j in range(8):
+                            piece_aux = self.board.squares[(i,j)]['piece']
+                            if(piece_aux is not None and piece.color != piece_aux.color):
+                                aux = 2
+                            if(piece_aux is not None and piece.color == piece_aux.color):
+                                vec_aux = list(set(piece_aux.get_possible_moves((i,j), self.board.squares)) & set(list_aux))
+                                if(vec_aux or (get_piece_type(piece_aux.name) == 'king' and piece_aux.get_possible_moves((i,j), self.board.squares))):
+                                    aux = 1
+                                    break
+                        if(aux == 1):
+                            break
+                    if(aux == 0 or aux == 2):
+                        stri = "Xeque-Mate"
+                        tk.messagebox.showinfo("Xeque-Mate", stri)
+                        self.board.clear()
+                else:
+                    aux = 0
+                    for i in range(1,8):
+                        aux = 0
+                        for j in range(1,8):
+                            piece_aux = self.board.squares[(i,j)]['piece']
+                            if(piece_aux is not None and piece.color != piece_aux.color):
+                                aux = 2
+                            if(piece_aux is not None and piece.color == piece_aux.color):
+                                vec_aux = piece_aux.get_possible_moves((i,j), self.board.squares)
+                                if(vec_aux):
+                                    aux = 1
+                                    break
+                        if(aux == 1):
+                            break
+                    if(aux == 0 or aux == 2):
+                        stri = "Afogamento"
+                        tk.messagebox.showinfo("Empate por afogamento", stri)
+                        self.board.clear()
+                ai_possible_moves = vec #pega um vetor de possiveis movimentos da peca escolhida
                 if(ai_possible_moves):#se o vetor nao e vazio vai movimentar
                     intervalo=random.randrange(0,len(ai_possible_moves))#qual movimento vai fazer
                     next_row=ai_possible_moves[intervalo][0]#linha que vai mover
